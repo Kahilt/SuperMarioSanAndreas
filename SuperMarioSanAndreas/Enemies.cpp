@@ -21,6 +21,8 @@ public:
 
 	bool alive;			//determines whether enemy is alive or dead
 
+	float sourceX;		//sourceX to control which portion of the sprite is printed
+
 	Enemies()
 	{
 		startX = -1000;		//ensures that stage is initially clear
@@ -28,6 +30,8 @@ public:
 		y = 0;
 		direction = 1;		//initial direction set to RIGHT
 		bool alive = true;
+		sourceX = 0;
+
 	}
 
 
@@ -51,8 +55,8 @@ public:
 		//check if bullet collides with enemy, if true : alive = false;
 	}
 
-	void draw(float *sourceX, ALLEGRO_BITMAP *en)	//receives a sourceX to control which portion of the sprite is printed & 
-	{												//receives an ALLEGRO_BITMAP from game loop
+	void draw(ALLEGRO_BITMAP *en)	//receives an ALLEGRO_BITMAP from game loop
+	{
 		if (alive)
 		{
 			//al_init_image_addon();				*in game loop
@@ -62,13 +66,13 @@ public:
 			if (!en)
 				cout << "Error loading image";
 
-			*sourceX += al_get_bitmap_width(en) / 3;		//assuming sprite has 3 animations, source point increments by on animation length each time
+			sourceX += al_get_bitmap_width(en) / 3;		//assuming sprite has 3 animations, source point increments by on animation length each time
 
-			if (*sourceX >= al_get_bitmap_width(en))		//sets source point back to 0 when end is reached
-				*sourceX = 0;
+			if (sourceX >= al_get_bitmap_width(en))		//sets source point back to 0 when end is reached
+				sourceX = 0;
 
-			al_draw_bitmap_region(en, *sourceX, 0, 32, 32, x, y, NULL);		//draws image
-
+			al_draw_bitmap_region(en, sourceX, 0, width, height, x, y, NULL);		//draws image
+			al_rest(10.0);
 		}
 	}
 
