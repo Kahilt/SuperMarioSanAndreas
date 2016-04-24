@@ -16,9 +16,9 @@ using namespace std;
 	 int x = 10, y = 700, movespeed = 5;
 	 int state = NULL;
 	 const float FPS = 60.0;
-	 enum Direction {UP, DOWN, LEFT, RIGHT};
+	 enum Direction {/*UP, DOWN, */LEFT, RIGHT};
 	 ALLEGRO_COLOR blue = al_map_rgb(44, 117, 255);
-	 int dir = DOWN;
+	// int dir = DOWN;
 
 	ALLEGRO_DISPLAY *display;
 	al_set_new_display_flags(ALLEGRO_WINDOWED);
@@ -61,37 +61,30 @@ using namespace std;
 		if (events.type == ALLEGRO_EVENT_TIMER)
 		{
 			al_get_keyboard_state(&keyState);
-			if (al_key_down(&keyState, ALLEGRO_KEY_DOWN))
-				y += movespeed;
-			else if (al_key_down(&keyState, ALLEGRO_KEY_UP))
-				y -= movespeed;
-			else if (al_key_down(&keyState, ALLEGRO_KEY_RIGHT))
-				x += movespeed;
-			else if (al_key_down(&keyState, ALLEGRO_KEY_LEFT))
+			//if (al_key_down(&keyState, ALLEGRO_KEY_DOWN))
+				//y += movespeed;
+			//else if (al_key_down(&keyState, ALLEGRO_KEY_UP))
+				//y -= movespeed;
+			/*else */if (al_key_down(&keyState, ALLEGRO_KEY_RIGHT))
 				x -= movespeed;
+			else if (al_key_down(&keyState, ALLEGRO_KEY_LEFT))
+				x += movespeed;
 			draw = true;
 		}
 
 		if (draw)
 		{
 			draw = false;
-			al_draw_rectangle(x, y, x + 20, y + 20, blue, 2.0);
+			//al_draw_rectangle(x, y, x + 20, y + 20, blue, 2.0);
 			al_flip_display();
-			al_draw_bitmap(imagewindowsky, 1, 2, NULL);
-			al_draw_bitmap(imagewindow, 1, 5, NULL);
+			al_draw_bitmap(imagewindowsky,/* 1*/x, 2, NULL);
+			al_draw_bitmap(imagewindow,/* 1*/x, 5, NULL);
 			al_draw_bitmap(imagecar, 175, 553, NULL);
 			al_draw_bitmap(imagecopcar, 700, 635, NULL);
 		}
 	}
 	
 
-	
-	
-	
-
-	
-	
-	
 	
 	//al_init_font_addon();
 	//al_init_ttf_addon();
