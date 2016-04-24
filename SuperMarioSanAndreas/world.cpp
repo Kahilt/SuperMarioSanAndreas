@@ -1,14 +1,15 @@
-#include <allegro5/allegro.h>
-#include <iostream> 
-#include <allegro5/allegro_image.h>
-#include <allegro5/allegro_primitives.h>
+#include <allegro5/allegro.h>//telling compiler to include allegro 5 files
+#include <iostream> //telling compiler to include iostream files
+#include <allegro5/allegro_image.h>//telling compiler to include allegro 5 image file
+#include <allegro5/allegro_primitives.h>//telling compiler to include allegro 5 primitives
 //#include <allegro5/allegro_ttf.h>
 //#include <allegro5/allegro_font.h>	
 using namespace std;
-#define length 1366
-#define width 770
+#define length 1366 //defining the screen lenght 
+#define width 770  //defining the screen width 
 
- int main(){
+
+ int main(){//main function
 
 	 al_init();
 
@@ -38,6 +39,7 @@ using namespace std;
 	
 
 	ALLEGRO_BITMAP *imagewindow = al_load_bitmap("bg.png");
+	al_convert_mask_to_alpha(imagewindow,al_map_rgb(255, 255, 255));
 	ALLEGRO_BITMAP *imagewindowsky = al_load_bitmap("Sky.png");
 	ALLEGRO_BITMAP *imagecar = al_load_bitmap("mcar.png");
 	ALLEGRO_BITMAP *imagecopcar = al_load_bitmap("ccar.png");
@@ -77,10 +79,12 @@ using namespace std;
 			draw = false;
 			//al_draw_rectangle(x, y, x + 20, y + 20, blue, 2.0);
 			al_flip_display();
-			al_draw_bitmap(imagewindowsky,/* 1*/x, 2, NULL);
-			al_draw_bitmap(imagewindow,/* 1*/x, 5, NULL);
-			al_draw_bitmap(imagecar, 175+x, 553, NULL);
-			al_draw_bitmap(imagecopcar, 700+x, 635, NULL);
+
+				al_draw_bitmap(imagewindowsky,/* 1*/x, 2, NULL);
+				al_draw_bitmap(imagewindow,/* 1*/x, 5, NULL);
+				al_draw_bitmap(imagecar, 175 + x, 553, NULL);
+				al_draw_bitmap(imagecopcar, 700 + x, 635, NULL);
+		
 		}
 	}
 	
