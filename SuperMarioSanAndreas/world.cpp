@@ -79,8 +79,8 @@ using namespace std;
 			al_flip_display();
 			al_draw_bitmap(imagewindowsky,/* 1*/x, 2, NULL);
 			al_draw_bitmap(imagewindow,/* 1*/x, 5, NULL);
-			al_draw_bitmap(imagecar, 175, 553, NULL);
-			al_draw_bitmap(imagecopcar, 700, 635, NULL);
+			al_draw_bitmap(imagecar, 175+x, 553, NULL);
+			al_draw_bitmap(imagecopcar, 700+x, 635, NULL);
 		}
 	}
 	
