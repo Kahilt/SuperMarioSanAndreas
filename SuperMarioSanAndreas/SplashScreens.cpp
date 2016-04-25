@@ -57,6 +57,7 @@ int splash()
 				break;
 			}
 		}
+		al_draw_bitmap(image, width / 2 - imageWidth / 2, height / 2 - imageHeight / 2, 0);
 		al_flip_display();
 		al_clear_to_color(al_map_rgb(0, 0, 0));
 	}
@@ -67,3 +68,5 @@ int splash()
 	al_destroy_display(display);
 	return 0;
 }
+
+/*NB!!!!!!!!!!!!!!!!!!!!!!!!! check loading bitmaps with allegro 5 by MikeGeigTv*/
