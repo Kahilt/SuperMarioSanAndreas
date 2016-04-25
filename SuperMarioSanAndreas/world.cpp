@@ -80,10 +80,13 @@ using namespace std;
 			draw = false;
 			
 			al_flip_display();//shows the display window on pc window
+//			al_draw_bitmap(imagewindowsky,/* 1*/x + (length*i), 2, NULL);
 			for (int i = 0; i <= 5; i++)//for loop created to redraw the background according to level lenght
 			{
-				al_draw_bitmap(imagewindowsky,/* 1*/x+(length*i), 2, NULL);	// draws sky to window
-				al_draw_bitmap(imagewindow,/* 1*/x+(length*i), 5, NULL);	// draws buildings to window
+				if (x <= 0){
+					al_draw_bitmap(imagewindowsky,/* 1*/x + (length*i), 2, NULL);	// draws sky to window
+					al_draw_bitmap(imagewindow,/* 1*/x + (length*i), 5, NULL);	// draws buildings to window
+				}
 			}
 		}
 	}
