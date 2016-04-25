@@ -17,7 +17,7 @@ int splash()
 
 	//creating allegro variables
 	ALLEGRO_DISPLAY *display= NULL;
-	ALLEGRO EVENT_QUEUE *event_queue = NULL;
+	ALLEGRO_EVENT_QUEUE *event_queue = NULL;
 	ALLEGRO_BITMAP *image = NULL;
 	
 	// initiallizing ALLEGRO
@@ -46,7 +46,7 @@ int splash()
 	while (!done)
 	{
 		ALLEGRO_EVENT evnt;
-		al_wait_for_an_event(event_queue, &envt);
+		al_wait_for_event(event_queue, &evnt);
 
 		if (evnt.type == ALLEGRO_EVENT_KEY_DOWN)
 		{
