@@ -5,24 +5,57 @@
 #include <allegro5/allegro_ttf.h>
 #include <allegro5/allegro_font.h>	
 using namespace std;
-#define width 770
-#define length 1366
+
 int splash()
 {
-	ALLEGRO_DISPLAY *display;
+	//creating variables to be used
+	int width = 1366;
+	int height = 770;
+	bool done = false;
+	//creating allegro variables
+	ALLEGRO_DISPLAY *display= NULL;
+	ALLEGRO EVENT_QUEUE *event_queue = NULL;
+	ALLEGRO_BITMAP *image = NULL;
+	
+	// initiallizing ALLEGRO
 	if (!al_init())
 	{
-		al_show_native_message_box(NULL, NULL, NULL, "Unable to initialize allegro 5", NULL, NULL);
-			return -1;
+		return -1;
 	}
-	display = al_create_display(width, length);
-
+	// Creating display object
+	display = al_create_display(width, height);
+	//testing display obj
 	if (!display)
 	{
-		al_show_native_message_box(display, "Sample Title", "Display Settings", "Unable to display",NULL,NULL);
+		return -1;
 	}
-	al_destroy_display(display);
+	al_install_keyboard();
+
 	
+	event_queue = al_create_event_queue();
+	al_register_event_source(event_queue, al_get_keyboard_event_source());
+	
+	while (!done)
+	{
+		ALLEGRO_EVENT evnt;
+		al_wait_for_an_event(event_queue, &envt);
 
+		if (evnt.type == ALLEGRO_EVENT_KEY_DOWN)
+		{
+			switch (evnt.keyboard.keycode)
+			{
+			case ALLEGRO_KEY_ESCAPE:
+				done = true;
+				break;
+			}
+		}
+		al_flip_display();
+		al_clear_to_color(al_map_rgb(0, 0, 0));
+	}
 
+	//Destroying objects
+	al_destroy_bitmap(image);
+	al_destroy_event_queue(event_queue);
+	al_destroy_display(display);
+	return 0;
 }
