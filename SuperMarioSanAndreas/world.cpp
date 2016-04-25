@@ -9,16 +9,17 @@ using namespace std;
 #define width 770  //defining the screen width 
 
 
+
  int main(){//main function
 
 	 al_init();
 
 	 bool done = false, draw = false;
-	 int x = 10, y = 700, movespeed = 5;
+	 int x = 0, y = 0, movespeed = 5;
 	 int state = NULL;
 	 const float FPS = 60.0;
 	 enum Direction {/*UP, DOWN, */LEFT, RIGHT};
-	 ALLEGRO_COLOR blue = al_map_rgb(44, 117, 255);
+	 
 	// int dir = DOWN;
 
 	ALLEGRO_DISPLAY *display;
@@ -38,12 +39,11 @@ using namespace std;
 	al_register_event_source(event_queue, al_get_timer_event_source(timer));
 	
 
-	ALLEGRO_BITMAP *imagewindow = al_load_bitmap("bg.png");
-	al_convert_mask_to_alpha(imagewindow,al_map_rgb(255, 255, 255));
-	ALLEGRO_BITMAP *imagewindowsky = al_load_bitmap("Sky.png");
+	ALLEGRO_BITMAP *imagewindow = al_load_bitmap("bgc.png");
+	ALLEGRO_BITMAP *imagewindowsky = al_load_bitmap("sky1.png");
 	ALLEGRO_BITMAP *imagecar = al_load_bitmap("mcar.png");
 	ALLEGRO_BITMAP *imagecopcar = al_load_bitmap("ccar.png");
-
+	
 	al_start_timer(timer);
 
 	while (!done)
@@ -55,7 +55,7 @@ using namespace std;
 		{
 			switch (events.keyboard.keycode)
 			{
-			case ALLEGRO_KEY_ESCAPE:
+			case ALLEGRO_KEY_ESCAPE:	// closes window if escape key is pressed
 				done = true;
 			}
 		}
@@ -68,22 +68,38 @@ using namespace std;
 			//else if (al_key_down(&keyState, ALLEGRO_KEY_UP))
 				//y -= movespeed;
 			/*else */if (al_key_down(&keyState, ALLEGRO_KEY_RIGHT))
-				x -= movespeed;
+				x -= movespeed;	// moves background to the left to creat the illusion of the player moving through the game world
 			else if (al_key_down(&keyState, ALLEGRO_KEY_LEFT))
-				x += movespeed;
+				x += movespeed;	// moves background to the right to creat the illusion of the player moving through the game world
 			draw = true;
 		}
 
 		if (draw)
 		{
 			draw = false;
-			//al_draw_rectangle(x, y, x + 20, y + 20, blue, 2.0);
+			
 			al_flip_display();
 
-				al_draw_bitmap(imagewindowsky,/* 1*/x, 2, NULL);
-				al_draw_bitmap(imagewindow,/* 1*/x, 5, NULL);
-				al_draw_bitmap(imagecar, 175 + x, 553, NULL);
-				al_draw_bitmap(imagecopcar, 700 + x, 635, NULL);
+			al_draw_bitmap(imagewindowsky,/* 1*/x, 2, NULL);	// draws sky to window
+			al_draw_bitmap(imagewindow,/* 1*/x, 5, NULL);	// draws buildings to window
+
+			al_draw_bitmap(imagewindowsky,/* 1*/x + 1366, 2, NULL);	// draws sky to window after length of 1366 pixels
+			al_draw_bitmap(imagewindow,/* 1*/x + 1366, 5, NULL);	// draws buildings to window after length of 1366 pixels
+
+			al_draw_bitmap(imagewindowsky,/* 1*/x + (1366 * 2), 2, NULL);	// draws sky to window after length of 2732 pixels
+			al_draw_bitmap(imagewindow,/* 1*/x + (1366 * 2), 5, NULL);	// draws buildings to window after length of 2732 pixels
+
+			al_draw_bitmap(imagewindowsky,/* 1*/x + (1366 * 3), 2, NULL);	// draws sky to window after length of 4098 pixels
+			al_draw_bitmap(imagewindow,/* 1*/x + (1366 * 3), 5, NULL);	// draws buildings to window after length of 4098 pixels
+
+			al_draw_bitmap(imagewindowsky,/* 1*/x + (1366 * 4), 2, NULL);	// draws sky to window after length of 5464 pixels
+			al_draw_bitmap(imagewindow,/* 1*/x + (1366 * 4), 5, NULL);	// draws buildings to window after length of 5464 pixels
+
+			al_draw_bitmap(imagewindowsky,/* 1*/x + (1366 * 5), 2, NULL);	// draws sky to window after length of 6830 pixels
+			al_draw_bitmap(imagewindow,/* 1*/x + (1366 * 5), 5, NULL);	// draws buildings to window after length of 6830 pixels
+
+			al_draw_bitmap(imagecar, 175 + x, 553, NULL);	// draws car to window
+			al_draw_bitmap(imagecopcar, 700 + x, 635, NULL);	// draws cop car to window
 		
 		}
 	}
