@@ -5,8 +5,8 @@
 #include <allegro5/allegro_ttf.h>
 #include <allegro5/allegro_font.h>	
 using namespace std;
-#define length 800
-#define width 600
+#define width 800
+#define length 600
 int main()
 {
 	ALLEGRO_DISPLAY *display;
@@ -15,7 +15,7 @@ int main()
 		al_show_native_message_box(NULL, NULL, NULL, "Unable to initialize allegro %", NULL, NULL);
 			return -1;
 	}
-	display = al_create_display(length, width);
+	display = al_create_display(width, length);
 
 	if (!display)
 	{
