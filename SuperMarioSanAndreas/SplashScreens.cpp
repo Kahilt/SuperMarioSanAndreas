@@ -1,9 +1,8 @@
-#include <allegro5/allegro.h>
-#include <allegro5/allegro_native_dialog.h>
+#include <allegro5\allegro.h>
+#include <allegro5\allegro_native_dialog.h>
 #include <iostream> 
-#include <allegro5/allegro_image.h>
-#include <allegro5/allegro_ttf.h>
-#include <allegro5/allegro_font.h>	
+#include <allegro5\allegro_image.h>
+
 using namespace std;
 
 int splash()
@@ -12,6 +11,10 @@ int splash()
 	int width = 1366;
 	int height = 770;
 	bool done = false;
+	int imageWidth = 0;
+	int imageHeight = 0;
+
+
 	//creating allegro variables
 	ALLEGRO_DISPLAY *display= NULL;
 	ALLEGRO EVENT_QUEUE *event_queue = NULL;
@@ -29,9 +32,14 @@ int splash()
 	{
 		return -1;
 	}
+	//initializing addons
 	al_install_keyboard();
+	al_init_image_addon();
 
-	
+	//inserting the image
+	image = al_load_bitmap("startscreen.png");
+	imageWidth = al_get_bitmap_width(image);
+	imageHeight = al_get_bitmap_height(image);
 	event_queue = al_create_event_queue();
 	al_register_event_source(event_queue, al_get_keyboard_event_source());
 	
