@@ -14,6 +14,7 @@ using namespace std;
 
 	 al_init();
 
+
 	 bool done = false, draw = false;
 	 int x = 0, y = 0, movespeed = 5;
 	 int state = NULL;
@@ -79,28 +80,11 @@ using namespace std;
 			draw = false;
 			
 			al_flip_display();
-
-			al_draw_bitmap(imagewindowsky,/* 1*/x, 2, NULL);	// draws sky to window
-			al_draw_bitmap(imagewindow,/* 1*/x, 5, NULL);	// draws buildings to window
-
-			al_draw_bitmap(imagewindowsky,/* 1*/x + 1366, 2, NULL);	// draws sky to window after length of 1366 pixels
-			al_draw_bitmap(imagewindow,/* 1*/x + 1366, 5, NULL);	// draws buildings to window after length of 1366 pixels
-
-			al_draw_bitmap(imagewindowsky,/* 1*/x + (1366 * 2), 2, NULL);	// draws sky to window after length of 2732 pixels
-			al_draw_bitmap(imagewindow,/* 1*/x + (1366 * 2), 5, NULL);	// draws buildings to window after length of 2732 pixels
-
-			al_draw_bitmap(imagewindowsky,/* 1*/x + (1366 * 3), 2, NULL);	// draws sky to window after length of 4098 pixels
-			al_draw_bitmap(imagewindow,/* 1*/x + (1366 * 3), 5, NULL);	// draws buildings to window after length of 4098 pixels
-
-			al_draw_bitmap(imagewindowsky,/* 1*/x + (1366 * 4), 2, NULL);	// draws sky to window after length of 5464 pixels
-			al_draw_bitmap(imagewindow,/* 1*/x + (1366 * 4), 5, NULL);	// draws buildings to window after length of 5464 pixels
-
-			al_draw_bitmap(imagewindowsky,/* 1*/x + (1366 * 5), 2, NULL);	// draws sky to window after length of 6830 pixels
-			al_draw_bitmap(imagewindow,/* 1*/x + (1366 * 5), 5, NULL);	// draws buildings to window after length of 6830 pixels
-
-			al_draw_bitmap(imagecar, 175 + x, 553, NULL);	// draws car to window
-			al_draw_bitmap(imagecopcar, 700 + x, 635, NULL);	// draws cop car to window
-		
+			for (int i = 0; i <= 5; i++)
+			{
+				al_draw_bitmap(imagewindowsky,/* 1*/x+(1366*i), 2, NULL);	// draws sky to window
+				al_draw_bitmap(imagewindow,/* 1*/x+(1366*i), 5, NULL);	// draws buildings to window
+			}
 		}
 	}
 	
