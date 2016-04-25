@@ -12,7 +12,7 @@ int splash()
 	ALLEGRO_DISPLAY *display;
 	if (!al_init())
 	{
-		//al_show_native_message_box(NULL, NULL, NULL, "Unable to initialize allegro 5", NULL, NULL);
+		al_show_native_message_box(NULL, NULL, NULL, "Unable to initialize allegro 5", NULL, NULL);
 			return -1;
 	}
 	display = al_create_display(width, length);
