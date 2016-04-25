@@ -16,8 +16,8 @@ public:
 
 	float direction;	//used to determine whether enemy is moving left or right (+1 for right, -1 for left)
 
-	float width;		//contains width of animation in pixels
-	float height;		//contains height of animation in pixels
+	float aniWidth;		//contains width of animation in pixels
+	float aniHeight;		//contains height of animation in pixels
 
 	bool alive;			//determines whether enemy is alive or dead
 
@@ -32,8 +32,8 @@ public:
 		bool alive = true;
 		sourceX = 0;
 
-		height = 120.0;
-		width = 110.0;
+		aniHeight = 120.0;
+		aniWidth = 110.0;
 	}
 
 
@@ -41,8 +41,16 @@ public:
 	{
 	}
 
+	void updateX(int relX)			//updates the x values of the enemy relative to the movement of the background
+	{
+		x += relX;
+		startX += relX;
+		endX += relX;
+	}
+
 	void move(int speed)
 	{
+		
 		if (x <= startX)		//if enemy tries to go before starting point, direction is changed
 			direction = 1.0;
 
@@ -50,6 +58,8 @@ public:
 			direction = -1.0;
 
 		x += (direction * speed);		//increments enemy's position 
+		
+
 	}
 
 	void getShot(/*		will receive a Bullet object		*/)
@@ -57,7 +67,7 @@ public:
 		//check if bullet collides with enemy, if true : alive = false;
 	}
 
-	void draw(ALLEGRO_BITMAP *right , ALLEGRO_BITMAP *left)	//receives an ALLEGRO_BITMAP from game loop
+	void draw(ALLEGRO_BITMAP *right , ALLEGRO_BITMAP *left , bool time)	//receives an ALLEGRO_BITMAP from game loop, time controls how often animation changes
 	{
 		if (alive)
 		{
@@ -70,24 +80,26 @@ public:
 				if (!right)
 					cout << "Error loading image";
 
-				sourceX += al_get_bitmap_width(right) / 7;		//since there are 7 animations 
+				if (time)
+					sourceX += al_get_bitmap_width(right) / 7;		//since there are 7 animations 
 
 				if (sourceX >= al_get_bitmap_width(right))		//sets source point back to 0 when end is reached
 					sourceX = 0;
 	
-				al_draw_bitmap_region(right, sourceX, 0, width, height, x, y, NULL);		//draws image
+				al_draw_bitmap_region(right, sourceX, 0, aniWidth, aniHeight, x, y, NULL);		//draws image
 			}
 			else
 			{
 				if (!left)
 					cout << "Error loading image";
 
-				sourceX += al_get_bitmap_width(left) / 7;		//since there are 7 animations 
+				if (time)
+					sourceX += al_get_bitmap_width(left) / 7;		//since there are 7 animations 
 
 				if (sourceX >= al_get_bitmap_width(left))		//sets source point back to 0 when end is reached
 					sourceX = 0;
 
-				al_draw_bitmap_region(left, sourceX, 0, width, height, x, y, NULL);		//draws image
+				al_draw_bitmap_region(left, sourceX, 0, aniWidth, aniHeight, x, y, NULL);		//draws image
 			}
 		}
 	}
