@@ -32,6 +32,8 @@ public:
 		bool alive = true;
 		sourceX = 0;
 
+		height = 120.0;
+		width = 110.0;
 	}
 
 
@@ -55,24 +57,38 @@ public:
 		//check if bullet collides with enemy, if true : alive = false;
 	}
 
-	void draw(ALLEGRO_BITMAP *en)	//receives an ALLEGRO_BITMAP from game loop
+	void draw(ALLEGRO_BITMAP *right , ALLEGRO_BITMAP *left)	//receives an ALLEGRO_BITMAP from game loop
 	{
 		if (alive)
 		{
-			//al_init_image_addon();				*in game loop
+			//al_init_image_addon();																			*in game loop
+			//ALLEGRO_BITMAP *punch_ganster_right = al_load_bitmap("Punching_gangster_RIGHT.png");				*in game loop
+			//ALLEGRO_BITMAP *punch_ganster_left = al_load_bitmap("Punching_gangster_LEFT.png");				*in game loop
 
-			//ALLEGRO_BITMAP *en = al_load_bitmap("Enemy.png");				*in game loop
+			if (direction == 1)
+			{
+				if (!right)
+					cout << "Error loading image";
 
-			if (!en)
-				cout << "Error loading image";
+				sourceX += al_get_bitmap_width(right) / 7;		//since there are 7 animations 
 
-			sourceX += al_get_bitmap_width(en) / 3;		//assuming sprite has 3 animations, source point increments by on animation length each time
+				if (sourceX >= al_get_bitmap_width(right))		//sets source point back to 0 when end is reached
+					sourceX = 0;
+	
+				al_draw_bitmap_region(right, sourceX, 0, width, height, x, y, NULL);		//draws image
+			}
+			else
+			{
+				if (!left)
+					cout << "Error loading image";
 
-			if (sourceX >= al_get_bitmap_width(en))		//sets source point back to 0 when end is reached
-				sourceX = 0;
+				sourceX += al_get_bitmap_width(left) / 7;		//since there are 7 animations 
 
-			al_draw_bitmap_region(en, sourceX, 0, width, height, x, y, NULL);		//draws image
-			al_rest(10.0);
+				if (sourceX >= al_get_bitmap_width(left))		//sets source point back to 0 when end is reached
+					sourceX = 0;
+
+				al_draw_bitmap_region(left, sourceX, 0, width, height, x, y, NULL);		//draws image
+			}
 		}
 	}
 
