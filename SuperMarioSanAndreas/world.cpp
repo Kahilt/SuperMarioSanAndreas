@@ -15,6 +15,7 @@ using namespace std;
 
 	 al_init();
 
+
 	 bool done = false, draw = false;
 	 int x = 0, y = 0, movespeed = 5;
 	 int state = NULL;
@@ -41,12 +42,12 @@ using namespace std;
 	al_register_event_source(event_queue, al_get_keyboard_event_source());
 	al_register_event_source(event_queue, al_get_timer_event_source(timer));
 	al_register_event_source(event_queue, al_get_timer_event_source(enemyTimer));
-
+	
 	ALLEGRO_BITMAP *imagewindow = al_load_bitmap("bgc.png");
 	ALLEGRO_BITMAP *imagewindowsky = al_load_bitmap("sky1.png");
 	ALLEGRO_BITMAP *imagecar = al_load_bitmap("mcar.png");
 	ALLEGRO_BITMAP *imagecopcar = al_load_bitmap("ccar.png");
-
+	
 	Enemies gangster;						//creates 1 object of enemies class
 	gangster.x = 1000;						//x position of enemy
 	gangster.startX = 1000;					//starting postion of enemy
@@ -102,29 +103,15 @@ using namespace std;
 		{
 			draw = false;
 			
-			al_flip_display();
-
-			al_draw_bitmap(imagewindowsky,/* 1*/x, 2, NULL);	// draws sky to window
-			al_draw_bitmap(imagewindow,/* 1*/x, 5, NULL);	// draws buildings to window
-
-			al_draw_bitmap(imagewindowsky,/* 1*/x + 1366, 2, NULL);	// draws sky to window after length of 1366 pixels
-			al_draw_bitmap(imagewindow,/* 1*/x + 1366, 5, NULL);	// draws buildings to window after length of 1366 pixels
-
-			al_draw_bitmap(imagewindowsky,/* 1*/x + (1366 * 2), 2, NULL);	// draws sky to window after length of 2732 pixels
-			al_draw_bitmap(imagewindow,/* 1*/x + (1366 * 2), 5, NULL);	// draws buildings to window after length of 2732 pixels
-
-			al_draw_bitmap(imagewindowsky,/* 1*/x + (1366 * 3), 2, NULL);	// draws sky to window after length of 4098 pixels
-			al_draw_bitmap(imagewindow,/* 1*/x + (1366 * 3), 5, NULL);	// draws buildings to window after length of 4098 pixels
-
-			al_draw_bitmap(imagewindowsky,/* 1*/x + (1366 * 4), 2, NULL);	// draws sky to window after length of 5464 pixels
-			al_draw_bitmap(imagewindow,/* 1*/x + (1366 * 4), 5, NULL);	// draws buildings to window after length of 5464 pixels
-
-			al_draw_bitmap(imagewindowsky,/* 1*/x + (1366 * 5), 2, NULL);	// draws sky to window after length of 6830 pixels
-			al_draw_bitmap(imagewindow,/* 1*/x + (1366 * 5), 5, NULL);	// draws buildings to window after length of 6830 pixels
-
-			al_draw_bitmap(imagecar, 175 + x, 553, NULL);	// draws car to window
-			al_draw_bitmap(imagecopcar, 700 + x, 635, NULL);	// draws cop car to window
-
+			al_flip_display();//shows the display window on pc window
+//			al_draw_bitmap(imagewindowsky,/* 1*/x + (length*i), 2, NULL);
+			for (int i = 0; i <= 5; i++)//for loop created to redraw the background according to level lenght
+			{
+				if (x <= 0){
+					al_draw_bitmap(imagewindowsky,/* 1*/x + (length*i), 2, NULL);	// draws sky to window
+					al_draw_bitmap(imagewindow,/* 1*/x + (length*i), 5, NULL);	// draws buildings to window
+				}
+			}
 			gangster.draw(punch_ganster_right, punch_ganster_left, (events.timer.source == enemyTimer));
 		}
 
