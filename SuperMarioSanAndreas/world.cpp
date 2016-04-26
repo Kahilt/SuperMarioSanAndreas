@@ -8,6 +8,7 @@ using namespace std;
 #define length 1366 //defining the screen lenght 
 #define width 770  //defining the screen width 
 #include "Enemies.cpp"
+#include "pilars.cpp"
 
 void cameraUpdate(float *camerposition, float x, float y, int w, int h){
 	camerposition[0] = -(length / 2) + (x + w / 2);				//positioning the camera at midpoint of the screen on the x axis
@@ -61,9 +62,29 @@ void cameraUpdate(float *camerposition, float x, float y, int w, int h){
 	gangster.y = 570;
 	gangster.endX = 1500;					//ending postion of enemy
 
+	pilars pillar1;
+	pillar1.x = 500;
+	pillar1.y = 570;
+	pillar1.size = 1;
+
+	pilars pillar2;
+	pillar2.x = 586;
+	pillar2.y = 516;
+	pillar2.size = 2;
+
+
+	pilars pillar3;
+	pillar3.x = 672;
+	pillar3.y = 396;
+	pillar3.size = 3;
+
+
 	ALLEGRO_BITMAP *punch_ganster_right = al_load_bitmap("Punching_gangster_RIGHT.png");
 	ALLEGRO_BITMAP *punch_ganster_left = al_load_bitmap("Punching_gangster_LEFT.png");
 
+	ALLEGRO_BITMAP *smallPillar = al_load_bitmap("Single_pillar_small.png");
+	ALLEGRO_BITMAP *medPillar = al_load_bitmap("Single_pillar_medium.png");
+	ALLEGRO_BITMAP *largePillar = al_load_bitmap("Single_pillar_large.png");
 	
 	al_start_timer(timer);
 	al_start_timer(enemyTimer);
@@ -121,6 +142,9 @@ void cameraUpdate(float *camerposition, float x, float y, int w, int h){
 				}
 			al_draw_bitmap(mario, x, y,NULL);
 			
+			pillar1.draw(smallPillar, medPillar, largePillar);
+			pillar2.draw(smallPillar, medPillar, largePillar);
+			pillar3.draw(smallPillar, medPillar, largePillar);
 			gangster.draw(punch_ganster_right, punch_ganster_left, (events.timer.source == enemyTimer));
 		}
 
