@@ -138,7 +138,7 @@ void cameraUpdate(float *camerposition, float x, float y, int w, int h){
 			for (int i = 0; i <= 5; i++)//for loop created to redraw the background according to level lenght
 			{
 					al_draw_bitmap(imagewindowsky,(length*i), 2, NULL);	// draws sky to window
-					al_draw_bitmap(imagewindow,(length*i), 5, NULL);	// draws buildings to window
+					al_draw_bitmap(imagewindow,(length*i), 5, NULL);	// draws buildings to window.
 				}
 			al_draw_bitmap(mario, x, y,NULL);
 			
