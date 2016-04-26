@@ -13,8 +13,8 @@ const int height = 770;
 int imageWidth = 0;
 int imageHeight = 0;
 
-bool keys[] = { false, false };
-enum KEYS{ ENTER, ESCAPE };
+bool keys[] = { false, false, false };
+enum KEYS{ ENTER, ESCAPE, SPACE};
 
 enum PAGE{ MENU, PLAYING, PAUSE, GAMEOVER };
  
@@ -120,12 +120,68 @@ int splash(int argc, char **argv)
 				frames = 0;
 			}
 
+			if (page == MENU)
+			{
+				if (keys[ENTER])
+					page = PLAYING;
+
+				if (keys[ESCAPE])
+					done = true;
+			}
+
+
+			if (page == PLAYING)
+			{
+				if (keys[ESCAPE])
+					page = PAUSE;
+			}
+
+
+			if (page ==PAUSE)
+			{
+				if (keys[ENTER])
+					page = PLAYING;
+				if (keys[SPACE])
+					page = MENU;
+
+				if (keys[ESCAPE])
+					done = true;
+
+			}
+
+		
+			if (page == GAMEOVER)
+			{
+				if (keys[ENTER])
+					page = MENU;
+
+				if (keys[ESCAPE])
+					done = true;
+				
+			}
 		}
 			
 		if (render && al_is_event_queue_empty(event_queue))
 		{
 			render = false;
-			al_draw_bitmap(image, width / 2 - imageWidth / 2, height / 2 - imageHeight / 2, 0);
+			
+			
+			if (page==MENU)
+			{ 
+				al_draw_bitmap(image, width / 2 - imageWidth / 2, height / 2 - imageHeight / 2, 0);
+
+			}
+			if (page == PLAYING)
+			{
+			}
+
+			if (page == PAUSE)
+			{
+			}
+			if (page == GAMEOVER)
+			{
+			}
+
 			al_flip_display();
 			al_clear_to_color(al_map_rgb(0, 0, 0));
 		}
