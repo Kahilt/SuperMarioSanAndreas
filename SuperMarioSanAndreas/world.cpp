@@ -35,7 +35,7 @@ void cameraUpdate(float *camerposition, float x, float y, int w, int h){
 	ALLEGRO_DISPLAY *display;
 	al_set_new_display_flags(ALLEGRO_WINDOWED|ALLEGRO_RESIZABLE);
 	display = al_create_display(length, width);
-	al_set_window_position(display, 200, 100);
+	al_set_window_position(display, 0, 0);
 
 	al_init_image_addon();
 
@@ -60,9 +60,8 @@ void cameraUpdate(float *camerposition, float x, float y, int w, int h){
 	ALLEGRO_BITMAP *imagecar = al_load_bitmap("mcar.png");
 	ALLEGRO_BITMAP *imagecopcar = al_load_bitmap("ccar.png");
 	ALLEGRO_BITMAP *mario = al_load_bitmap("Mario_Nintendo.png");
-	ALLEGRO_BITMAP *punch_ganster_right = al_load_bitmap("Punching_gangster_RIGHT.png");
-	ALLEGRO_BITMAP *punch_ganster_left = al_load_bitmap("Punching_gangster_LEFT.png");
-
+	ALLEGRO_BITMAP *punch_gangster = al_load_bitmap("Punching_gangster.png");
+	
 	ALLEGRO_BITMAP *smallPillar = al_load_bitmap("Single_pillar_small.png");
 	ALLEGRO_BITMAP *medPillar = al_load_bitmap("Single_pillar_medium.png");
 	ALLEGRO_BITMAP *largePillar = al_load_bitmap("Single_pillar_large.png");
@@ -139,7 +138,7 @@ void cameraUpdate(float *camerposition, float x, float y, int w, int h){
 			al_translate_transform(&CAMERA, -cameraposition[0], -cameraposition[1]);//translates the camera position
 			al_use_transform(&CAMERA);
 
-			gangster.move(movespeed);
+			gangster.move(movespeed/2);
 
 		}
 
@@ -171,7 +170,7 @@ void cameraUpdate(float *camerposition, float x, float y, int w, int h){
 				car5.draw(imagecar, imagecopcar);
 				car6.draw(imagecar, imagecopcar);
 
-				gangster.draw(punch_ganster_right, punch_ganster_left, (events.timer.source == enemyTimer));	// draw method from Enemies class
+				gangster.draw(punch_gangster, (events.timer.source == enemyTimer));	// draw method from Enemies class
 			}
 		}
 
@@ -195,7 +194,7 @@ void cameraUpdate(float *camerposition, float x, float y, int w, int h){
 	al_destroy_bitmap(imagecopcar);
 	al_destroy_timer(timer);
 
-	al_destroy_bitmap(punch_ganster_right);
-	al_destroy_bitmap(punch_ganster_left);
+	al_destroy_bitmap(punch_gangster);
+	
 	return 0;
 }

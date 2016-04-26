@@ -41,13 +41,6 @@ public:
 	{
 	}
 
-	void updateX(int relX)			//updates the x values of the enemy relative to the movement of the background
-	{
-		x += relX;
-		startX += relX;
-		endX += relX;
-	}
-
 	void move(int speed)
 	{
 		
@@ -58,8 +51,6 @@ public:
 			direction = -1.0;
 
 		x += (direction * speed);		//increments enemy's position 
-		
-
 	}
 
 	void getShot(/*		will receive a Bullet object		*/)
@@ -67,39 +58,32 @@ public:
 		//check if bullet collides with enemy, if true : alive = false;
 	}
 
-	void draw(ALLEGRO_BITMAP *right , ALLEGRO_BITMAP *left , bool time)	//receives an ALLEGRO_BITMAP from game loop, time controls how often animation changes
+	void draw(ALLEGRO_BITMAP *enemy, bool time)	//receives an ALLEGRO_BITMAP from game loop, time controls how often animation changes
 	{
 		if (alive)
 		{
-			//al_init_image_addon();																			*in game loop
-			//ALLEGRO_BITMAP *punch_ganster_right = al_load_bitmap("Punching_gangster_RIGHT.png");				*in game loop
-			//ALLEGRO_BITMAP *punch_ganster_left = al_load_bitmap("Punching_gangster_LEFT.png");				*in game loop
-
 			if (direction == 1)
 			{
-				if (!right)
+				if (!enemy)
 					cout << "Error loading image";
 
 				if (time)
-					sourceX += al_get_bitmap_width(right) / 7;		//since there are 7 animations 
+					sourceX += al_get_bitmap_width(enemy) / 7;		//since there are 7 animations 
 
-				if (sourceX >= al_get_bitmap_width(right))		//sets source point back to 0 when end is reached
+				if (sourceX >= al_get_bitmap_width(enemy))		//sets source point back to 0 when end is reached
 					sourceX = 0;
 	
-				al_draw_bitmap_region(right, sourceX, 0, aniWidth, aniHeight, x, y, NULL);		//draws image
+				al_draw_bitmap_region(enemy, sourceX, 121, aniWidth, aniHeight, x, y, NULL);		//draws image
 			}
 			else
 			{
-				if (!left)
-					cout << "Error loading image";
-
 				if (time)
-					sourceX += al_get_bitmap_width(left) / 7;		//since there are 7 animations 
+					sourceX += al_get_bitmap_width(enemy) / 7;		//since there are 7 animations 
 
-				if (sourceX >= al_get_bitmap_width(left))		//sets source point back to 0 when end is reached
+				if (sourceX >= al_get_bitmap_width(enemy))		//sets source point back to 0 when end is reached
 					sourceX = 0;
 
-				al_draw_bitmap_region(left, sourceX, 0, aniWidth, aniHeight, x, y, NULL);		//draws image
+				al_draw_bitmap_region(enemy, sourceX, 0, aniWidth, aniHeight, x, y, NULL);		//draws image
 			}
 		}
 	}
