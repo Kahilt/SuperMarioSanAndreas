@@ -30,6 +30,9 @@
     <ClCompile Include="pilars.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Cars.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="SuperMario.h">

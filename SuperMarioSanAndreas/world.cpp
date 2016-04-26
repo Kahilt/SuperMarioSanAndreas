@@ -9,6 +9,7 @@ using namespace std;
 #define width 770  //defining the screen width 
 #include "Enemies.cpp"
 #include "pilars.cpp"
+#include "Cars.cpp"
 
 void cameraUpdate(float *camerposition, float x, float y, int w, int h){
 	camerposition[0] = -(length / 2) + (x + w / 2);				//positioning the camera at midpoint of the screen on the x axis
@@ -78,6 +79,16 @@ void cameraUpdate(float *camerposition, float x, float y, int w, int h){
 	pillar3.y = 396;
 	pillar3.size = 3;
 
+	Cars car1;
+	car1.x = 300;
+	car1.y = 650;
+	car1.carType = 1;
+
+	Cars car2;
+	car2.x = 750;
+	car2.y = 660;
+	car2.carType = 2;
+
 
 	ALLEGRO_BITMAP *punch_ganster_right = al_load_bitmap("Punching_gangster_RIGHT.png");
 	ALLEGRO_BITMAP *punch_ganster_left = al_load_bitmap("Punching_gangster_LEFT.png");
@@ -137,14 +148,16 @@ void cameraUpdate(float *camerposition, float x, float y, int w, int h){
 //			al_draw_bitmap(imagewindowsky,/* 1*/x + (length*i), 2, NULL);
 			for (int i = 0; i <= 5; i++)//for loop created to redraw the background according to level lenght
 			{
-					al_draw_bitmap(imagewindowsky,(length*i), 2, NULL);	// draws sky to window
-					al_draw_bitmap(imagewindow,(length*i), 5, NULL);	// draws buildings to window.
+					al_draw_bitmap(imagewindowsky,(length*i), 0, NULL);	// draws sky to window
+					al_draw_bitmap(imagewindow,(length*i), 3, NULL);	// draws buildings to window.
 				}
 			al_draw_bitmap(mario, x, y,NULL);
 			
 			pillar1.draw(smallPillar, medPillar, largePillar);
 			pillar2.draw(smallPillar, medPillar, largePillar);
 			pillar3.draw(smallPillar, medPillar, largePillar);
+			car1.draw(imagecar, imagecopcar);
+			car2.draw(imagecar, imagecopcar);
 			gangster.draw(punch_ganster_right, punch_ganster_left, (events.timer.source == enemyTimer));
 		}
 
