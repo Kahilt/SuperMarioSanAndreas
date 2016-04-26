@@ -31,7 +31,11 @@ int splash(int argc, char **argv)
 	//creating allegro variables
 	ALLEGRO_DISPLAY *display= NULL;
 	ALLEGRO_EVENT_QUEUE *event_queue = NULL;
-	ALLEGRO_BITMAP *image = NULL;
+	ALLEGRO_BITMAP *start = NULL;
+	ALLEGRO_BITMAP *pause = NULL;
+	ALLEGRO_BITMAP *gameover = NULL;
+
+
 	ALLEGRO_TIMER *timer;
 	ALLEGRO_FONT *font18;
 
@@ -59,10 +63,21 @@ int splash(int argc, char **argv)
 	//==============================================
 	font18 = al_load_font("arial.ttf", 18, 0);
 
-	//inserting the image
-	image = al_load_bitmap("startscreen.png");
-	imageWidth = al_get_bitmap_width(image);
-	imageHeight = al_get_bitmap_height(image);
+	//loading the Start Screen
+	start = al_load_bitmap("start.png");
+	imageWidth = al_get_bitmap_width(start);
+	imageHeight = al_get_bitmap_height(start);
+
+	//loading Pause screen
+	pause = al_load_bitmap("pausescreen.bmp");
+	imageWidth = al_get_bitmap_width(pause);
+	imageHeight = al_get_bitmap_height(pause);
+	
+	// loading GAMEOVER screen
+	gameover = al_load_bitmap("wasted screen.png");
+	imageWidth = al_get_bitmap_width(gameover);
+	imageHeight = al_get_bitmap_height(gameover);
+
 
 	//Timer initialize and startup
 	event_queue = al_create_event_queue();
@@ -177,9 +192,13 @@ int splash(int argc, char **argv)
 
 			if (page == PAUSE)
 			{
+				al_draw_bitmap(pause, width / 2 - imageWidth / 2, height / 2 - imageHeight / 2, 0);
+
 			}
 			if (page == GAMEOVER)
 			{
+				al_draw_bitmap(gameover, width / 2 - imageWidth / 2, height / 2 - imageHeight / 2, 0);
+
 			}
 
 			al_flip_display();
