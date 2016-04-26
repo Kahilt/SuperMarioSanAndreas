@@ -1,25 +1,40 @@
 #include <allegro5/allegro.h>
-#include <allegro5/allegro_native_dialog.h>
 #include <iostream> 
 #include <allegro5/allegro_image.h>
+#include <allegro5/allegro_primitives.h>
+#include <allegro5/allegro_font.h>
+#include <allegro5/allegro_ttf.h>
+
 
 using namespace std;
+//creating variables to be used
+const int width = 1366;
+const int height = 770;
+int imageWidth = 0;
+int imageHeight = 0;
 
-int splash()
+bool keys[] = { false, false };
+enum KEYS{ ENTER, ESCAPE };
+
+enum PAGE{ MENU, PLAYING, PAUSE, GAMEOVER };
+ 
+int splash(int argc, char **argv)
 {
-	//creating variables to be used
-	int width = 1366;
-	int height = 770;
 	bool done = false;
-	int imageWidth = 0;
-	int imageHeight = 0;
+	bool render = false;
+	float gameTime = 0;
+	int frames = 0;
+	int gameFPS = 0;
 
+	int page = MENU;
 
 	//creating allegro variables
 	ALLEGRO_DISPLAY *display= NULL;
 	ALLEGRO_EVENT_QUEUE *event_queue = NULL;
 	ALLEGRO_BITMAP *image = NULL;
-	
+	ALLEGRO_TIMER *timer;
+	ALLEGRO_FONT *font18;
+
 	// initiallizing ALLEGRO
 	if (!al_init())
 	{
@@ -35,14 +50,29 @@ int splash()
 	//initializing addons
 	al_install_keyboard();
 	al_init_image_addon();
+	al_init_font_addon();
+	al_init_ttf_addon();
+	al_init_primitives_addon();
+
+	//==============================================
+	//PROJECT INIT
+	//==============================================
+	font18 = al_load_font("arial.ttf", 18, 0);
 
 	//inserting the image
 	image = al_load_bitmap("startscreen.png");
 	imageWidth = al_get_bitmap_width(image);
 	imageHeight = al_get_bitmap_height(image);
+
+	//Timer initialize and startup
 	event_queue = al_create_event_queue();
+	timer = al_create_timer(1.0 / 60);
+	al_register_event_source(event_queue, al_get_timer_event_source(timer));
 	al_register_event_source(event_queue, al_get_keyboard_event_source());
-	
+
+	al_start_timer(timer);
+	gameTime = al_current_time();
+
 	while (!done)
 	{
 		ALLEGRO_EVENT evnt;
@@ -53,20 +83,63 @@ int splash()
 			switch (evnt.keyboard.keycode)
 			{
 			case ALLEGRO_KEY_ESCAPE:
-				done = true;
+				keys[ESCAPE] = true;
+				break;
+			case ALLEGRO_KEY_ENTER:
+				keys[ENTER] = true;
 				break;
 			}
 		}
-		al_draw_bitmap(image, width / 2 - imageWidth / 2, height / 2 - imageHeight / 2, 0);
-		al_flip_display();
-		al_clear_to_color(al_map_rgb(0, 0, 0));
+
+		else if (evnt.type == ALLEGRO_EVENT_KEY_UP)
+		{
+			switch (evnt.keyboard.keycode)
+			{
+			case ALLEGRO_KEY_ESCAPE:
+				keys[ESCAPE] = false;
+				break;
+			case ALLEGRO_KEY_ENTER:
+				keys[ENTER] = false;
+				break;
+			}
+		}
+		
+
+		//GAME UPDATE
+		
+		else if (ev.type == ALLEGRO_EVENT_TIMER)
+		{
+			render = true;
+
+
+			frames++;
+			if (al_current_time() - gameTime >= 1)
+			{
+				gameTime = al_current_time();
+				gameFPS = frames;
+				frames = 0;
+			}
+
+		}
+			
+		if (render && al_is_event_queue_empty(event_queue))
+		{
+			render = false;
+			al_draw_bitmap(image, width / 2 - imageWidth / 2, height / 2 - imageHeight / 2, 0);
+			al_flip_display();
+			al_clear_to_color(al_map_rgb(0, 0, 0));
+		}
 	}
 
 	//Destroying objects
 	al_destroy_bitmap(image);
+	al_destroy_font(font18);
+	al_destroy_timer(timer);
 	al_destroy_event_queue(event_queue);
 	al_destroy_display(display);
 	return 0;
 }
+
+void ChangePage(int &page, int newPage);
 
 /*NB!!!!!!!!!!!!!!!!!!!!!!!!! check loading bitmaps with allegro 5 by MikeGeigTv*/
