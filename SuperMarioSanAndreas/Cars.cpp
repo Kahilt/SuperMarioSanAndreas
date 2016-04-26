@@ -24,6 +24,13 @@ public:
 		carType = 1;				
 	}
 
+	void setCars(int posx, int posy, int type)
+	{
+		x = posx;
+		y = posy;
+		carType = type;
+	}
+
 	~Cars()
 	{
 

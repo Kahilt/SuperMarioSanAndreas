@@ -107,7 +107,7 @@ int splash(int argc, char **argv)
 
 		//GAME UPDATE
 		
-		else if (ev.type == ALLEGRO_EVENT_TIMER)
+		else if (evnt.type == ALLEGRO_EVENT_TIMER)
 		{
 			render = true;
 

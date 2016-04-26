@@ -28,6 +28,7 @@ void cameraUpdate(float *camerposition, float x, float y, int w, int h){
 	 const float FPS = 60.0;
 	 const float EFPS = 13.0;
 	 enum Direction {/*UP, DOWN, */LEFT, RIGHT};
+	 int level = 1;
 	 
 	// int dir = DOWN;
 
@@ -49,14 +50,25 @@ void cameraUpdate(float *camerposition, float x, float y, int w, int h){
 	al_register_event_source(event_queue, al_get_keyboard_event_source());
 	al_register_event_source(event_queue, al_get_timer_event_source(timer));
 	al_register_event_source(event_queue, al_get_timer_event_source(enemyTimer));
-	
+	ALLEGRO_TRANSFORM CAMERA;
+
+	///////////////////////////////////////////////////////////////////////IMAGE LOADING/////////////////////////////////////////////////////////////
+
+
 	ALLEGRO_BITMAP *imagewindow = al_load_bitmap("bgc.png");
 	ALLEGRO_BITMAP *imagewindowsky = al_load_bitmap("sky1.png");
 	ALLEGRO_BITMAP *imagecar = al_load_bitmap("mcar.png");
 	ALLEGRO_BITMAP *imagecopcar = al_load_bitmap("ccar.png");
 	ALLEGRO_BITMAP *mario = al_load_bitmap("Mario_Nintendo.png");
-	ALLEGRO_TRANSFORM CAMERA;
+	ALLEGRO_BITMAP *punch_ganster_right = al_load_bitmap("Punching_gangster_RIGHT.png");
+	ALLEGRO_BITMAP *punch_ganster_left = al_load_bitmap("Punching_gangster_LEFT.png");
+
+	ALLEGRO_BITMAP *smallPillar = al_load_bitmap("Single_pillar_small.png");
+	ALLEGRO_BITMAP *medPillar = al_load_bitmap("Single_pillar_medium.png");
+	ALLEGRO_BITMAP *largePillar = al_load_bitmap("Single_pillar_large.png");
 	
+	///////////////////////////////////////////////////CALLING CLASSES/////////////////////////////////////////////////////////////////////////////
+
 	Enemies gangster;						//creates 1 object of enemies class
 	gangster.x = 1000;						//x position of enemy
 	gangster.startX = 1000;					//starting postion of enemy
@@ -79,28 +91,19 @@ void cameraUpdate(float *camerposition, float x, float y, int w, int h){
 	pillar3.y = 396;
 	pillar3.size = 3;
 
-	Cars car1;
-	car1.x = 300;
-	car1.y = 650;
-	car1.carType = 1;
-
-	Cars car2;
-	car2.x = 750;
-	car2.y = 660;
-	car2.carType = 2;
-
-
-	ALLEGRO_BITMAP *punch_ganster_right = al_load_bitmap("Punching_gangster_RIGHT.png");
-	ALLEGRO_BITMAP *punch_ganster_left = al_load_bitmap("Punching_gangster_LEFT.png");
-
-	ALLEGRO_BITMAP *smallPillar = al_load_bitmap("Single_pillar_small.png");
-	ALLEGRO_BITMAP *medPillar = al_load_bitmap("Single_pillar_medium.png");
-	ALLEGRO_BITMAP *largePillar = al_load_bitmap("Single_pillar_large.png");
+	Cars car1, car2, car3, car4, car5, car6;	//object of Cars class
+	car1.setCars(2500, 650, 1);
+	car3.setCars(3600, 650, 1);
+	car5.setCars(1300, 650, 1);
+	car2.setCars(300, 660, 2);
+	car4.setCars(4700, 660, 2);
+	car6.setCars(7000, 660, 2);
 	
-	al_start_timer(timer);
-	al_start_timer(enemyTimer);
+	////////////////////////////////////////////GAME START//////////////////////////////////////////////////////////////////////////////////////////////
+	al_start_timer(timer);	// main timer
+	al_start_timer(enemyTimer);	// enemy timer
 
-	while (!done)
+	while (!done)	// main game loop
 	{
 		ALLEGRO_EVENT events;
 		al_wait_for_event(event_queue, &events);
@@ -143,22 +146,33 @@ void cameraUpdate(float *camerposition, float x, float y, int w, int h){
 		if (draw)
 		{
 			draw = false;
-			
+
 			al_flip_display();//shows the display window on pc window
-//			al_draw_bitmap(imagewindowsky,/* 1*/x + (length*i), 2, NULL);
+			//			al_draw_bitmap(imagewindowsky,/* 1*/x + (length*i), 2, NULL);
 			for (int i = 0; i <= 5; i++)//for loop created to redraw the background according to level lenght
 			{
-					al_draw_bitmap(imagewindowsky,(length*i), 0, NULL);	// draws sky to window
-					al_draw_bitmap(imagewindow,(length*i), 3, NULL);	// draws buildings to window.
-				}
-			al_draw_bitmap(mario, x, y,NULL);
-			
-			pillar1.draw(smallPillar, medPillar, largePillar);
-			pillar2.draw(smallPillar, medPillar, largePillar);
-			pillar3.draw(smallPillar, medPillar, largePillar);
-			car1.draw(imagecar, imagecopcar);
-			car2.draw(imagecar, imagecopcar);
-			gangster.draw(punch_ganster_right, punch_ganster_left, (events.timer.source == enemyTimer));
+				al_draw_bitmap(imagewindowsky, (length*i), 0, NULL);	// draws sky to window
+				al_draw_bitmap(imagewindow, (length*i), 3, NULL);	// draws buildings to window.
+			}
+			al_draw_bitmap(mario, x, y, NULL);
+
+			//////////////////////////LEVEL 1//////////////////////////////////////////////////////////////////
+
+			if (level == 1)
+			{
+				pillar1.draw(smallPillar, medPillar, largePillar);
+				pillar2.draw(smallPillar, medPillar, largePillar);
+				pillar3.draw(smallPillar, medPillar, largePillar);
+
+				car1.draw(imagecar, imagecopcar);	// calling draw method from Cars class
+				car2.draw(imagecar, imagecopcar);
+				car3.draw(imagecar, imagecopcar);
+				car4.draw(imagecar, imagecopcar);
+				car5.draw(imagecar, imagecopcar);
+				car6.draw(imagecar, imagecopcar);
+
+				gangster.draw(punch_ganster_right, punch_ganster_left, (events.timer.source == enemyTimer));	// draw method from Enemies class
+			}
 		}
 
 		
@@ -172,7 +186,7 @@ void cameraUpdate(float *camerposition, float x, float y, int w, int h){
 	//ALLEGRO_FONT *font = al_load_font("emulogic.ttf", 20, NULL);
 	
 	//al_flip_display();
-	//al_rest(10);
+	
 	//al_destroy_font(font);
 	al_destroy_display(display);
 	al_destroy_bitmap(imagewindow);
