@@ -9,7 +9,11 @@ using namespace std;
 #define width 770  //defining the screen width 
 #include "Enemies.cpp"
 
-
+void cameraUpdate(float *camerposition, float x, float y, int w, int h){
+	camerposition[0] = -(length / 2) + (x + w / 2);				//positioning the camera at midpoint of the screen on the x axis
+	if (camerposition[0] < 0)									//check if the position is less then zero and if true then make it equal to zero
+		camerposition[0] = 0;
+}
 
  int main(){//main function
 
@@ -20,13 +24,13 @@ using namespace std;
 	 int x = 0, y = 0, movespeed = 5;
 	 int state = NULL;
 	 const float FPS = 60.0;
-	 const float EFPS = 15.0;
+	 const float EFPS = 13.0;
 	 enum Direction {/*UP, DOWN, */LEFT, RIGHT};
 	 
 	// int dir = DOWN;
 
 	ALLEGRO_DISPLAY *display;
-	al_set_new_display_flags(ALLEGRO_WINDOWED);
+	al_set_new_display_flags(ALLEGRO_WINDOWED|ALLEGRO_RESIZABLE);
 	display = al_create_display(length, width);
 	al_set_window_position(display, 200, 100);
 
@@ -34,6 +38,7 @@ using namespace std;
 
 	al_init_primitives_addon();
 	al_install_keyboard();
+	float cameraposition[2] = { 0, 0 };
 
 	ALLEGRO_KEYBOARD_STATE keyState;
 	ALLEGRO_TIMER *timer = al_create_timer(1.0 / FPS);
@@ -47,6 +52,8 @@ using namespace std;
 	ALLEGRO_BITMAP *imagewindowsky = al_load_bitmap("sky1.png");
 	ALLEGRO_BITMAP *imagecar = al_load_bitmap("mcar.png");
 	ALLEGRO_BITMAP *imagecopcar = al_load_bitmap("ccar.png");
+	ALLEGRO_BITMAP *mario = al_load_bitmap("Mario_Nintendo.png");
+	ALLEGRO_TRANSFORM CAMERA;
 	
 	Enemies gangster;						//creates 1 object of enemies class
 	gangster.x = 1000;						//x position of enemy
@@ -78,22 +85,24 @@ using namespace std;
 		if (events.type == ALLEGRO_EVENT_TIMER)
 		{
 			al_get_keyboard_state(&keyState);
-			//if (al_key_down(&keyState, ALLEGRO_KEY_DOWN))
-				//y += movespeed;
-			//else if (al_key_down(&keyState, ALLEGRO_KEY_UP))
-				//y -= movespeed;
-			/*else */
-			if (al_key_down(&keyState, ALLEGRO_KEY_RIGHT))
+			if (al_key_down(&keyState, ALLEGRO_KEY_DOWN))
+				y += movespeed;
+			else if (al_key_down(&keyState, ALLEGRO_KEY_UP))
+				y -= movespeed;
+			else if (al_key_down(&keyState, ALLEGRO_KEY_RIGHT))
 			{
-				x -= movespeed;	// moves background to the left to creat the illusion of the player moving through the game world
-				gangster.updateX(-1*movespeed);
+				x += movespeed;	// moves background to the left to creat the illusion of the player moving through the game world
 			}
 			else if (al_key_down(&keyState, ALLEGRO_KEY_LEFT))
 			{
-				x += movespeed;	// moves background to the right to creat the illusion of the player moving through the game world
-				gangster.updateX(movespeed);
+				x -= movespeed;	// moves background to the right to creat the illusion of the player moving through the game world
+
 			}
 			draw = true;
+			cameraUpdate(cameraposition, x, y, length / 2, width / 2);//updates the position of camera as mario moves
+			al_identity_transform(&CAMERA);                           //transforms the image
+			al_translate_transform(&CAMERA, -cameraposition[0], -cameraposition[1]);//translates the camera position
+			al_use_transform(&CAMERA);
 
 			gangster.move(movespeed);
 
@@ -107,11 +116,11 @@ using namespace std;
 //			al_draw_bitmap(imagewindowsky,/* 1*/x + (length*i), 2, NULL);
 			for (int i = 0; i <= 5; i++)//for loop created to redraw the background according to level lenght
 			{
-				if (x <= 0){
-					al_draw_bitmap(imagewindowsky,/* 1*/x + (length*i), 2, NULL);	// draws sky to window
-					al_draw_bitmap(imagewindow,/* 1*/x + (length*i), 5, NULL);	// draws buildings to window
+					al_draw_bitmap(imagewindowsky,(length*i), 2, NULL);	// draws sky to window
+					al_draw_bitmap(imagewindow,(length*i), 5, NULL);	// draws buildings to window
 				}
-			}
+			al_draw_bitmap(mario, x, y,NULL);
+			
 			gangster.draw(punch_ganster_right, punch_ganster_left, (events.timer.source == enemyTimer));
 		}
 
