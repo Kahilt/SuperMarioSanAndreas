@@ -26,9 +26,10 @@ void cameraUpdate(float *camerposition, float x, float y, int w, int h){
 	 int x = 0, y = 0, movespeed = 5;
 	 int state = NULL;
 	 const float FPS = 60.0;
-	 const float EFPS = 13.0;
+	 const float EFPS = 15.0;
 	 enum Direction {/*UP, DOWN, */LEFT, RIGHT};
 	 int level = 1;
+	 const int numOfEnemys = 4;					//contains the number of enemies
 	 
 	// int dir = DOWN;
 
@@ -61,6 +62,7 @@ void cameraUpdate(float *camerposition, float x, float y, int w, int h){
 	ALLEGRO_BITMAP *imagecopcar = al_load_bitmap("ccar.png");
 	ALLEGRO_BITMAP *mario = al_load_bitmap("Mario_Nintendo.png");
 	ALLEGRO_BITMAP *punch_gangster = al_load_bitmap("Punching_gangster.png");
+	ALLEGRO_BITMAP *chain_gangster = al_load_bitmap("Chain_gangster.png");
 	
 	ALLEGRO_BITMAP *smallPillar = al_load_bitmap("Single_pillar_small.png");
 	ALLEGRO_BITMAP *medPillar = al_load_bitmap("Single_pillar_medium.png");
@@ -68,11 +70,11 @@ void cameraUpdate(float *camerposition, float x, float y, int w, int h){
 	
 	///////////////////////////////////////////////////CALLING CLASSES/////////////////////////////////////////////////////////////////////////////
 
-	Enemies gangster;						//creates 1 object of enemies class
-	gangster.x = 1000;						//x position of enemy
-	gangster.startX = 1000;					//starting postion of enemy
-	gangster.y = 570;
-	gangster.endX = 1500;					//ending postion of enemy
+	Enemies gangster[numOfEnemys];						//creates 1 object of enemies class
+	gangster[0].setValues(1000, 570, 1000, 1500,1);	//sets values to enemy
+	gangster[1].setValues(2016, 590, 2016, 2200,1);
+	gangster[2].setValues(4000, 600, 4000, 4500,2);
+	gangster[3].setValues(3000, 600, 3000, 3800, 2);
 
 	pilars pillar1;
 	pillar1.x = 500;
@@ -138,7 +140,10 @@ void cameraUpdate(float *camerposition, float x, float y, int w, int h){
 			al_translate_transform(&CAMERA, -cameraposition[0], -cameraposition[1]);//translates the camera position
 			al_use_transform(&CAMERA);
 
-			gangster.move(movespeed/2);
+			for (int i = 0; i < numOfEnemys; i++)
+			{
+				gangster[i].move(movespeed / 2);
+			}
 
 		}
 
@@ -170,7 +175,10 @@ void cameraUpdate(float *camerposition, float x, float y, int w, int h){
 				car5.draw(imagecar, imagecopcar);
 				car6.draw(imagecar, imagecopcar);
 
-				gangster.draw(punch_gangster, (events.timer.source == enemyTimer));	// draw method from Enemies class
+				for (int i = 0; i < numOfEnemys; i++)
+				{
+					gangster[i].draw(punch_gangster, chain_gangster,(events.timer.source == enemyTimer));	// draw method from Enemies class
+				}
 			}
 		}
 
@@ -195,6 +203,7 @@ void cameraUpdate(float *camerposition, float x, float y, int w, int h){
 	al_destroy_timer(timer);
 
 	al_destroy_bitmap(punch_gangster);
+	al_destroy_bitmap(chain_gangster);
 	
 	return 0;
 }

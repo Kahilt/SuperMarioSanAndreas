@@ -22,6 +22,8 @@ public:
 	bool alive;			//determines whether enemy is alive or dead
 
 	float sourceX;		//sourceX to control which portion of the sprite is printed
+	float sourceXR;
+	int type;			//	1 = Punching gangster,	2 = Chain gangster
 
 	Enemies()
 	{
@@ -41,6 +43,22 @@ public:
 	{
 	}
 
+	void setValues(float xPos, float yPos, float stX, float enX,int ty)		//allows main program to alter values of object
+	{
+		x = xPos;
+		y = yPos;
+		startX = stX;
+		endX = enX;
+		type = ty;
+
+		if (type == 2)
+		{
+			aniWidth = 140.0;
+			aniHeight = 130.0;
+			sourceXR = 1820;
+		}
+	}
+
 	void move(int speed)
 	{
 		
@@ -58,32 +76,61 @@ public:
 		//check if bullet collides with enemy, if true : alive = false;
 	}
 
-	void draw(ALLEGRO_BITMAP *enemy, bool time)	//receives an ALLEGRO_BITMAP from game loop, time controls how often animation changes
+	void draw(ALLEGRO_BITMAP *punch, ALLEGRO_BITMAP *chain, bool time)	//receives an ALLEGRO_BITMAP from game loop, time controls how often animation changes
 	{
 		if (alive)
 		{
-			if (direction == 1)
+			if (type == 1)			//draws appropriate animation for punching gangster
 			{
-				if (!enemy)
-					cout << "Error loading image";
+				if (direction == 1)
+				{
+					if (!punch)
+						cout << "Error loading image";
 
-				if (time)
-					sourceX += al_get_bitmap_width(enemy) / 7;		//since there are 7 animations 
+					if (time)
+						sourceX += al_get_bitmap_width(punch) / 7;		//since there are 7 animations 
 
-				if (sourceX >= al_get_bitmap_width(enemy))		//sets source point back to 0 when end is reached
-					sourceX = 0;
-	
-				al_draw_bitmap_region(enemy, sourceX, 121, aniWidth, aniHeight, x, y, NULL);		//draws image
+					if (sourceX >= al_get_bitmap_width(punch))		//sets source point back to 0 when end is reached
+						sourceX = 0;
+
+					al_draw_bitmap_region(punch, sourceX, 121, aniWidth, aniHeight, x, y, NULL);		//draws image
+				}
+				else
+				{
+					if (time)
+						sourceX += al_get_bitmap_width(punch) / 7;		//since there are 7 animations 
+
+					if (sourceX >= al_get_bitmap_width(punch))		//sets source point back to 0 when end is reached
+						sourceX = 0;
+
+					al_draw_bitmap_region(punch, sourceX, 0, aniWidth, aniHeight, x, y, NULL);		//draws image
+				}
 			}
-			else
+			else if (type == 2)
 			{
-				if (time)
-					sourceX += al_get_bitmap_width(enemy) / 7;		//since there are 7 animations 
+				if (direction == 1)
+				{
+					if (!chain)
+						cout << "Error loading image";
 
-				if (sourceX >= al_get_bitmap_width(enemy))		//sets source point back to 0 when end is reached
-					sourceX = 0;
+					if (time)
+						sourceX += al_get_bitmap_width(chain) / 13;		//since there are 13 animations 
 
-				al_draw_bitmap_region(enemy, sourceX, 0, aniWidth, aniHeight, x, y, NULL);		//draws image
+					if (sourceX >= al_get_bitmap_width(chain))		//sets source point back to 0 when end is reached
+						sourceX = 0;
+
+					al_draw_bitmap_region(chain, sourceX, 131, aniWidth, aniHeight, x, y, NULL);		//draws image
+				}
+				else
+				{
+					if (time)
+						sourceX += al_get_bitmap_width(chain) / 13;		//since there are 13 animations 
+
+					if (sourceX >= al_get_bitmap_width(chain))		//sets source point back to 0 when end is reached
+						sourceX = 0;
+
+					al_draw_bitmap_region(chain, sourceX, 0, aniWidth, aniHeight, x, y, NULL);		//draws image
+				}
 			}
 		}
 	}
