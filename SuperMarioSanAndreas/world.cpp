@@ -30,7 +30,7 @@ void cameraUpdate(float *camerposition, float x, float y, int w, int h){
 	 enum Direction {/*UP, DOWN, */LEFT, RIGHT};
 	 int level = 1;
 	 const int numOfEnemys = 4;					//contains the number of enemies
-	 const int numCars = 8;
+	 const int numCars = 6;
 	 
 	// int dir = DOWN;
 
@@ -95,13 +95,12 @@ void cameraUpdate(float *camerposition, float x, float y, int w, int h){
 
 	Cars  car[numCars];//object of Cars class
 	car[1].setCars(2500, 650, 1);
-	car[2].setCars(3600, 650, 1);
-	car[3].setCars(1300, 650, 1);
-	car[3].setCars(1500, 650, 1);
-	car[4].setCars(300, 660, 2);
-	car[5].setCars(4700, 660, 2);
-	car[6].setCars(7800, 660, 2);
-	car[7].setCars(7000, 660, 2);
+	car[2].setCars(5500, 650, 1);
+	
+	car[3].setCars(300, 660, 2);
+	car[4].setCars(4700, 660, 2);
+	car[5].setCars(7800, 660, 2);
+	car[6].setCars(7000, 660, 2);
 	
 	////////////////////////////////////////////GAME START//////////////////////////////////////////////////////////////////////////////////////////////
 	al_start_timer(timer);	// main timer
