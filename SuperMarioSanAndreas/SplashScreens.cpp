@@ -34,6 +34,7 @@ int splash(int argc, char **argv)
 	ALLEGRO_BITMAP *start = NULL;
 	ALLEGRO_BITMAP *pause = NULL;
 	ALLEGRO_BITMAP *gameover = NULL;
+	ALLEGRO_BITMAP *image=NULL ;
 
 
 	ALLEGRO_TIMER *timer;
