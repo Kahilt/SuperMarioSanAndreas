@@ -88,9 +88,9 @@ void cameraUpdate(float *camerposition, float x, float y, int w, int h){
 	worldObstacles *obstacle4 = &car4;
 	worldObstacles *obstacle5 = &car5;
 	worldObstacles *obstacle6 = &car6;
-	obstacle1->setvalue(2500, 590, 3);
-	obstacle2->setvalue(5600, 650, 1);
-	obstacle3->setvalue(1700, 650, 1);
+	obstacle1->setvalue(2500, 650, 1);
+	obstacle2->setvalue(3600, 650, 1);
+	obstacle3->setvalue(1300, 650, 1);
 	obstacle4->setvalue(300, 660, 2);
 	obstacle5->setvalue(4700, 660, 2);
 	obstacle6->setvalue(7000, 590, 3); 
@@ -214,7 +214,8 @@ void cameraUpdate(float *camerposition, float x, float y, int w, int h){
 	al_destroy_bitmap(imagecar);
 	al_destroy_bitmap(imagecopcar);
 	al_destroy_timer(timer);
-
+	al_destroy_bitmap(smallPillar);
+	al_destroy_bitmap(medPillar);
 	al_destroy_bitmap(punch_gangster);
 	al_destroy_bitmap(chain_gangster);
 	
