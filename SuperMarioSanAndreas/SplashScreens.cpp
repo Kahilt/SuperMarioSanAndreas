@@ -15,9 +15,11 @@ int imageHeight = 0;
 
 bool keys[] = { false, false, false };
 enum KEYS{ ENTER, ESCAPE, SPACE};
-
 enum PAGE{ MENU, PLAYING, PAUSE, GAMEOVER };
  
+void ChangePage(int &page, int newPage);
+
+
 int splash(int argc, char **argv)
 {
 	bool done = false;
@@ -26,7 +28,8 @@ int splash(int argc, char **argv)
 	int frames = 0;
 	int gameFPS = 0;
 
-	int page = MENU;
+	//PROJECT VAIABLES
+	int page = -1;
 
 	//creating allegro variables
 	ALLEGRO_DISPLAY *display= NULL;
@@ -40,7 +43,9 @@ int splash(int argc, char **argv)
 	ALLEGRO_TIMER *timer;
 	ALLEGRO_FONT *font18;
 
+	//###################################################
 	// initiallizing ALLEGRO
+	//###################################################
 	if (!al_init())
 	{
 		return -1;
@@ -52,18 +57,28 @@ int splash(int argc, char **argv)
 	{
 		return -1;
 	}
-	//initializing addons
+
+
+	//###################################################
+	// INITAILIZING ADDONS
+	//###################################################
 	al_install_keyboard();
 	al_init_image_addon();
 	al_init_font_addon();
 	al_init_ttf_addon();
 	al_init_primitives_addon();
 
-	//==============================================
-	//PROJECT INIT
-	//==============================================
+
+	//###################################################
+	// INITIALIZING PROJECT
+	//###################################################
 	font18 = al_load_font("arial.ttf", 18, 0);
 
+	ChangePage(page, MENU);
+
+	//###################################################
+	// LOADING ALL SCREEN PICTURES
+	//###################################################
 	//loading the Start Screen
 	start = al_load_bitmap("start.png");
 	imageWidth = al_get_bitmap_width(start);
@@ -80,7 +95,9 @@ int splash(int argc, char **argv)
 	imageHeight = al_get_bitmap_height(gameover);
 
 
-	//Timer initialize and startup
+	//###################################################
+	// TIMER INITIALIZATION AND STARTUP
+	//###################################################
 	event_queue = al_create_event_queue();
 	timer = al_create_timer(1.0 / 60);
 	al_register_event_source(event_queue, al_get_timer_event_source(timer));
@@ -121,13 +138,16 @@ int splash(int argc, char **argv)
 		}
 		
 
-		//GAME UPDATE
+
+		//###################################################
+		//GAME UPDATES
+		//###################################################
 		
 		else if (evnt.type == ALLEGRO_EVENT_TIMER)
 		{
 			render = true;
 
-
+			//FPS UPDATE
 			frames++;
 			if (al_current_time() - gameTime >= 1)
 			{
@@ -136,47 +156,52 @@ int splash(int argc, char **argv)
 				frames = 0;
 			}
 
+			//#########PAGES##############
+
 			if (page == MENU)
 			{
 				if (keys[ENTER])
-					page = PLAYING;
+					ChangePage(page,PLAYING);
 
-				if (keys[ESCAPE])
+				else if (keys[ESCAPE])
 					done = true;
 			}
 
 
-			if (page == PLAYING)
+			else if (page == PLAYING)
 			{
 				if (keys[ESCAPE])
-					page = PAUSE;
+					ChangePage(page, PAUSE);
 			}
 
 
-			if (page ==PAUSE)
+			else if (page ==PAUSE)
 			{
 				if (keys[ENTER])
-					page = PLAYING;
-				if (keys[SPACE])
-					page = MENU;
+					ChangePage(page, PLAYING);
+				else if (keys[SPACE])
+					ChangePage(page, MENU);
 
-				if (keys[ESCAPE])
+				else if (keys[ESCAPE])
 					done = true;
 
 			}
 
 		
-			if (page == GAMEOVER)
+			else if (page == GAMEOVER)
 			{
 				if (keys[ENTER])
-					page = MENU;
+					ChangePage(page, MENU);
 
-				if (keys[ESCAPE])
+				else if (keys[ESCAPE])
 					done = true;
 				
 			}
 		}
-			
+
+		//###################################################
+		// RENDER SECTION
+		//###################################################
 		if (render && al_is_event_queue_empty(event_queue))
 		{
 			render = false;
@@ -216,6 +241,43 @@ int splash(int argc, char **argv)
 	return 0;
 }
 
-void ChangePage(int &page, int newPage);
+void ChangePage(int &page, int newPage)
+{
+	if (page == MENU)
+	{
+		std::cout << "Leaving menu\n";
+	}
+	else if (page == PLAYING)
+	{
+		std::cout << "Leaving gameplay\n";
+	}
+	else if (page == PAUSE)
+	{
+		std::cout << "Leaving pause screen\n";
+	}
+	else if (page == GAMEOVER)
+	{
+		std::cout << "Leaving the game\n";
+	}
+
+	page = newPage;
+
+	if (page == MENU)
+	{
+		std::cout << "Entering Menu\n";
+	}
+	else if (page == PLAYING)
+	{
+		std::cout << "Entering gameplay\n";
+	}
+	else if (page == PAUSE)
+	{
+		std::cout << "Entering pause screen\n";
+	}
+	else if (page == GAMEOVER)
+	{
+		std::cout << "Entering gameover screen\n";
+	}
+}
 
 /*NB!!!!!!!!!!!!!!!!!!!!!!!!! check loading bitmaps with allegro 5 by MikeGeigTv*/
