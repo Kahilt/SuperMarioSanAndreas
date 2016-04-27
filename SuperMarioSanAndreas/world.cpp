@@ -30,7 +30,7 @@ void cameraUpdate(float *camerposition, float x, float y, int w, int h){
 	 const float EFPS = 15.0;
 	 enum Direction {/*UP, DOWN, */LEFT, RIGHT};
 	 int level = 1;
-	 const int numOfEnemys = 4;					//contains the number of enemies
+	 const int numOfEnemys = 7;					//contains the number of enemies
 	 
 	// int dir = DOWN;
 
@@ -64,6 +64,7 @@ void cameraUpdate(float *camerposition, float x, float y, int w, int h){
 	ALLEGRO_BITMAP *mario = al_load_bitmap("Mario_Nintendo.png");
 	ALLEGRO_BITMAP *punch_gangster = al_load_bitmap("Punching_gangster.png");
 	ALLEGRO_BITMAP *chain_gangster = al_load_bitmap("Chain_gangster.png");
+	ALLEGRO_BITMAP *imagebus = al_load_bitmap("bus.png");
 	
 	ALLEGRO_BITMAP *smallPillar = al_load_bitmap("brick_grey.png");
 	ALLEGRO_BITMAP *medPillar = al_load_bitmap("download.png");
@@ -71,10 +72,13 @@ void cameraUpdate(float *camerposition, float x, float y, int w, int h){
 	///////////////////////////////////////////////////CALLING CLASSES/////////////////////////////////////////////////////////////////////////////
 
 	Enemies gangster[numOfEnemys];						//creates 1 object of enemies class
-	gangster[0].setValues(1000, 570, 1000, 1500,1);	//sets values to enemy
+	gangster[0].setValues(1000, 590, 1000, 1500,1);	//sets values to enemy
 	gangster[1].setValues(2016, 590, 2016, 2200,1);
 	gangster[2].setValues(4000, 600, 4000, 4500,2);
-	gangster[3].setValues(3000, 600, 3000, 3800, 2);
+	gangster[3].setValues(3000, 600, 3100, 3800, 2);
+	gangster[4].setValues(6500, 590, 5000, 5300, 1);
+	gangster[5].setValues(6500, 590, 5900, 6700, 1);
+	gangster[6].setValues(6500, 600, 7600, 8000, 2);
    
 	///////////////////////setting values for the position of cars//////////////////////////////////////////
 	Cars car1, car2, car3, car4, car5, car6;
@@ -86,10 +90,10 @@ void cameraUpdate(float *camerposition, float x, float y, int w, int h){
 	worldObstacles *obstacle6 = &car6;
 	obstacle1->setvalue(2500, 650, 1);
 	obstacle2->setvalue(3600, 650, 1);
-	obstacle3->setvalue(1600, 650, 1);
-	obstacle4->setvalue(850, 660, 2);
+	obstacle3->setvalue(1300, 650, 1);
+	obstacle4->setvalue(300, 660, 2);
 	obstacle5->setvalue(4700, 660, 2);
-	obstacle6->setvalue(7000, 660, 2); 
+	obstacle6->setvalue(7000, 590, 3); 
 	
 	///////////////////////////////////////setting positions of pillars(brikes)////////////////////////////////////////////////
    /* pilars pillar1, pillar2, pillar3, pillar4, pillar5, pillar6;
@@ -170,19 +174,20 @@ void cameraUpdate(float *camerposition, float x, float y, int w, int h){
 
 			if (level == 1)
 			{
-			    obstacle1->draw(imagecar, imagecopcar);
-				obstacle2->draw(imagecar, imagecopcar);	
-				obstacle3->draw(imagecar, imagecopcar);
-				obstacle4->draw(imagecar, imagecopcar);	
-				obstacle5->draw(imagecar, imagecopcar);
-				obstacle6->draw(imagecar, imagecopcar);
-			/*	obstacle7->draw(smallPillar, medPillar);
+				obstacle1->draw(imagecar, imagecopcar, imagebus);
+				obstacle2->draw(imagecar, imagecopcar, imagebus);
+				obstacle3->draw(imagecar, imagecopcar, imagebus);
+				obstacle4->draw(imagecar, imagecopcar, imagebus);
+				obstacle5->draw(imagecar, imagecopcar, imagebus);
+				obstacle6->draw(imagecar, imagecopcar, imagebus);
+			/*obstacle7->draw(smallPillar, medPillar);
 				obstacle8->draw(smallPillar, medPillar);
 				obstacle9->draw(smallPillar, medPillar);
 				obstacle10->draw(smallPillar, medPillar);
 				obstacle11->draw(smallPillar, medPillar);
 				obstacle12->draw(smallPillar, medPillar);
 				*/
+				//al_draw_bitmap(imagebus, 2500, 590, NULL);
 				for (int i = 0; i < numOfEnemys; i++)
 				{
 					gangster[i].draw(punch_gangster, chain_gangster,(events.timer.source == enemyTimer));	// draw method from Enemies class
