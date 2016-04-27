@@ -74,26 +74,20 @@ int splash(int argc, char **argv)
 	//###################################################
 	font18 = al_load_font("arial.ttf", 18, 0);
 
-	ChangePage(page, MENU);
-
 	//###################################################
 	// LOADING ALL SCREEN PICTURES
 	//###################################################
 	//loading the Start Screen
 	start = al_load_bitmap("start.png");
-	imageWidth = al_get_bitmap_width(start);
-	imageHeight = al_get_bitmap_height(start);
-
+	
 	//loading Pause screen
 	pause = al_load_bitmap("pausescreen.bmp");
-	imageWidth = al_get_bitmap_width(pause);
-	imageHeight = al_get_bitmap_height(pause);
 	
 	// loading GAMEOVER screen
 	gameover = al_load_bitmap("wasted screen.png");
-	imageWidth = al_get_bitmap_width(gameover);
-	imageHeight = al_get_bitmap_height(gameover);
+	
 
+	ChangePage(page, MENU);
 
 	//###################################################
 	// TIMER INITIALIZATION AND STARTUP
@@ -160,7 +154,9 @@ int splash(int argc, char **argv)
 
 			if (page == MENU)
 			{
+				al_daw_bitmap(start, 0, 0, 0);
 				if (keys[ENTER])
+					
 					ChangePage(page,PLAYING);
 
 				else if (keys[ESCAPE])
@@ -177,6 +173,7 @@ int splash(int argc, char **argv)
 
 			else if (page ==PAUSE)
 			{
+				al_daw_bitmap(pause, 0, 0, 0);
 				if (keys[ENTER])
 					ChangePage(page, PLAYING);
 				else if (keys[SPACE])
@@ -190,6 +187,7 @@ int splash(int argc, char **argv)
 		
 			else if (page == GAMEOVER)
 			{
+				al_daw_bitmap(gameover, 0, 0, 0);
 				if (keys[ENTER])
 					ChangePage(page, MENU);
 
@@ -209,7 +207,7 @@ int splash(int argc, char **argv)
 			
 			if (page==MENU)
 			{ 
-				al_draw_bitmap(image, width / 2 - imageWidth / 2, height / 2 - imageHeight / 2, 0);
+				al_draw_bitmap(start,0,0,0);
 
 			}
 			if (page == PLAYING)
@@ -218,12 +216,11 @@ int splash(int argc, char **argv)
 
 			if (page == PAUSE)
 			{
-				al_draw_bitmap(pause, width / 2 - imageWidth / 2, height / 2 - imageHeight / 2, 0);
-
+				al_draw_bitmap(pause, 0, 0, 0);
 			}
 			if (page == GAMEOVER)
 			{
-				al_draw_bitmap(gameover, width / 2 - imageWidth / 2, height / 2 - imageHeight / 2, 0);
+				al_draw_bitmap(gameover, 0,0,0);
 
 			}
 
@@ -234,6 +231,9 @@ int splash(int argc, char **argv)
 
 	//Destroying objects
 	al_destroy_bitmap(image);
+	al_destroy_bitmap(start);
+	al_destroy_bitmap(pause);
+	al_destroy_bitmap(gameover);
 	al_destroy_font(font18);
 	al_destroy_timer(timer);
 	al_destroy_event_queue(event_queue);
