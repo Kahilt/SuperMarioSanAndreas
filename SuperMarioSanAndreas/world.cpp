@@ -187,7 +187,7 @@ void cameraUpdate(float *camerposition, float x, float y, int w, int h){
 				obstacle11->draw(smallPillar, medPillar);
 				obstacle12->draw(smallPillar, medPillar);
 				*/
-				//al_draw_bitmap(imagebus, 2500, 590, NULL);
+				
 				for (int i = 0; i < numOfEnemys; i++)
 				{
 					gangster[i].draw(punch_gangster, chain_gangster,(events.timer.source == enemyTimer));	// draw method from Enemies class
