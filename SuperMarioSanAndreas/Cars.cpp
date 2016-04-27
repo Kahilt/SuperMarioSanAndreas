@@ -16,14 +16,16 @@ public:
 
 	int size;		//1= small ,2= medium, 3 = large
 
-		void draw(ALLEGRO_BITMAP *muscle, ALLEGRO_BITMAP *cop)
+		void draw(ALLEGRO_BITMAP *muscle, ALLEGRO_BITMAP *cop, ALLEGRO_BITMAP *bus)
 	{
 		if (size == 1){
 			al_draw_bitmap(muscle, x, y, NULL);
 		}
-		else{
+		else if (size == 2){
 			al_draw_bitmap(cop, x, y, NULL);
 		}
+		else
+			al_draw_bitmap(bus, x, y, NULL);
 	}
 	void setvalue(int posx, int posy, int type)
 	{

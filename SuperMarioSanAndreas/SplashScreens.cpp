@@ -154,7 +154,7 @@ int splash(int argc, char **argv)
 
 			if (page == MENU)
 			{
-				al_daw_bitmap(start, 0, 0, 0);
+				al_draw_bitmap(start, 0, 0, 0);
 				if (keys[ENTER])
 					
 					ChangePage(page,PLAYING);
@@ -173,7 +173,7 @@ int splash(int argc, char **argv)
 
 			else if (page ==PAUSE)
 			{
-				al_daw_bitmap(pause, 0, 0, 0);
+				al_draw_bitmap(pause, 0, 0, 0);
 				if (keys[ENTER])
 					ChangePage(page, PLAYING);
 				else if (keys[SPACE])
@@ -187,7 +187,7 @@ int splash(int argc, char **argv)
 		
 			else if (page == GAMEOVER)
 			{
-				al_daw_bitmap(gameover, 0, 0, 0);
+				al_draw_bitmap(gameover, 0, 0, 0);
 				if (keys[ENTER])
 					ChangePage(page, MENU);
 
