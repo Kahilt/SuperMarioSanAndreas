@@ -30,6 +30,7 @@ void cameraUpdate(float *camerposition, float x, float y, int w, int h){
 	 enum Direction {/*UP, DOWN, */LEFT, RIGHT};
 	 int level = 1;
 	 const int numOfEnemys = 4;					//contains the number of enemies
+	 const int numCars = 8;
 	 
 	// int dir = DOWN;
 
@@ -92,13 +93,15 @@ void cameraUpdate(float *camerposition, float x, float y, int w, int h){
 	pillar3.y = 396;
 	pillar3.size = 3;
 
-	Cars car1, car2, car3, car4, car5, car6;	//object of Cars class
-	car1.setCars(2500, 650, 1);
-	car3.setCars(3600, 650, 1);
-	car5.setCars(1300, 650, 1);
-	car2.setCars(300, 660, 2);
-	car4.setCars(4700, 660, 2);
-	car6.setCars(7000, 660, 2);
+	Cars  car[numCars];//object of Cars class
+	car[1].setCars(2500, 650, 1);
+	car[2].setCars(3600, 650, 1);
+	car[3].setCars(1300, 650, 1);
+	car[3].setCars(1500, 650, 1);
+	car[4].setCars(300, 660, 2);
+	car[5].setCars(4700, 660, 2);
+	car[6].setCars(7800, 660, 2);
+	car[7].setCars(7000, 660, 2);
 	
 	////////////////////////////////////////////GAME START//////////////////////////////////////////////////////////////////////////////////////////////
 	al_start_timer(timer);	// main timer
@@ -168,12 +171,10 @@ void cameraUpdate(float *camerposition, float x, float y, int w, int h){
 				pillar2.draw(smallPillar, medPillar, largePillar);
 				pillar3.draw(smallPillar, medPillar, largePillar);
 
-				car1.draw(imagecar, imagecopcar);	// calling draw method from Cars class
-				car2.draw(imagecar, imagecopcar);
-				car3.draw(imagecar, imagecopcar);
-				car4.draw(imagecar, imagecopcar);
-				car5.draw(imagecar, imagecopcar);
-				car6.draw(imagecar, imagecopcar);
+				for (int i = 0; i < numCars; i++)
+				{
+					car[i].draw(imagecar, imagecopcar);	// calling draw method from Cars class
+				}
 
 				for (int i = 0; i < numOfEnemys; i++)
 				{
