@@ -5,30 +5,18 @@
 #include "world obstacles.cpp"
 class pilars: public worldObstacles
 {
-
+private :
+	float x;
+	float y;
 public:
 		float pillarHeight;
 		float pillarWidth;
 
-		float x;
-		float y;
+	//	float x;
+		//float y;
 
 		int size;		//1= small ,2= medium, 3 = large
-
-		/*pilars()
-		{
-			x = -1000;
-			y = -1000;
-
-			pillarWidth = 86.0;
-			size = 1;				//all pilars are assumed small initially
-		}
-
-		~pilars()
-		{
-
-		}*/
-
+				
 		void draw(ALLEGRO_BITMAP *smal, ALLEGRO_BITMAP *med)
 		{
 			if (size == 1){
