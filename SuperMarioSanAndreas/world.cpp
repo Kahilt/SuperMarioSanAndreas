@@ -72,7 +72,7 @@ void cameraUpdate(float *camerposition, float x, float y, int w, int h){
 	///////////////////////////////////////////////////CALLING CLASSES/////////////////////////////////////////////////////////////////////////////
 
 	Enemies gangster[numOfEnemys];						//creates 1 object of enemies class
-	gangster[0].setValues(1000, 590, 1000, 1500,1);	//sets values to enemy
+	gangster[0].setValues(1000, 590, 600, 1000,1);	//sets values to enemy
 	gangster[1].setValues(2016, 590, 2016, 2200,1);
 	gangster[2].setValues(4000, 600, 4000, 4500,2);
 	gangster[3].setValues(3000, 600, 3100, 3800, 2);
@@ -89,9 +89,9 @@ void cameraUpdate(float *camerposition, float x, float y, int w, int h){
 	worldObstacles *obstacle5 = &car5;
 	worldObstacles *obstacle6 = &car6;
 	obstacle1->setvalue(2500, 650, 1);
-	obstacle2->setvalue(3600, 650, 1);
-	obstacle3->setvalue(1300, 650, 1);
-	obstacle4->setvalue(850, 660, 2);
+	//obstacle2->setvalue(3600, 650, 1);
+	obstacle3->setvalue(1300, 590, 3);
+	obstacle4->setvalue(300, 660, 2);
 	obstacle5->setvalue(4700, 660, 2);
 	obstacle6->setvalue(7000, 590, 3); 
 	
