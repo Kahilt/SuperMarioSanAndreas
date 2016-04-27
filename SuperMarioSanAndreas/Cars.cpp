@@ -2,48 +2,46 @@
 #include <iostream> //telling compiler to include iostream files
 #include <allegro5/allegro_image.h>//telling compiler to include allegro 5 image file
 #include <allegro5/allegro_primitives.h>//telling compiler to include allegro 5 primitives
-
-class Cars
+#include "world obstacles.cpp"
+class Cars : public worldObstacles
 {
 
 public:
-	float caright;
-	float carWidth;
+	float carsHeight;
+	float carsWidth;
 
 	float x;
 	float y;
 
-	int carType;		//1= Muscle car ,2= Cop car
+	int size;		//1= small ,2= medium, 3 = large
 
-	Cars()
+	/*pilars()
 	{
-		x = -1000;
-		y = -1000;
+	x = -1000;
+	y = -1000;
 
-		carWidth = 86.0;
-		carType = 1;				
+	carsWidth = 86.0;
+	size = 1;				//all pilars are assumed small initially
 	}
 
-	void setCars(int posx, int posy, int type)
-	{
-		x = posx;
-		y = posy;
-		carType = type;
-	}
-
-	~Cars()
+	~pilars()
 	{
 
-	}
+	}*/
 
 	void draw(ALLEGRO_BITMAP *muscle, ALLEGRO_BITMAP *cop)
 	{
-		if (carType == 1){
+		if (size == 1){
 			al_draw_bitmap(muscle, x, y, NULL);
 		}
-		
 		else{
 			al_draw_bitmap(cop, x, y, NULL);
 		}
+	}
+	void setvalue(int posx, int posy, int type)
+	{
+		x = posx;
+		y = posy;
+		size = type;
 	}
 };

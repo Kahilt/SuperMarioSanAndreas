@@ -10,6 +10,7 @@ using namespace std;
 #include "Enemies.cpp"
 #include "pilars.cpp"
 #include "Cars.cpp"
+#include "world obstacles.cpp"
 
 void cameraUpdate(float *camerposition, float x, float y, int w, int h){
 	camerposition[0] = -(length / 2) + (x + w / 2);				//positioning the camera at midpoint of the screen on the x axis
@@ -66,7 +67,6 @@ void cameraUpdate(float *camerposition, float x, float y, int w, int h){
 	
 	ALLEGRO_BITMAP *smallPillar = al_load_bitmap("Single_pillar_small.png");
 	ALLEGRO_BITMAP *medPillar = al_load_bitmap("Single_pillar_medium.png");
-	ALLEGRO_BITMAP *largePillar = al_load_bitmap("Single_pillar_large.png");
 	
 	///////////////////////////////////////////////////CALLING CLASSES/////////////////////////////////////////////////////////////////////////////
 
@@ -75,30 +75,21 @@ void cameraUpdate(float *camerposition, float x, float y, int w, int h){
 	gangster[1].setValues(2016, 590, 2016, 2200,1);
 	gangster[2].setValues(4000, 600, 4000, 4500,2);
 	gangster[3].setValues(3000, 600, 3000, 3800, 2);
-
-	pilars pillar1;
-	pillar1.x = 500;
-	pillar1.y = 570;
-	pillar1.size = 1;
-
-	pilars pillar2;
-	pillar2.x = 586;
-	pillar2.y = 516;
-	pillar2.size = 2;
-
-
-	pilars pillar3;
-	pillar3.x = 672;
-	pillar3.y = 396;
-	pillar3.size = 3;
-
-	Cars car1, car2, car3, car4, car5, car6;	//object of Cars class
-	car1.setCars(2500, 650, 1);
-	car3.setCars(3600, 650, 1);
-	car5.setCars(1300, 650, 1);
-	car2.setCars(300, 660, 2);
-	car4.setCars(4700, 660, 2);
-	car6.setCars(7000, 660, 2);
+    pilars pil;
+	Cars car1, car2, car3, car4, car5, car6;
+	//worldObstacles *obstacle1 = &pil;
+	worldObstacles *obstacle1 = &car1;
+	worldObstacles *obstacle2 = &car2;
+	worldObstacles *obstacle3 = &car3;
+	worldObstacles *obstacle4 = &car4;
+	worldObstacles *obstacle5 = &car5;
+	worldObstacles *obstacle6 = &car6;
+	obstacle1->setvalue(2500, 650, 1);
+	obstacle2->setvalue(3600, 650, 1);
+	obstacle3->setvalue(1300, 650, 1);
+	obstacle4->setvalue(300, 660, 2);
+	obstacle5->setvalue(4700, 660, 2);
+	obstacle6->setvalue(7000, 660, 2); 
 	
 	////////////////////////////////////////////GAME START//////////////////////////////////////////////////////////////////////////////////////////////
 	al_start_timer(timer);	// main timer
@@ -164,17 +155,14 @@ void cameraUpdate(float *camerposition, float x, float y, int w, int h){
 
 			if (level == 1)
 			{
-				pillar1.draw(smallPillar, medPillar, largePillar);
-				pillar2.draw(smallPillar, medPillar, largePillar);
-				pillar3.draw(smallPillar, medPillar, largePillar);
-
-				car1.draw(imagecar, imagecopcar);	// calling draw method from Cars class
-				car2.draw(imagecar, imagecopcar);
-				car3.draw(imagecar, imagecopcar);
-				car4.draw(imagecar, imagecopcar);
-				car5.draw(imagecar, imagecopcar);
-				car6.draw(imagecar, imagecopcar);
-
+				//obstacle1->draw(smallPillar, medPillar);
+				obstacle1->draw(imagecar, imagecopcar);
+				obstacle2->draw(imagecar, imagecopcar);	
+				obstacle3->draw(imagecar, imagecopcar);
+				obstacle4->draw(imagecar, imagecopcar);	
+				obstacle5->draw(imagecar, imagecopcar);
+				obstacle6->draw(imagecar, imagecopcar);
+				
 				for (int i = 0; i < numOfEnemys; i++)
 				{
 					gangster[i].draw(punch_gangster, chain_gangster,(events.timer.source == enemyTimer));	// draw method from Enemies class

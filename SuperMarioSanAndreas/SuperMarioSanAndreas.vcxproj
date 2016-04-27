@@ -16,6 +16,7 @@
     <ClCompile Include="pilars.cpp" />
     <ClCompile Include="SplashScreens.cpp" />
     <ClCompile Include="SuperMario.cpp" />
+    <ClCompile Include="world obstacles.cpp" />
     <ClCompile Include="world.cpp" />
   </ItemGroup>
   <ItemGroup>
