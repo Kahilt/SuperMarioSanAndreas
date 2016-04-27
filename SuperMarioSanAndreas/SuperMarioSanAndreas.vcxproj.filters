@@ -33,6 +33,9 @@
     <ClCompile Include="Cars.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="world obstacles.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="SuperMario.h">
