@@ -14,14 +14,14 @@ public:
 	float carsHeight;
 	float carsWidth;
 
-	int size;		//1= small ,2= medium, 3 = large
+	int cartype;		//1= muscle car ,2= cop car, 3 = bus
 
 		void draw(ALLEGRO_BITMAP *muscle, ALLEGRO_BITMAP *cop, ALLEGRO_BITMAP *bus)
 	{
-		if (size == 1){
+		if (cartype == 1){
 			al_draw_bitmap(muscle, x, y, NULL);
 		}
-		else if (size == 2){
+		else if (cartype == 2){
 			al_draw_bitmap(cop, x, y, NULL);
 		}
 		else
@@ -31,6 +31,6 @@ public:
 	{
 		x = posx;
 		y = posy;
-		size = type;
+		cartype = type;
 	}
 };
