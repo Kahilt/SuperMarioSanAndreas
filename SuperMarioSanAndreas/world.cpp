@@ -68,16 +68,17 @@ void cameraUpdate(float *camerposition, float x, float y, int w, int h){
 	
 	ALLEGRO_BITMAP *smallPillar = al_load_bitmap("brick_grey.png");
 	ALLEGRO_BITMAP *medPillar = al_load_bitmap("download.png");
-	
+	ALLEGRO_BITMAP *manhole = al_load_bitmap("manhole.png");
+
 	///////////////////////////////////////////////////CALLING CLASSES/////////////////////////////////////////////////////////////////////////////
 
 	Enemies gangster[numOfEnemys];						//creates 1 object of enemies class
-	gangster[0].setValues(1000, 590, 1000, 1250,1);	//sets values to enemy
+	gangster[0].setValues(1000, 590, 1000, 1500,1);	//sets values to enemy
 	gangster[1].setValues(1800, 590, 1800, 2200,1);
 	gangster[2].setValues(3000, 600, 3000, 3800,2);
-	gangster[3].setValues(4050, 600, 4050, 4800, 2);
-	gangster[4].setValues(6500, 590, 5500, 5900, 1);
-	gangster[5].setValues(6500, 590, 5900, 6700, 1);
+	gangster[3].setValues(4050, 600, 4080, 4800, 2);
+	gangster[4].setValues(6500, 590, 5400, 5900, 1);
+	gangster[5].setValues(6500, 590, 6000, 6700, 1);
 	gangster[6].setValues(6500, 600, 7600, 8000, 2);
    
 	///////////////////////setting values for the position of cars//////////////////////////////////////////
@@ -189,6 +190,7 @@ void cameraUpdate(float *camerposition, float x, float y, int w, int h){
 				{
 					gangster[i].draw(punch_gangster, chain_gangster,(events.timer.source == enemyTimer));	// draw method from Enemies class
 				}
+				al_draw_bitmap(manhole, 7450, 670, NULL);
 			}
 		}
 
