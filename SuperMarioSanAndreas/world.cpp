@@ -73,10 +73,10 @@ void cameraUpdate(float *camerposition, float x, float y, int w, int h){
 
 	Enemies gangster[numOfEnemys];						//creates 1 object of enemies class
 	gangster[0].setValues(1000, 590, 1000, 1500,1);	//sets values to enemy
-	gangster[1].setValues(2016, 590, 2016, 2200,1);
-	gangster[2].setValues(4000, 600, 4000, 4500,2);
-	gangster[3].setValues(3000, 600, 3100, 3800, 2);
-	gangster[4].setValues(6500, 590, 5000, 5300, 1);
+	gangster[1].setValues(1800, 590, 1800, 2200,1);
+	gangster[2].setValues(3000, 600, 3000, 3800,2);
+	gangster[3].setValues(4050, 600, 4050, 4800, 2);
+	gangster[4].setValues(6500, 590, 5500, 5900, 1);
 	gangster[5].setValues(6500, 590, 5900, 6700, 1);
 	gangster[6].setValues(6500, 600, 7600, 8000, 2);
    
