@@ -82,10 +82,10 @@ void cameraUpdate(float *camerposition, float x, float y, int w, int h){
 	gangster[6].setValues(6500, 600, 7600, 8000, 2);
    
 	///////////////////////setting values for the position of cars//////////////////////////////////////////
-	Cars car[12];
+	Cars car[6];
 	
-	worldObstacles *obstacle[12];
-	for (int i = 0; i < 12; i++)
+	worldObstacles *obstacle[6];
+	for (int i = 0; i < 6; i++)
 	{
 		obstacle[i] = &car[i];
 	}
