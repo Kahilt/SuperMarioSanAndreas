@@ -105,7 +105,12 @@ void cameraUpdate(float *camerposition, float x, float y, int w, int h){
 	{
 		obstacles[i] = &pilar[i];
 	}
-	obstacles[0]->setvalue(500, 650, 1);
+	int by = 0;
+	for (int i = 0; i < 6; i++){
+		
+			by += 32;
+		obstacles[i]->setvalue(1100+by, 500, 1);
+	}
 
 	////////////////////////////////////////////GAME START//////////////////////////////////////////////////////////////////////////////////////////////
 	al_start_timer(timer);	// main timer
@@ -176,6 +181,7 @@ void cameraUpdate(float *camerposition, float x, float y, int w, int h){
 				}
 				for (int j = 0; j < 6; j++){
 					obstacles[j]->draw(smallPillar, medPillar,medPillar);
+					
 				}
 			
 				
