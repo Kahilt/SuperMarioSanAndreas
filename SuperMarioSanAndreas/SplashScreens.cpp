@@ -7,7 +7,9 @@
 
 
 using namespace std;
-//creating variables to be used
+//###################################################
+// VARIABLE CREATION
+//###################################################
 const int width = 1366;
 const int height = 770;
 int imageWidth = 0;
@@ -28,10 +30,10 @@ int splash(int argc, char **argv)
 	int frames = 0;
 	int gameFPS = 0;
 
-	//PROJECT VAIABLES
+	//PROJECT VARIABLES
 	int page = -1;
 
-	//creating allegro variables
+	//CREATING ALLEGRO VARIABLES
 	ALLEGRO_DISPLAY *display= NULL;
 	ALLEGRO_EVENT_QUEUE *event_queue = NULL;
 	ALLEGRO_BITMAP *start = NULL;
@@ -44,7 +46,7 @@ int splash(int argc, char **argv)
 	ALLEGRO_FONT *font18;
 
 	//###################################################
-	// initiallizing ALLEGRO
+	// INITIALIZING ALLEGRO
 	//###################################################
 	if (!al_init())
 	{
@@ -149,9 +151,9 @@ int splash(int argc, char **argv)
 				gameFPS = frames;
 				frames = 0;
 			}
-
-			//#########PAGES##############
-
+			//###################################################
+			// PAGES SECTION
+			//###################################################
 			if (page == MENU)
 			{
 				al_draw_bitmap(start, 0, 0, 0);
@@ -241,7 +243,12 @@ int splash(int argc, char **argv)
 	return 0;
 }
 
-void ChangePage(int &page, int newPage)
+//###################################################
+// OPTIONAL PART
+//###################################################
+
+
+/*void ChangePage(int &page, int newPage)
 {
 	if (page == MENU)
 	{
@@ -279,5 +286,5 @@ void ChangePage(int &page, int newPage)
 		std::cout << "Entering gameover screen\n";
 	}
 }
-
+*/
 /*NB!!!!!!!!!!!!!!!!!!!!!!!!! check loading bitmaps with allegro 5 by MikeGeigTv*/
