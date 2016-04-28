@@ -88,13 +88,7 @@ void cameraUpdate(float *camerposition, float x, float y, int w, int h){
 	{
 		obstacle[i] = &car[i];
 	}
-	/*
-	worldObstacles *obstacle1 = &car1;
-	worldObstacles *obstacle2 = &car2;
-	worldObstacles *obstacle3 = &car3;
-	worldObstacles *obstacle4 = &car4;
-	worldObstacles *obstacle5 = &car5;
-	worldObstacles *obstacle6 = &car6;*/
+	
 
 	obstacle[0]->setvalue(2500, 650, 1);
 	obstacle[1]->setvalue(3600, 650, 1);
