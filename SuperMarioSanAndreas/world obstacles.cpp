@@ -9,7 +9,7 @@ using namespace std;
 
 class worldObstacles{
 public:
-	virtual void draw(ALLEGRO_BITMAP *x, ALLEGRO_BITMAP *y, ALLEGRO_BITMAP *z) = 0;
+	virtual void draw(ALLEGRO_BITMAP *x, ALLEGRO_BITMAP *y, ALLEGRO_BITMAP *z){};
 	virtual void setvalue(int a, int b, int c) = 0;
 };
 #endif

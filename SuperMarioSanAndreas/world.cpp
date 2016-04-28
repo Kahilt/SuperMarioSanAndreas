@@ -72,7 +72,7 @@ void cameraUpdate(float *camerposition, float x, float y, int w, int h){
 	///////////////////////////////////////////////////CALLING CLASSES/////////////////////////////////////////////////////////////////////////////
 
 	Enemies gangster[numOfEnemys];						//creates 1 object of enemies class
-	gangster[0].setValues(1000, 590, 1000, 1500,1);	//sets values to enemy
+	gangster[0].setValues(1000, 590, 1000, 1250,1);	//sets values to enemy
 	gangster[1].setValues(1800, 590, 1800, 2200,1);
 	gangster[2].setValues(3000, 600, 3000, 3800,2);
 	gangster[3].setValues(4050, 600, 4050, 4800, 2);
@@ -81,36 +81,31 @@ void cameraUpdate(float *camerposition, float x, float y, int w, int h){
 	gangster[6].setValues(6500, 600, 7600, 8000, 2);
    
 	///////////////////////setting values for the position of cars//////////////////////////////////////////
-	Cars car[6];	//car1, car2, car3, car4, car5, car6, car7, car8, car9, car10, car11, car12;
+	Cars car[12];
 	
-	worldObstacles *obstacle[6];
-	for (int i = 0; i < 6; i++)
+	worldObstacles *obstacle[12];
+	for (int i = 0; i < 12; i++)
 	{
 		obstacle[i] = &car[i];
 	}
 	
 
-	obstacle[0]->setvalue(2500, 650, 1);
-	obstacle[1]->setvalue(3600, 650, 1);
-	obstacle[2]->setvalue(1300, 650, 1);
-	obstacle[3]->setvalue(850, 660, 2);
-	obstacle[4]->setvalue(4700, 660, 2);
-	obstacle[5]->setvalue(7000, 590, 3);
+	obstacle[0]->setvalue(800, 650, 1);
+	obstacle[1]->setvalue(1600, 650, 1);
+	obstacle[2]->setvalue(2300, 650, 1);
+	obstacle[3]->setvalue(2800, 660, 2);
+	obstacle[4]->setvalue(3900, 660, 2);
+	obstacle[5]->setvalue(4900, 590, 3);
 	
 	///////////////////////////////////////setting positions of pillars(brikes)////////////////////////////////////////////////
-   /* pilars pillar1, pillar2, pillar3, pillar4, pillar5, pillar6;
-	worldObstacles *obstacle7 = &pillar1;
-	worldObstacles *obstacle8 = &pillar2;
-	worldObstacles *obstacle9 = &pillar3;
-	worldObstacles *obstacle10 = &pillar4;
-	worldObstacles *obstacle11 = &pillar5;
-	worldObstacles *obstacle12 = &pillar6;
-	obstacle7->setvalue(2500, 500, 1);
-	obstacle8->setvalue(3600, 500, 1);
-	obstacle9->setvalue(1300, 500, 1);
-	obstacle10->setvalue(300, 500, 2);
-	obstacle11->setvalue(4700,500, 2);
-	obstacle12->setvalue(7000,500, 2);*/
+	pilars pilar[6];
+
+	worldObstacles *obstacles[6];
+	for (int i = 0; i < 6; i++)
+	{
+		obstacles[i] = &pilar[i];
+	}
+	obstacles[0]->setvalue(500, 650, 1);
 
 	////////////////////////////////////////////GAME START//////////////////////////////////////////////////////////////////////////////////////////////
 	al_start_timer(timer);	// main timer
@@ -176,19 +171,13 @@ void cameraUpdate(float *camerposition, float x, float y, int w, int h){
 
 			if (level == 1)
 			{
-				obstacle[0]->draw(imagecar, imagecopcar, imagebus);
-				obstacle[1]->draw(imagecar, imagecopcar, imagebus);
-				obstacle[2]->draw(imagecar, imagecopcar, imagebus);
-				obstacle[3]->draw(imagecar, imagecopcar, imagebus);
-				obstacle[4]->draw(imagecar, imagecopcar, imagebus);
-				obstacle[5]->draw(imagecar, imagecopcar, imagebus);
-			/*obstacle7->draw(smallPillar, medPillar);
-				obstacle8->draw(smallPillar, medPillar);
-				obstacle9->draw(smallPillar, medPillar);
-				obstacle10->draw(smallPillar, medPillar);
-				obstacle11->draw(smallPillar, medPillar);
-				obstacle12->draw(smallPillar, medPillar);
-				*/
+				for (int j = 0; j < 6; j++){
+					obstacle[j]->draw(imagecar, imagecopcar, imagebus);					
+				}
+				for (int j = 0; j < 6; j++){
+					obstacles[j]->draw(smallPillar, medPillar,medPillar);
+				}
+			
 				
 				for (int i = 0; i < numOfEnemys; i++)
 				{

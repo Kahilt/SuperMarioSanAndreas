@@ -17,7 +17,7 @@ public:
 
 		int size;		//1= small ,2= medium, 3 = large
 				
-		void draw(ALLEGRO_BITMAP *smal, ALLEGRO_BITMAP *med)
+		void draw(ALLEGRO_BITMAP *smal, ALLEGRO_BITMAP *med,ALLEGRO_BITMAP *LAR)
 		{
 			if (size == 1){
 				al_draw_bitmap(smal, x, y, NULL);
