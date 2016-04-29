@@ -3,9 +3,6 @@
 #include <iostream>
 
 using namespace std;
-
-
-
 class Luigi_lightning
 {
 public:
@@ -15,6 +12,7 @@ public:
 	float sourceX[7];		//contains width and height of animations
 	float tempX;			//controls the source point of ther animations
 	int i;					//used to iterate array
+	bool active;
 
 	Luigi_lightning()
 	{
@@ -31,6 +29,8 @@ public:
 
 		tempX = 1051;
 		i = 6;
+
+		active = false;
 	}
 
 	~Luigi_lightning()
@@ -40,19 +40,25 @@ public:
 
 	void draw(ALLEGRO_BITMAP *light, bool time)
 	{
-		al_draw_bitmap_region(light, tempX, 0, sourceX[i], 112, (x-sourceX[i]), y, NULL);
-		
-		if (time)
+		if (active)
 		{
-			i--;
+			al_draw_bitmap_region(light, tempX, 0, sourceX[i], 112, (x - sourceX[i]), y, NULL);
 
-			tempX -= sourceX[i];
-			
-			if (i == -1)		//used to set i back to ending of array
+			if (time)
 			{
-				i = 6;
-				tempX = 1051;
+				i--;
+
+				tempX -= sourceX[i];
+
+				if (i == -1)		//used to set i back to ending of array
+				{
+					i = 6;
+					tempX = 1051;
+					active = false;
+				}
 			}
 		}
 	}
+
+	
 };

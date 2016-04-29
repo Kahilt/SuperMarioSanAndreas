@@ -13,6 +13,7 @@ using namespace std;
 #include "world obstacles.cpp"
 #include "manHoles.cpp"
 #include "Luigi_lightning.cpp"
+#include "Luigi.cpp"
 
 void cameraUpdate(float *camerposition, float x, float y, int w, int h){
 	camerposition[0] = -(length / 2) + (x + w / 2);				//positioning the camera at midpoint of the screen on the x axis
@@ -30,6 +31,7 @@ void cameraUpdate(float *camerposition, float x, float y, int w, int h){
 	 int state = NULL;
 	 const float FPS = 60.0;
 	 const float EFPS = 15.0;
+	 const float LFPS = 5.0;
 	 enum Direction {/*UP, DOWN, */LEFT, RIGHT};
 	 int level;//tells you what level you are currently drawing
 	 const int numOfEnemys = 10;					//contains the number of enemies
@@ -50,10 +52,12 @@ void cameraUpdate(float *camerposition, float x, float y, int w, int h){
 	ALLEGRO_KEYBOARD_STATE keyState;
 	ALLEGRO_TIMER *timer = al_create_timer(1.0 / FPS);
 	ALLEGRO_TIMER *enemyTimer = al_create_timer(1.0 / EFPS);			//controls the animation of enemies  
+	ALLEGRO_TIMER *luigiTimer = al_create_timer(1.0 / LFPS);			//controls the animation of Luigi
 	ALLEGRO_EVENT_QUEUE *event_queue = al_create_event_queue();
 	al_register_event_source(event_queue, al_get_keyboard_event_source());
 	al_register_event_source(event_queue, al_get_timer_event_source(timer));
 	al_register_event_source(event_queue, al_get_timer_event_source(enemyTimer));
+	al_register_event_source(event_queue, al_get_timer_event_source(luigiTimer));
 	ALLEGRO_TRANSFORM CAMERA;
 
 	///////////////////////////////////////////////////////////////////////IMAGE LOADING/////////////////////////////////////////////////////////////
@@ -72,6 +76,7 @@ void cameraUpdate(float *camerposition, float x, float y, int w, int h){
 	ALLEGRO_BITMAP *medPillar = al_load_bitmap("download.png");
 	ALLEGRO_BITMAP *manhole = al_load_bitmap("manhole.png");
 	ALLEGRO_BITMAP *light = al_load_bitmap("Lightning sprite.png");
+	ALLEGRO_BITMAP *luigiBM = al_load_bitmap("Luigi.png");
 
 	///////////////////////////////////////////////////CALLING CLASSES/////////////////////////////////////////////////////////////////////////////
 
@@ -84,9 +89,15 @@ void cameraUpdate(float *camerposition, float x, float y, int w, int h){
 	gangster[5].setValues(6500, 590, 6000, 6700, 1);
 	gangster[6].setValues(6500, 600, 7600, 8000, 2);
    
-	Luigi_lightning lightning;						//temporary position just to test the lightning
-	lightning.x = 500;
-	lightning.y = 500;
+	Luigi luigi;						//Luigi positioned at end with lightning 
+	luigi.x = 7500;
+	luigi.y = 550;
+
+	Luigi_lightning lightning;						
+	lightning.x = luigi.x+10;
+	lightning.y = luigi.y+40;
+
+	
    
 	///////////////////////setting values for the position of cars//////////////////////////////////////////
 	Cars car[20];
@@ -197,6 +208,7 @@ void cameraUpdate(float *camerposition, float x, float y, int w, int h){
 	////////////////////////////////////////////GAME START//////////////////////////////////////////////////////////////////////////////////////////////
 	al_start_timer(timer);	// main timer
 	al_start_timer(enemyTimer);	// enemy timer
+	al_start_timer(luigiTimer);	// luigi timer
 
 	while (!done)	// main game loop
 	{
@@ -291,7 +303,9 @@ void cameraUpdate(float *camerposition, float x, float y, int w, int h){
 				{
 						gangster[i].draw(punch_gangster, chain_gangster, (events.timer.source == enemyTimer));	// draw method from Enemies class
 				}
-
+				
+				luigi.draw(luigiBM, (events.timer.source == luigiTimer),lightning.active);		
+				lightning.active = luigi.lightning_active();
 				lightning.draw(light, (events.timer.source == enemyTimer));
 				//al_draw_bitmap(manhole, 7450, 670, NULL);
 			}
@@ -322,6 +336,8 @@ void cameraUpdate(float *camerposition, float x, float y, int w, int h){
 	al_destroy_bitmap(chain_gangster);
 	al_destroy_bitmap(manhole);
 	al_destroy_bitmap(light);
+	al_destroy_bitmap(luigiBM);
+	al_destroy_timer(luigiTimer);
 	
 	return 0;
 }
