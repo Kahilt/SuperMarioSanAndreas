@@ -33,6 +33,7 @@ public:
 		direction = 1;		//initial direction set to RIGHT
 		bool alive = true;
 		sourceX = 0;
+		type = 1;
 
 		aniHeight = 120.0;
 		aniWidth = 110.0;
@@ -55,7 +56,6 @@ public:
 		{
 			aniWidth = 140.0;
 			aniHeight = 130.0;
-			sourceXR = 1820;
 		}
 	}
 
@@ -106,7 +106,7 @@ public:
 					al_draw_bitmap_region(punch, sourceX, 0, aniWidth, aniHeight, x, y, NULL);		//draws image
 				}
 			}
-			else if (type == 2)
+			else if (type == 2)			//draws appropriate image for chain gangster
 			{
 				if (direction == 1)
 				{

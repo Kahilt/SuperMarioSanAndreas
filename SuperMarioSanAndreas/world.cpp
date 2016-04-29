@@ -11,6 +11,7 @@ using namespace std;
 #include "pilars.cpp"
 #include "Cars.cpp"
 #include "world obstacles.cpp"
+#include "Luigi_lightning.cpp"
 
 void cameraUpdate(float *camerposition, float x, float y, int w, int h){
 	camerposition[0] = -(length / 2) + (x + w / 2);				//positioning the camera at midpoint of the screen on the x axis
@@ -66,9 +67,10 @@ void cameraUpdate(float *camerposition, float x, float y, int w, int h){
 	ALLEGRO_BITMAP *chain_gangster = al_load_bitmap("Chain_gangster.png");
 	ALLEGRO_BITMAP *imagebus = al_load_bitmap("bus.png");
 	
-	ALLEGRO_BITMAP *smallPillar = al_load_bitmap("brick_orange.png");
+	ALLEGRO_BITMAP *smallPillar = al_load_bitmap("brick_grey.png");
 	ALLEGRO_BITMAP *medPillar = al_load_bitmap("download.png");
 	ALLEGRO_BITMAP *manhole = al_load_bitmap("manhole.png");
+	ALLEGRO_BITMAP *light = al_load_bitmap("Lightning sprite.png");
 
 	///////////////////////////////////////////////////CALLING CLASSES/////////////////////////////////////////////////////////////////////////////
 
@@ -80,6 +82,10 @@ void cameraUpdate(float *camerposition, float x, float y, int w, int h){
 	gangster[4].setValues(6500, 590, 5400, 5900, 1);
 	gangster[5].setValues(6500, 590, 6000, 6700, 1);
 	gangster[6].setValues(6500, 600, 7600, 8000, 2);
+
+	Luigi_lightning lightning;						//temporary position just to test the lightning
+	lightning.x = 500;
+	lightning.y = 500;
    
 	///////////////////////setting values for the position of cars//////////////////////////////////////////
 	Cars car[6];
@@ -207,6 +213,8 @@ void cameraUpdate(float *camerposition, float x, float y, int w, int h){
 				{
 					gangster[i].draw(punch_gangster, chain_gangster,(events.timer.source == enemyTimer));	// draw method from Enemies class
 				}
+
+				lightning.draw(light, (events.timer.source == enemyTimer));
 				al_draw_bitmap(manhole, 7450, 670, NULL);
 			}
 		}
@@ -235,6 +243,7 @@ void cameraUpdate(float *camerposition, float x, float y, int w, int h){
 	al_destroy_bitmap(punch_gangster);
 	al_destroy_bitmap(chain_gangster);
 	al_destroy_bitmap(manhole);
+	al_destroy_bitmap(light);
 	
 	return 0;
 }
