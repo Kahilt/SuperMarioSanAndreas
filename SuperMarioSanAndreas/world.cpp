@@ -66,7 +66,7 @@ void cameraUpdate(float *camerposition, float x, float y, int w, int h){
 	ALLEGRO_BITMAP *chain_gangster = al_load_bitmap("Chain_gangster.png");
 	ALLEGRO_BITMAP *imagebus = al_load_bitmap("bus.png");
 	
-	ALLEGRO_BITMAP *smallPillar = al_load_bitmap("brick_grey.png");
+	ALLEGRO_BITMAP *smallPillar = al_load_bitmap("brick_orange.png");
 	ALLEGRO_BITMAP *medPillar = al_load_bitmap("download.png");
 	ALLEGRO_BITMAP *manhole = al_load_bitmap("manhole.png");
 
@@ -99,20 +99,37 @@ void cameraUpdate(float *camerposition, float x, float y, int w, int h){
 	obstacle[5]->setvalue(4900, 590, 3);
 	
 	///////////////////////////////////////setting positions of pillars(brikes)////////////////////////////////////////////////
-	pilars pilar[6];
+	pilars pilar[50];
 
-	worldObstacles *obstacles[6];
-	for (int i = 0; i < 6; i++)
+	worldObstacles *obstacles[50];
+	for (int i = 0; i < 50; i++)
 	{
 		obstacles[i] = &pilar[i];
 	}
-	int by = 0;
-	for (int i = 0; i < 6; i++){
+	int b1 = 0;
+	for (int i = 0; i < 9; i++){
 		
-			by += 32;
-		obstacles[i]->setvalue(1100+by, 500, 1);
+			b1 += 32;
+		obstacles[i]->setvalue(1100+b1, 550, 1);
 	}
+	int b2 = 0;
+	for (int i = 10; i < 18; i++){
 
+		b2 += 32;
+		obstacles[i]->setvalue(1900 + b2, 550, 1);
+	}
+	int b3 = 0;
+	for (int i = 19; i < 28; i++){
+
+		b3 += 32;
+		obstacles[i]->setvalue(3000 + b3, 550, 1);
+	}
+	int b4 = 0;
+	for (int i = 28; i < 38; i++){
+
+		b4 += 32;
+		obstacles[i]->setvalue(3288 + b4, 400, 1);
+	}
 	////////////////////////////////////////////GAME START//////////////////////////////////////////////////////////////////////////////////////////////
 	al_start_timer(timer);	// main timer
 	al_start_timer(enemyTimer);	// enemy timer
@@ -180,7 +197,7 @@ void cameraUpdate(float *camerposition, float x, float y, int w, int h){
 				for (int j = 0; j < 6; j++){
 					obstacle[j]->draw(imagecar, imagecopcar, imagebus);					
 				}
-				for (int j = 0; j < 6; j++){
+				for (int j = 0; j < 50; j++){
 					obstacles[j]->draw(smallPillar, medPillar,medPillar);
 					
 				}
@@ -217,6 +234,7 @@ void cameraUpdate(float *camerposition, float x, float y, int w, int h){
 	al_destroy_bitmap(medPillar);
 	al_destroy_bitmap(punch_gangster);
 	al_destroy_bitmap(chain_gangster);
+	al_destroy_bitmap(manhole);
 	
 	return 0;
 }
