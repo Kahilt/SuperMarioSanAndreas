@@ -13,6 +13,7 @@
   <ItemGroup>
     <ClCompile Include="Cars.cpp" />
     <ClCompile Include="Enemies.cpp" />
+    <ClCompile Include="manHoles.cpp" />
     <ClCompile Include="Luigi_lightning.cpp" />
     <ClCompile Include="pilars.cpp" />
     <ClCompile Include="SplashScreens.cpp" />
