@@ -11,6 +11,7 @@ using namespace std;
 #include "pilars.cpp"
 #include "Cars.cpp"
 #include "world obstacles.cpp"
+#include "manHoles.cpp"
 
 void cameraUpdate(float *camerposition, float x, float y, int w, int h){
 	camerposition[0] = -(length / 2) + (x + w / 2);				//positioning the camera at midpoint of the screen on the x axis
@@ -29,8 +30,8 @@ void cameraUpdate(float *camerposition, float x, float y, int w, int h){
 	 const float FPS = 60.0;
 	 const float EFPS = 15.0;
 	 enum Direction {/*UP, DOWN, */LEFT, RIGHT};
-	 int level = 1;
-	 const int numOfEnemys = 7;					//contains the number of enemies
+	 int level;//tells you what level you are currently drawing
+	 const int numOfEnemys = 10;					//contains the number of enemies
 	 
 	// int dir = DOWN;
 
@@ -71,7 +72,7 @@ void cameraUpdate(float *camerposition, float x, float y, int w, int h){
 	ALLEGRO_BITMAP *manhole = al_load_bitmap("manhole.png");
 
 	///////////////////////////////////////////////////CALLING CLASSES/////////////////////////////////////////////////////////////////////////////
-
+	
 	Enemies gangster[numOfEnemys];						//creates 1 object of enemies class
 	gangster[0].setValues(1000, 590, 1000, 1500,1);	//sets values to enemy
 	gangster[1].setValues(1800, 590, 1800, 2200,1);
@@ -81,55 +82,112 @@ void cameraUpdate(float *camerposition, float x, float y, int w, int h){
 	gangster[5].setValues(6500, 590, 6000, 6700, 1);
 	gangster[6].setValues(6500, 600, 7600, 8000, 2);
    
-	///////////////////////setting values for the position of cars//////////////////////////////////////////
-	Cars car[6];
+	///////////////////////setting values for the position of cars for level 1//////////////////////////////////////////
+	Cars car[20];
 	
-	worldObstacles *obstacle[6];
-	for (int i = 0; i < 6; i++)
+	worldObstacles *obstacleC[20];
+	for (int i = 0; i < 20; i++)
 	{
-		obstacle[i] = &car[i];
+		obstacleC[i] = &car[i];
 	}
 	
 
-	obstacle[0]->setvalue(800, 650, 1);
-	obstacle[1]->setvalue(1600, 650, 1);
-	obstacle[2]->setvalue(2300, 650, 1);
-	obstacle[3]->setvalue(2800, 660, 2);
-	obstacle[4]->setvalue(3900, 660, 2);
-	obstacle[5]->setvalue(4900, 590, 3);
-	
-	///////////////////////////////////////setting positions of pillars(brikes)////////////////////////////////////////////////
-	pilars pilar[50];
+	obstacleC[0]->setvalue(800, 650, 1);
+	obstacleC[1]->setvalue(1600, 650, 1);
+	obstacleC[2]->setvalue(2300, 650, 1);
+	obstacleC[3]->setvalue(2800, 660, 2);
+	obstacleC[4]->setvalue(3900, 660, 2);
+	obstacleC[5]->setvalue(4900, 590, 3);
 
-	worldObstacles *obstacles[50];
-	for (int i = 0; i < 50; i++)
+	///////////////////////setting values for the position of cars for level 2//////////////////////////////////////////
+	obstacleC[6]->setvalue(800, 650, 1);
+	obstacleC[7]->setvalue(1600, 650, 1);
+	obstacleC[8]->setvalue(2300, 650, 1);
+	obstacleC[9]->setvalue(-2000, 800, 2);
+	obstacleC[10]->setvalue(3900, 660, 2);
+	obstacleC[11]->setvalue(4900, 590, 3);
+	/*obstacle[12]->setvalue(, 590, 3);
+	obstacle[13]->setvalue(4900, 590, 3); 
+	obstacle[14]->setvalue(4900, 590, 3);*/
+	
+	///////////////////////////////////////setting positions of pillars(brikes) for level 1////////////////////////////////////////////////
+	pilars pilar[300];
+
+	worldObstacles *obstacleP[300];
+	for (int i = 0; i < 300; i++)
 	{
-		obstacles[i] = &pilar[i];
+		obstacleP[i] = &pilar[i];
 	}
 	int b1 = 0;
 	for (int i = 0; i < 9; i++){
 		
 			b1 += 32;
-		obstacles[i]->setvalue(1100+b1, 550, 1);
+		obstacleP[i]->setvalue(1100+b1, 550, 1);
 	}
 	int b2 = 0;
 	for (int i = 10; i < 18; i++){
 
 		b2 += 32;
-		obstacles[i]->setvalue(1900 + b2, 550, 1);
+		obstacleP[i]->setvalue(1900 + b2, 550, 1);
 	}
 	int b3 = 0;
 	for (int i = 19; i < 28; i++){
 
 		b3 += 32;
-		obstacles[i]->setvalue(3000 + b3, 550, 1);
+		obstacleP[i]->setvalue(3000 + b3, 550, 1);
 	}
 	int b4 = 0;
 	for (int i = 28; i < 38; i++){
 
 		b4 += 32;
-		obstacles[i]->setvalue(3288 + b4, 400, 1);
+		obstacleP[i]->setvalue(3288 + b4, 400, 1);
 	}
+	///////////////////////////////////////setting positions of pillars(brikes) for level 1////////////////////////////////////////////////
+	int l2b1 = 0;
+	for (int i = 39; i < 48; i++){
+
+		l2b1 += 32;
+		obstacleP[i]->setvalue(450 + l2b1, 620, 1);
+	}
+	int l2b2 = 0;
+	for (int i = 49; i < 58; i++){
+
+		l2b2 += 32;
+		obstacleP[i]->setvalue(1900 + l2b2, 550, 1);
+	}
+	int l2b3 = 0;
+	for (int i = 59; i < 68; i++){
+
+		l2b3 += 32;
+		obstacleP[i]->setvalue(3000 + l2b3, 550, 1);
+	}
+	int l2b4 = 0;
+	for (int i = 78; i < 88; i++){
+
+		l2b4 += 32;
+		obstacleP[i]->setvalue(3288 + l2b4, 400, 1);
+	}
+	obstacleP[89]->setvalue(2600, 550, 1);
+	obstacleP[90]->setvalue(2750, 550, 1);
+	obstacleP[91]->setvalue(2782, 550, 1);
+	////////////////////////////////////////////man hole poistion  level 2//////////////////////////////////////////////////////////////////////////////////////////
+	manHole manH[15];
+	worldObstacles *obstacleMH[15];
+	for (int i = 0; i < 15; i++)
+	{
+		obstacleMH[i] = &manH[i];
+	}
+	obstacleMH[1]->setvalue(360, 660, 1);
+	int by = 0;
+	for (int i = 2; i < 5; i++){
+		obstacleMH[i]->setvalue(2500+by, 660, 1);
+		by += 146;
+	}
+	////////////////////////////////////////////gansters level 2//////////////////////////////////////////////////////////////////////////////////////////
+	gangster[6].setValues(450, 500, 450, 690, 2);
+	gangster[7].setValues(1900, 430, 1900, 2140, 2);
+	gangster[8].setValues(3000, 430, 3000, 3256, 2);
+
 	////////////////////////////////////////////GAME START//////////////////////////////////////////////////////////////////////////////////////////////
 	al_start_timer(timer);	// main timer
 	al_start_timer(enemyTimer);	// enemy timer
@@ -189,27 +247,48 @@ void cameraUpdate(float *camerposition, float x, float y, int w, int h){
 				al_draw_bitmap(imagewindow, (length*i), 3, NULL);	// draws buildings to window.
 			}
 			al_draw_bitmap(mario, x, y, NULL);
-
-			//////////////////////////LEVEL 1//////////////////////////////////////////////////////////////////
-
-			if (level == 1)
+			level = 2;
+			if (level==1)
+				//////////////////////////LEVEL 1//////////////////////////////////////////////////////////////////
 			{
-				for (int j = 0; j < 6; j++){
-					obstacle[j]->draw(imagecar, imagecopcar, imagebus);					
+
+					for (int j = 0; j < 6; j++){
+						obstacleC[j]->draw(imagecar, imagecopcar, imagebus);
+					}
+					for (int j = 0; j < 50; j++){
+						obstacleP[j]->draw(smallPillar, medPillar, medPillar);
+
+					}
+
+
+					for (int i = 0; i < numOfEnemys; i++)
+					{
+						gangster[i].draw(punch_gangster, chain_gangster, (events.timer.source == enemyTimer));	// draw method from Enemies class
+					}
+					obstacleMH[0]->draw(manhole, manhole, manhole);
 				}
-				for (int j = 0; j < 50; j++){
-					obstacles[j]->draw(smallPillar, medPillar,medPillar);
+				//////////////////////////LEVEL 2//////////////////////////////////////////////////////////////////
+				if (level == 2){
+					for (int j = 6; j < 11; j++){
+						obstacleC[j]->draw(imagecar, imagecopcar, imagebus);
+					}
+					for (int j = 39; j < 100; j++){
+						obstacleP[j]->draw(smallPillar, medPillar, medPillar);
+
+					}
+					for (int j = 1; j < 15; j++){
+						obstacleMH[j]->draw(manhole, manhole, manhole);
+					}
+					
+
+					for (int i = 0; i < numOfEnemys; i++)
+					{
+						gangster[i].draw(punch_gangster, chain_gangster, (events.timer.source == enemyTimer));	// draw method from Enemies class
+					}
+					//al_draw_bitmap(manhole, 7450, 670, NULL);
 					
 				}
-			
-				
-				for (int i = 0; i < numOfEnemys; i++)
-				{
-					gangster[i].draw(punch_gangster, chain_gangster,(events.timer.source == enemyTimer));	// draw method from Enemies class
-				}
-				al_draw_bitmap(manhole, 7450, 670, NULL);
 			}
-		}
 
 		
 	}
