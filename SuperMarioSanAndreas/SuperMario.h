@@ -23,5 +23,12 @@ public:
 	int check; //will record Marios last left or right movement to decide which side he will face after the key is left
 	int dir; //the initial direction of Mario is set to down
 
-	void startMovement(ALLEGRO_DISPLAY *);
+	void startMovement(ALLEGRO_DISPLAY *, bool, ALLEGRO_EVENT, ALLEGRO_KEYBOARD_STATE, ALLEGRO_BITMAP *);
+	void drawMario(bool draw, ALLEGRO_BITMAP *player)
+	{
+		if (draw)
+		{
+			al_draw_bitmap_region(player, sourceX, dir*al_get_bitmap_height(player) / 6, al_get_bitmap_width(player) / 3, al_get_bitmap_height(player) / 6, x, y, NULL);
+		}
+	}
 };

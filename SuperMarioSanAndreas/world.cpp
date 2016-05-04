@@ -14,6 +14,7 @@ using namespace std;
 #include "manHoles.cpp"
 #include "Luigi_lightning.cpp"
 #include "Luigi.cpp"
+#include "SuperMario.cpp"
 
 void cameraUpdate(float *camerposition, float x, float y, int w, int h){
 	camerposition[0] = -(length / 2) + (x + w / 2);				//positioning the camera at midpoint of the screen on the x axis
@@ -60,7 +61,7 @@ void cameraUpdate(float *camerposition, float x, float y, int w, int h){
 	ALLEGRO_TIMER *mariotimer = al_create_timer(1.0 / FPS); //event 1/60 sec, the game will update
 	ALLEGRO_TIMER *enemyTimer = al_create_timer(1.0 / EFPS);			//controls the animation of enemies  
 	ALLEGRO_TIMER *luigiTimer = al_create_timer(1.0 / LFPS);			//controls the animation of Luigi
-	ALLEGRO_EVENT_QUEUE *event_queue = al_create_event_queue();
+	
 	al_register_event_source(event_queue, al_get_display_event_source(display));
 	al_register_event_source(event_queue, al_get_keyboard_event_source());
 	al_register_event_source(event_queue, al_get_timer_event_source(timer));
@@ -71,12 +72,12 @@ void cameraUpdate(float *camerposition, float x, float y, int w, int h){
 
 	///////////////////////////////////////////////////////////////////////IMAGE LOADING/////////////////////////////////////////////////////////////
 
-
+	ALLEGRO_BITMAP *Mario = al_load_bitmap("Try1.png");
 	ALLEGRO_BITMAP *imagewindow = al_load_bitmap("bgc.png");
 	ALLEGRO_BITMAP *imagewindowsky = al_load_bitmap("sky1.png");
 	ALLEGRO_BITMAP *imagecar = al_load_bitmap("mcar.png");
 	ALLEGRO_BITMAP *imagecopcar = al_load_bitmap("ccar.png");
-	ALLEGRO_BITMAP *mario = al_load_bitmap("Mario_Nintendo.png");
+	//ALLEGRO_BITMAP *mario = al_load_bitmap("Mario_Nintendo.png");
 	ALLEGRO_BITMAP *punch_gangster = al_load_bitmap("Punching_gangster.png");
 	ALLEGRO_BITMAP *chain_gangster = al_load_bitmap("Chain_gangster.png");
 	ALLEGRO_BITMAP *imagebus = al_load_bitmap("bus.png");
@@ -213,6 +214,8 @@ void cameraUpdate(float *camerposition, float x, float y, int w, int h){
 	gangster[6].setValues(450, 500, 450, 690, 2);
 	gangster[7].setValues(1900, 430, 1900, 2140, 2);
 	gangster[8].setValues(3000, 430, 3000, 3256, 2);
+	////////////////////////////////////////////Summon Mario//////////////////////////////////////////////////////////////////////////////////////////////
+	SuperMario newMario(10, 400);
 
 	////////////////////////////////////////////GAME START//////////////////////////////////////////////////////////////////////////////////////////////
 	al_start_timer(timer);	// main timer
@@ -225,48 +228,25 @@ void cameraUpdate(float *camerposition, float x, float y, int w, int h){
 		ALLEGRO_EVENT events;
 		al_wait_for_event(event_queue, &events);
 
-		if (events.type == ALLEGRO_EVENT_KEY_UP)
+		newMario.startMovement(display, done, events, keyState, Mario);
+		draw = true;
+		cameraUpdate(cameraposition, x, y, length / 2, width / 2);//updates the position of camera as mario moves
+		al_identity_transform(&CAMERA);                           //transforms the image
+		al_translate_transform(&CAMERA, -cameraposition[0], -cameraposition[1]);//translates the camera position
+		al_use_transform(&CAMERA);
+
+		for (int i = 0; i < numOfEnemys; i++)
 		{
-			switch (events.keyboard.keycode)
-			{
-			case ALLEGRO_KEY_ESCAPE:	// closes window if escape key is pressed
-				done = true;
-			}
+			gangster[i].move(movespeed / 2);
 		}
 
-		if (events.type == ALLEGRO_EVENT_TIMER)
-		{
-			al_get_keyboard_state(&keyState);
-			if (al_key_down(&keyState, ALLEGRO_KEY_DOWN))
-				y += movespeed;
-			else if (al_key_down(&keyState, ALLEGRO_KEY_UP))
-				y -= movespeed;
-			else if (al_key_down(&keyState, ALLEGRO_KEY_RIGHT))
-			{
-				x += movespeed;	// moves background to the left to creat the illusion of the player moving through the game world
-			}
-			else if (al_key_down(&keyState, ALLEGRO_KEY_LEFT))
-			{
-				x -= movespeed;	// moves background to the right to creat the illusion of the player moving through the game world
 
-			}
-			draw = true;
-			cameraUpdate(cameraposition, x, y, length / 2, width / 2);//updates the position of camera as mario moves
-			al_identity_transform(&CAMERA);                           //transforms the image
-			al_translate_transform(&CAMERA, -cameraposition[0], -cameraposition[1]);//translates the camera position
-			al_use_transform(&CAMERA);
-
-			for (int i = 0; i < numOfEnemys; i++)
-			{
-				gangster[i].move(movespeed / 2);
-			}
-
-		}
 
 		if (draw)
 		{
-			draw = false;
 
+			newMario.drawMario(draw, Mario);
+			draw = false;
 			al_flip_display();//shows the display window on pc window
 			//			al_draw_bitmap(imagewindowsky,/* 1*/x + (length*i), 2, NULL);
 			for (int i = 0; i <= 5; i++)//for loop created to redraw the background according to level lenght
@@ -274,54 +254,54 @@ void cameraUpdate(float *camerposition, float x, float y, int w, int h){
 				al_draw_bitmap(imagewindowsky, (length*i), 0, NULL);	// draws sky to window
 				al_draw_bitmap(imagewindow, (length*i), 3, NULL);	// draws buildings to window.
 			}
-			al_draw_bitmap(mario, x, y, NULL);
+
 			level = 2;
-			if (level==1)
-			//////////////////////////LEVEL 1//////////////////////////////////////////////////////////////////
+			if (level == 1)
+				//////////////////////////LEVEL 1//////////////////////////////////////////////////////////////////
 			{
 
 				for (int j = 0; j < 6; j++){
-						obstacleC[j]->draw(imagecar, imagecopcar, imagebus);
+					obstacleC[j]->draw(imagecar, imagecopcar, imagebus);
 				}
 				for (int j = 0; j < 50; j++){
-						obstacleP[j]->draw(smallPillar, medPillar, medPillar);
+					obstacleP[j]->draw(smallPillar, medPillar, medPillar);
 
-					}
-
-
-					for (int i = 0; i < numOfEnemys; i++)
-					{
-						gangster[i].draw(punch_gangster, chain_gangster, (events.timer.source == enemyTimer));	// draw method from Enemies class
-					}
-					obstacleMH[0]->draw(manhole, manhole, manhole);
 				}
-				//////////////////////////LEVEL 2//////////////////////////////////////////////////////////////////
-				if (level == 2){
-					for (int j = 6; j < 11; j++){
-						obstacleC[j]->draw(imagecar, imagecopcar, imagebus);
-					}
-					for (int j = 39; j < 100; j++){
-						obstacleP[j]->draw(smallPillar, medPillar, medPillar);
-					
-				}
-					for (int j = 1; j < 15; j++){
-						obstacleMH[j]->draw(manhole, manhole, manhole);
-					}
-			
-				
+
+
 				for (int i = 0; i < numOfEnemys; i++)
 				{
-						gangster[i].draw(punch_gangster, chain_gangster, (events.timer.source == enemyTimer));	// draw method from Enemies class
+					gangster[i].draw(punch_gangster, chain_gangster, (events.timer.source == enemyTimer));	// draw method from Enemies class
 				}
-				
-				luigi.draw(luigiBM, (events.timer.source == luigiTimer),lightning.active);		
+				obstacleMH[0]->draw(manhole, manhole, manhole);
+			}
+			//////////////////////////LEVEL 2//////////////////////////////////////////////////////////////////
+			if (level == 2){
+				for (int j = 6; j < 11; j++){
+					obstacleC[j]->draw(imagecar, imagecopcar, imagebus);
+				}
+				for (int j = 39; j < 100; j++){
+					obstacleP[j]->draw(smallPillar, medPillar, medPillar);
+
+				}
+				for (int j = 1; j < 15; j++){
+					obstacleMH[j]->draw(manhole, manhole, manhole);
+				}
+
+
+				for (int i = 0; i < numOfEnemys; i++)
+				{
+					gangster[i].draw(punch_gangster, chain_gangster, (events.timer.source == enemyTimer));	// draw method from Enemies class
+				}
+
+				luigi.draw(luigiBM, (events.timer.source == luigiTimer), lightning.active);
 				lightning.active = luigi.lightning_active();
 				lightning.draw(light, (events.timer.source == enemyTimer));
 				//al_draw_bitmap(manhole, 7450, 670, NULL);
 			}
 		}
 
-		
+
 	}
 	
 
@@ -334,6 +314,7 @@ void cameraUpdate(float *camerposition, float x, float y, int w, int h){
 	//al_flip_display();
 	
 	//al_destroy_font(font);
+	al_rest(2.0);//delay
 	al_destroy_display(display);
 	al_destroy_bitmap(imagewindow);
 	al_destroy_bitmap(imagewindowsky); 
