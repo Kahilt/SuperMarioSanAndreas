@@ -5,7 +5,7 @@ SuperMario::SuperMario()
 {
 	sourceX = 0;
 	sourceY = 0;
-	done = false;
+	alive = false;
 	active = false;
 	draw = true;
 	x = 10;

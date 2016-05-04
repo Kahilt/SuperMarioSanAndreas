@@ -14,7 +14,7 @@ public:
 	enum DIRECTION{ RIGHT, LEFT, DOWN, UP, NONE1, NONE2 }; //Defines the different states or directions of mario. NONE1=facing right NONE2=facing left	
 
 
-	bool done ;//used to determine when game will exit
+	bool alive ;//used to determine when mario will die
 	bool active; //will help cause the animation ONLY if key is pressed in particular direction
 	bool draw ;//for timer, used for smooth animations
 	float x , y , moveSpeed ; // x and y are starting co-ordinates of Mario, moveSpeed is the increment of the co-ordinates hence will det how fast Mario moves
