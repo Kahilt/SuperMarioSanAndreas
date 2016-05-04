@@ -44,18 +44,27 @@ void cameraUpdate(float *camerposition, float x, float y, int w, int h){
 	al_set_window_position(display, 0, 0);
 
 	al_init_image_addon();
-
 	al_init_primitives_addon();
 	al_install_keyboard();
 	float cameraposition[2] = { 0, 0 };
 
 	ALLEGRO_KEYBOARD_STATE keyState;
+	
+	ALLEGRO_EVENT_QUEUE *event_queue = al_create_event_queue();// create pointer for keyboard
+	
+	al_register_event_source(event_queue, al_get_keyboard_event_source()); //stores the keyboard buttons in a queue to be executed
+	
+	
+	
 	ALLEGRO_TIMER *timer = al_create_timer(1.0 / FPS);
+	ALLEGRO_TIMER *mariotimer = al_create_timer(1.0 / FPS); //event 1/60 sec, the game will update
 	ALLEGRO_TIMER *enemyTimer = al_create_timer(1.0 / EFPS);			//controls the animation of enemies  
 	ALLEGRO_TIMER *luigiTimer = al_create_timer(1.0 / LFPS);			//controls the animation of Luigi
 	ALLEGRO_EVENT_QUEUE *event_queue = al_create_event_queue();
+	al_register_event_source(event_queue, al_get_display_event_source(display));
 	al_register_event_source(event_queue, al_get_keyboard_event_source());
 	al_register_event_source(event_queue, al_get_timer_event_source(timer));
+	al_register_event_source(event_queue, al_get_timer_event_source(mariotimer));
 	al_register_event_source(event_queue, al_get_timer_event_source(enemyTimer));
 	al_register_event_source(event_queue, al_get_timer_event_source(luigiTimer));
 	ALLEGRO_TRANSFORM CAMERA;
@@ -207,6 +216,7 @@ void cameraUpdate(float *camerposition, float x, float y, int w, int h){
 
 	////////////////////////////////////////////GAME START//////////////////////////////////////////////////////////////////////////////////////////////
 	al_start_timer(timer);	// main timer
+	al_start_timer(mariotimer);	// mario timer
 	al_start_timer(enemyTimer);	// enemy timer
 	al_start_timer(luigiTimer);	// luigi timer
 

@@ -4,7 +4,7 @@
 #include <allegro5/allegro_primitives.h>
 #include <allegro5/allegro_font.h>
 #include <allegro5/allegro_ttf.h>
-#include "world.cpp"
+/*#include "world.cpp"
 
 
 using namespace std;
@@ -241,7 +241,7 @@ int splash(int argc, char **argv)
 	al_destroy_display(display);
 	return 0;
 }
-
+*/
 //###################################################
 // OPTIONAL PART
 //###################################################
@@ -285,3 +285,4 @@ int splash(int argc, char **argv)
 		std::cout << "Entering gameover screen\n";
 	}
 }
+*/
