@@ -1,17 +1,16 @@
-/*#include <allegro5/allegro.h>
+#include <allegro5/allegro.h>
 #include <iostream> 
 #include <allegro5/allegro_image.h>
 #include <allegro5/allegro_primitives.h>
 #include <allegro5/allegro_font.h>
 #include <allegro5/allegro_ttf.h>
+#include "world.cpp"
 
 
 using namespace std;
 //###################################################
 // VARIABLE CREATION
 //###################################################
-const int width = 1366;
-const int height = 770;
 int imageWidth = 0;
 int imageHeight = 0;
 
@@ -53,7 +52,7 @@ int splash(int argc, char **argv)
 		return -1;
 	}
 	// Creating display object
-	display = al_create_display(width, height);
+	display = al_create_display(length,width);
 	//testing display obj
 	if (!display)
 	{
@@ -286,5 +285,3 @@ int splash(int argc, char **argv)
 		std::cout << "Entering gameover screen\n";
 	}
 }
-*/
-/*NB!!!!!!!!!!!!!!!!!!!!!!!!! check loading bitmaps with allegro 5 by MikeGeigTv*/
