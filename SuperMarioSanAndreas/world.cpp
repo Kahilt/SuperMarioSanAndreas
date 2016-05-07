@@ -93,7 +93,7 @@ void cameraUpdate(float *camerposition, float x, float y, int w, int h){
 
 	///////////////////////////////////////////////////////////////////////IMAGE LOADING/////////////////////////////////////////////////////////////
 
-	ALLEGRO_BITMAP *Mario = al_load_bitmap("Try1.png");
+
 	ALLEGRO_BITMAP *Duck = al_load_bitmap("Duck.png");
 	ALLEGRO_BITMAP *Jump = al_load_bitmap("Jump.png");
 	ALLEGRO_BITMAP *Stand = al_load_bitmap("Stand.png");
@@ -102,7 +102,7 @@ void cameraUpdate(float *camerposition, float x, float y, int w, int h){
 	ALLEGRO_BITMAP *Jump1 = al_load_bitmap("Jump1.png");
 	ALLEGRO_BITMAP *Stand1 = al_load_bitmap("Stand1.png");
 	ALLEGRO_BITMAP *Walk1 = al_load_bitmap("Walk1.png");
-	al_convert_mask_to_alpha(Mario, al_map_rgb(0, 0, 0));
+
 	ALLEGRO_BITMAP *imagewindow = al_load_bitmap("bgc.png");
 	ALLEGRO_BITMAP *imagewindowsky = al_load_bitmap("sky1.png");
 	ALLEGRO_BITMAP *imagecar = al_load_bitmap("mcar.png");
