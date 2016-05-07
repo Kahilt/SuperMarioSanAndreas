@@ -26,17 +26,38 @@ void cameraUpdate(float *camerposition, float x, float y, int w, int h){
 
 	 al_init();
 
-
-	 bool done = false, draw = false;
+	 int sourceXa=0;//used for cropping the SpriteSheet for animation
+	 int sourceXb = 0;
+	 int sourceXc = 0;
+	 int sourceXd = 0;
+	 int sourceXe = 0;
+	 int sourceXf = 0;
+	 int sourceXg = 0;
+	 int sourceXh = 0;
+	 float velx, vely;
+	 velx = 0;
+	 vely = 0;
+	 const float gravity=1;
+	 bool jump = false;
+	 float jumpSpeed = 23;
+	 //enum NewDirection{ RIGHT, LEFT, DOWN, UP, NONE1, NONE2 }; //Defines the different states or directions of mario. NONE1=facing right NONE2=facing left	
+	 int moveSpeed = 5;
+	 int check; //will record Marios last left or right movement to decide which side he will face after the key is left
+	 int dir; //the initial direction of Mario is set to down
+	 bool dead;//used to determine when mario will die
+	 bool active; //will help cause the animation ONLY if key is pressed in particular direction
+	 bool draw=false;//for timer, used for smooth animations
+	 bool done = false;
 	 int x = 0, y = 0, movespeed = 5;
 	 int state = NULL;
 	 const float FPS = 60.0;
 	 const float EFPS = 15.0;
 	 const float LFPS = 5.0;
-	 enum Direction {/*UP, DOWN, */LEFT, RIGHT};
+	 enum Direction {UP, DOWN, LEFT, RIGHT, NONE1, NONE2, NONE3,NONE4 };
 	 int level;//tells you what level you are currently drawing
 	 const int numOfEnemys = 10;					//contains the number of enemies
-	 
+	 bool jumpCheck;
+	 int check2;
 	// int dir = DOWN;
 
 	ALLEGRO_DISPLAY *display;
@@ -73,6 +94,15 @@ void cameraUpdate(float *camerposition, float x, float y, int w, int h){
 	///////////////////////////////////////////////////////////////////////IMAGE LOADING/////////////////////////////////////////////////////////////
 
 	ALLEGRO_BITMAP *Mario = al_load_bitmap("Try1.png");
+	ALLEGRO_BITMAP *Duck = al_load_bitmap("Duck.png");
+	ALLEGRO_BITMAP *Jump = al_load_bitmap("Jump.png");
+	ALLEGRO_BITMAP *Stand = al_load_bitmap("Stand.png");
+	ALLEGRO_BITMAP *Walk = al_load_bitmap("Walk.png");
+	ALLEGRO_BITMAP *Duck1 = al_load_bitmap("Duck1.png");
+	ALLEGRO_BITMAP *Jump1 = al_load_bitmap("Jump1.png");
+	ALLEGRO_BITMAP *Stand1 = al_load_bitmap("Stand1.png");
+	ALLEGRO_BITMAP *Walk1 = al_load_bitmap("Walk1.png");
+	al_convert_mask_to_alpha(Mario, al_map_rgb(0, 0, 0));
 	ALLEGRO_BITMAP *imagewindow = al_load_bitmap("bgc.png");
 	ALLEGRO_BITMAP *imagewindowsky = al_load_bitmap("sky1.png");
 	ALLEGRO_BITMAP *imagecar = al_load_bitmap("mcar.png");
@@ -215,20 +245,130 @@ void cameraUpdate(float *camerposition, float x, float y, int w, int h){
 	gangster[7].setValues(1900, 430, 1900, 2140, 2);
 	gangster[8].setValues(3000, 430, 3000, 3256, 2);
 	////////////////////////////////////////////Summon Mario//////////////////////////////////////////////////////////////////////////////////////////////
-	SuperMario newMario(10, 400);
 
 	////////////////////////////////////////////GAME START//////////////////////////////////////////////////////////////////////////////////////////////
 	al_start_timer(timer);	// main timer
 	al_start_timer(mariotimer);	// mario timer
 	al_start_timer(enemyTimer);	// enemy timer
 	al_start_timer(luigiTimer);	// luigi timer
-
+	al_get_keyboard_state(&keyState);
+	jumpCheck = false;
+	x = 0;
+	y = 600;
 	while (!done)	// main game loop
 	{
+	
 		ALLEGRO_EVENT events;
 		al_wait_for_event(event_queue, &events);
 
-		newMario.startMovement(display, done, events, keyState, Mario);
+		if (events.type == ALLEGRO_EVENT_KEY_DOWN)
+		{
+			switch (events.keyboard.keycode)
+			{
+			case ALLEGRO_KEY_ESCAPE:
+				done = true;
+				break;
+			}
+		}
+		
+		else if (events.type == ALLEGRO_EVENT_DISPLAY_CLOSE)
+			done = true;
+
+
+		if (events.type == ALLEGRO_EVENT_TIMER)
+		{
+			active = true;
+			al_get_keyboard_state(&keyState);
+			
+			if (al_key_down(&keyState, ALLEGRO_KEY_DOWN))
+			{
+				velx = 0;
+				y += moveSpeed;
+				dir = DOWN;
+			}
+			else if (al_key_down(&keyState, ALLEGRO_KEY_UP) && jump == true)
+			{
+				vely = -jumpSpeed;
+				dir = UP;
+				jump = false;
+			}
+			else if (al_key_down(&keyState, ALLEGRO_KEY_RIGHT))
+			{
+				velx = moveSpeed;
+				dir = RIGHT;
+				check = 1;
+				check2 = 1;
+			}
+			else if (al_key_down(&keyState, ALLEGRO_KEY_LEFT))
+			{
+				velx = -moveSpeed;
+				dir = LEFT;
+				check = 2;
+				check2 = 2;
+			}
+		
+			
+			else
+			{
+				if (check == 1 || check == 0)
+				{
+					dir = NONE1;
+					
+				}
+				else
+				{
+					dir = NONE2;
+					
+				}
+				velx = 0;
+				active = false;
+			}
+
+		
+			if (active)
+			{
+				sourceXa += al_get_bitmap_width(Duck) / 10;
+				sourceXb += al_get_bitmap_width(Jump) / 10;
+				sourceXc += al_get_bitmap_width(Walk) / 10;
+				sourceXd += al_get_bitmap_width(Stand) / 10;
+				sourceXe += al_get_bitmap_width(Duck1) / 10;
+				sourceXf += al_get_bitmap_width(Jump1) / 10;
+				sourceXg += al_get_bitmap_width(Walk1) / 10;
+				sourceXh += al_get_bitmap_width(Stand1) / 10;
+			}
+				//sourceX += al_get_bitmap_width(Mario) / 3;
+
+			//if (sourceX >= al_get_bitmap_width(Mario))
+			if (sourceXa >= al_get_bitmap_width(Duck))
+				sourceXa = 0;
+			if (sourceXb >= al_get_bitmap_width(Jump))
+				sourceXb = 0;
+			if (sourceXc >= al_get_bitmap_width(Walk))
+				sourceXc = 0;
+			if (sourceXd >= al_get_bitmap_width(Stand))
+				sourceXd = 0;
+			if (sourceXe >= al_get_bitmap_width(Duck1))
+				sourceXe = 0;
+			if (sourceXf >= al_get_bitmap_width(Jump1))
+				sourceXf = 0;
+			if (sourceXg >= al_get_bitmap_width(Walk1))
+				sourceXg = 0;
+			if (sourceXh >= al_get_bitmap_width(Stand1))
+				sourceXh = 0;
+		}
+		if (!jump)
+			vely += gravity;
+		else
+			vely = 0;
+
+		x += velx;
+		y += vely;
+		if (y < 600)
+			dir = UP;
+		jump = (y  >= 600);
+		if (jump)
+			y = 600;
+
 		draw = true;
 		cameraUpdate(cameraposition, x, y, length / 2, width / 2);//updates the position of camera as mario moves
 		al_identity_transform(&CAMERA);                           //transforms the image
@@ -245,7 +385,35 @@ void cameraUpdate(float *camerposition, float x, float y, int w, int h){
 		if (draw)
 		{
 
-			newMario.drawMario(draw, Mario);
+		
+				//al_draw_bitmap_region(Mario, sourceX, dir*al_get_bitmap_height(Mario) / 6, al_get_bitmap_width(Mario) / 3, al_get_bitmap_height(Mario) / 6, x, y, NULL);
+			switch (dir)
+			{
+			case 0:
+				if(check2==1)
+					al_draw_bitmap_region(Jump1, sourceXf, 0, al_get_bitmap_width(Jump1) / 10, al_get_bitmap_height(Jump1), x, y, NULL);
+				else
+					al_draw_bitmap_region(Jump, sourceXb, 0, al_get_bitmap_width(Jump) / 10, al_get_bitmap_height(Jump), x, y, NULL);
+				break;
+			case 1:
+				if (check2 == 1)
+				    al_draw_bitmap_region(Duck1, sourceXe, 0, al_get_bitmap_width(Duck1) / 10, al_get_bitmap_height(Duck1), x, y, NULL);
+				else
+					al_draw_bitmap_region(Duck, sourceXa, 0, al_get_bitmap_width(Duck) / 10, al_get_bitmap_height(Duck), x, y, NULL);
+				break;
+			case 2:al_draw_bitmap_region(Walk, sourceXc, 0, al_get_bitmap_width(Walk) / 10, al_get_bitmap_height(Walk), x, y, NULL);
+				break;
+			case 3:al_draw_bitmap_region(Walk1, sourceXg, 0, al_get_bitmap_width(Walk1) / 10, al_get_bitmap_height(Walk1), x, y, NULL);
+				break;
+			case 4:al_draw_bitmap_region(Stand1, sourceXh, 0, al_get_bitmap_width(Stand1) / 10, al_get_bitmap_height(Stand1), x, y, NULL); 
+				break;
+			case 5:
+				al_draw_bitmap_region(Stand, sourceXd, 0, al_get_bitmap_width(Stand) / 10, al_get_bitmap_height(Stand), x, y, NULL);
+				break;
+			}
+			
+			
+		
 			draw = false;
 			al_flip_display();//shows the display window on pc window
 			//			al_draw_bitmap(imagewindowsky,/* 1*/x + (length*i), 2, NULL);
@@ -256,7 +424,7 @@ void cameraUpdate(float *camerposition, float x, float y, int w, int h){
 			}
 
 			level = 2;
-			if (level == 1)
+			if (level == 2)
 				//////////////////////////LEVEL 1//////////////////////////////////////////////////////////////////
 			{
 

@@ -20,7 +20,7 @@ public :
 	{
 		x = -1000;
 		y = -1000;
-
+		alive = true;
 		aniWidth = 125.0;
 		aniHeight = 185.0;
 
