@@ -15,7 +15,7 @@ using namespace std;
 #include "Luigi_lightning.cpp"
 #include "Luigi.cpp"
 #include "SuperMario.cpp"
-
+#include "Spikes.cpp"
 void cameraUpdate(float *camerposition, float x, float y, int w, int h){
 	camerposition[0] = -(length / 2) + (x + w / 2);				//positioning the camera at midpoint of the screen on the x axis
 	if (camerposition[0] < 0)									//check if the position is less then zero and if true then make it equal to zero
@@ -34,6 +34,9 @@ void drawMulti(first startloop, first endloop, first plusplus,second object[],fi
  int main(){//main function
 
 	 al_init();
+	 int delay = 0;
+	 bool hit = false;
+	 bool hitcheck = false;
 
 	 float sourceXa=0;//used for cropping the SpriteSheet for animation
 	 float sourceXb = 0;
@@ -43,6 +46,8 @@ void drawMulti(first startloop, first endloop, first plusplus,second object[],fi
 	 float sourceXf = 0;
 	 float sourceXg = 0;
 	 float sourceXh = 0;
+	 float sourceXi = 0;
+	 float sourceXj = 0;
 	 float velx, vely;
 	 velx = 0;
 	 vely = 0;
@@ -53,18 +58,21 @@ void drawMulti(first startloop, first endloop, first plusplus,second object[],fi
 	 int moveSpeed = 2;
 	 int check; //will record Marios last left or right movement to decide which side he will face after the key is left
 	 int dir; //the initial direction of Mario is set to down
-	 bool dead;//used to determine when mario will die
+	// bool dead;//used to determine when mario will die
 	 bool active; //will help cause the animation ONLY if key is pressed in particular direction
 	 bool draw=false;//for timer, used for smooth animations
 	 bool done = false;
 	 int x = 0, y = 0, movespeed = 2;
 	 int state = NULL;
 	 const float FPS = 60.0;
+	
 	 const float EFPS = 15.0;
 	 const float LFPS = 5.0;
-	 enum Direction {UP, DOWN, LEFT, RIGHT, NONE1, NONE2, NONE3,NONE4 };
+	 const float MFPS = 8.0;
+	 const float WFPS = 9.0;
+	 enum Direction {UP, DOWN, LEFT, RIGHT, NONE1, NONE2, ATT};
 	 int level;//tells you what level you are currently drawing
-	 const int numOfEnemys = 15;					//contains the number of enemies
+	 const int numOfEnemys = 20;					//contains the number of enemies
 	 bool jumpCheck;
 	 int check2;
 	// int dir = DOWN;
@@ -88,7 +96,8 @@ void drawMulti(first startloop, first endloop, first plusplus,second object[],fi
 	
 	
 	ALLEGRO_TIMER *timer = al_create_timer(1.0 / FPS);
-	ALLEGRO_TIMER *mariotimer = al_create_timer(1.0 / FPS); //event 1/60 sec, the game will update
+	ALLEGRO_TIMER *mariotimer = al_create_timer(1.0 / MFPS); 
+	ALLEGRO_TIMER *weapontimer = al_create_timer(1.0 /WFPS);
 	ALLEGRO_TIMER *enemyTimer = al_create_timer(1.0 / EFPS);			//controls the animation of enemies  
 	ALLEGRO_TIMER *luigiTimer = al_create_timer(1.0 / LFPS);			//controls the animation of Luigi
 	
@@ -96,6 +105,7 @@ void drawMulti(first startloop, first endloop, first plusplus,second object[],fi
 	al_register_event_source(event_queue, al_get_keyboard_event_source());
 	al_register_event_source(event_queue, al_get_timer_event_source(timer));
 	al_register_event_source(event_queue, al_get_timer_event_source(mariotimer));
+	al_register_event_source(event_queue, al_get_timer_event_source(weapontimer));
 	al_register_event_source(event_queue, al_get_timer_event_source(enemyTimer));
 	al_register_event_source(event_queue, al_get_timer_event_source(luigiTimer));
 	ALLEGRO_TRANSFORM CAMERA;
@@ -111,6 +121,8 @@ void drawMulti(first startloop, first endloop, first plusplus,second object[],fi
 	ALLEGRO_BITMAP *Jump1 = al_load_bitmap("Jump1.png");
 	ALLEGRO_BITMAP *Stand1 = al_load_bitmap("Stand1.png");
 	ALLEGRO_BITMAP *Walk1 = al_load_bitmap("Walk1.png");
+	ALLEGRO_BITMAP *AttackL = al_load_bitmap("attackleft.png");
+	ALLEGRO_BITMAP *AttackR = al_load_bitmap("attackright.png");
 
 	ALLEGRO_BITMAP *imagewindow = al_load_bitmap("bgc.png");
 	ALLEGRO_BITMAP *imagewindowsky = al_load_bitmap("sky1.png");
@@ -126,6 +138,7 @@ void drawMulti(first startloop, first endloop, first plusplus,second object[],fi
 	ALLEGRO_BITMAP *manhole = al_load_bitmap("manhole.png");
 	ALLEGRO_BITMAP *light = al_load_bitmap("Lightning sprite.png");
 	ALLEGRO_BITMAP *luigiBM = al_load_bitmap("Luigi.png");
+	ALLEGRO_BITMAP *spike = al_load_bitmap("Spike.png");
 
 	///////////////////////////////////////////////////CALLING CLASSES/////////////////////////////////////////////////////////////////////////////
 
@@ -176,19 +189,34 @@ void drawMulti(first startloop, first endloop, first plusplus,second object[],fi
 	obstacle[13]->setvalue(4900, 590, 3); 
 	obstacle[14]->setvalue(4900, 590, 3);*/
 
-	///////////////////////////////////////setting positions of pillars(bricks) for level 1////////////////////////////////////////////////
+	////////////////////cars level 3
+
+	obstacleC[12]->setvalue(800, 650, 1);
+	//obstacleC[13]->setvalue(1600, 650, 1);
+	obstacleC[14]->setvalue(2300, 650, 1);
+	obstacleC[15]->setvalue(-2000, 800, 2);
+	obstacleC[16]->setvalue(3900, 660, 2);
+	obstacleC[17]->setvalue(4900, 590, 3);
+
+
+	///////////////////////////////////////setting positions of pillars(brikes) for level 1////////////////////////////////////////////////
 	pilars pilar[300];
 
+	
+
 	worldObstacles *obstacleP[300];
+	
 	for (int i = 0; i < 300; i++)
 	{
 		obstacleP[i] = &pilar[i];
 	}
+	
 	int b1 = 0;
 	for (int i = 0; i < 9; i++){
 		
 			b1 += 32;
 		obstacleP[i]->setvalue(1100+b1, 550, 1);
+		
 	}
 	int b2 = 0;
 	for (int i = 10; i < 18; i++){
@@ -210,11 +238,13 @@ void drawMulti(first startloop, first endloop, first plusplus,second object[],fi
 	}
 	///////////////////////////////////////setting positions of pillars(bricks) for level 2////////////////////////////////////////////////
 	int l2b1 = 0;
+	
 	for (int i = 39; i < 48; i++){
 
 		l2b1 += 32;
 		obstacleP[i]->setvalue(450 + l2b1, 620, 1);
 	}
+	
 	int l2b2 = 0;
 	for (int i = 49; i < 58; i++){
 
@@ -250,6 +280,16 @@ void drawMulti(first startloop, first endloop, first plusplus,second object[],fi
 	}
 	drawMulti(97, 105, 32, obstacleP, 20, 450, 1);
 	
+
+	////////////////////////////////////////////Level 3 Bricks
+
+	int l3b1 = 0;
+
+	/*for (int i = 92; i < 97; i++){
+
+		l3b1 += 32;
+		obstacleP[i]->setvalue(450 + l3b1, 620, 1);
+	}*/
 	////////////////////////////////////////////man hole poistion  level 2//////////////////////////////////////////////////////////////////////////////////////////
 	manHole manH[15];
 	worldObstacles *obstacleMH[15];
@@ -271,17 +311,50 @@ void drawMulti(first startloop, first endloop, first plusplus,second object[],fi
 	}
 	//obstacleMH[7]->setvalue(3608, 660, 1);
 	////////////////////////////////////////////gansters level 2//////////////////////////////////////////////////////////////////////////////////////////
-	gangster[7].setValues(1000, 590, 1000, 1500, 1);	//sets values to enemy
-	gangster[8].setValues(1800, 590, 1800, 2200, 1);
-	gangster[9].setValues(2943, 600, 2943, 3270, 2);
-	gangster[10].setValues(450, 500, 450, 690, 2);
-	gangster[11].setValues(1900, 430, 1900, 2140, 2);
-	gangster[12].setValues(3000, 430, 3000, 3250, 2);
+	gangster[7].setValues(450, 500, 460, 690, 2);
+	gangster[8].setValues(1900, 430, 1900, 2140, 2);
+	gangster[9].setValues(3000, 430, 3000, 3256, 2);
+
+	///////////////////////gangsters level 3
+	gangster[10].setValues(1000, 590, 1000, 1500, 1);	//sets values to enemy
+	gangster[11].setValues(1800, 590, 1800, 2200, 1);
+	gangster[12].setValues(3000, 600, 3000, 3800, 2);
+	gangster[13].setValues(4050, 600, 4080, 4800, 2);
+	gangster[14].setValues(6500, 590, 5400, 5900, 1);
+	gangster[15].setValues(6500, 590, 6000, 6700, 1);
+	gangster[16].setValues(6500, 600, 7600, 8000, 2);
+	gangster[17].setValues(450, 500, 460, 690, 2);
+	//gangster[18].setValues(1900, 430, 1900, 2140, 2);
+	gangster[19].setValues(3000, 430, 3000, 3256, 2);
+	//gangster[9].setValues(450, 500, 310, 500, 2);
+	////////////////////////////Spikes
+	Spikes spikes[100];
+	worldObstacles *Obsspikes[100];
+
+	for (int i = 0; i < 100; i++)
+	{
+		Obsspikes[i] = &spikes[i];
+	}
+
+	int l3s1 = 0;
+
+	for (int i = 0; i < 4; i++){
+
+		l3s1 += 32;
+		Obsspikes[i]->setvalue(100 + l3s1, 660, 1);
+	}
+	for (int i = 5; i < 10; i++){
+
+		l3s1 += 32;
+		Obsspikes[i]->setvalue(1450 + l3s1, 660, 1);
+	}
+
 	////////////////////////////////////////////Summon Mario//////////////////////////////////////////////////////////////////////////////////////////////
 
 	////////////////////////////////////////////GAME START//////////////////////////////////////////////////////////////////////////////////////////////
 	al_start_timer(timer);	// main timer
-	al_start_timer(mariotimer);	// mario timer
+	al_start_timer(mariotimer);
+	al_start_timer(weapontimer);	// mario timer
 	al_start_timer(enemyTimer);	// enemy timer
 	al_start_timer(luigiTimer);	// luigi timer
 	al_get_keyboard_state(&keyState);
@@ -310,23 +383,42 @@ void drawMulti(first startloop, first endloop, first plusplus,second object[],fi
 
 		if (events.type == ALLEGRO_EVENT_TIMER)
 		{
+			if (events.timer.source == timer)
+			{
 			active = true;
 			al_get_keyboard_state(&keyState);
 			
 			if (al_key_down(&keyState, ALLEGRO_KEY_DOWN))
 			{
+					hit = false;
 				velx = 0;
 				y += moveSpeed;
 				dir = DOWN;
 			}
+				else if (al_key_down(&keyState, ALLEGRO_KEY_SPACE))
+				{
+					
+					hitcheck = true; 
+						hit = true;
+						velx = 0;
+						dir = ATT;
+					
+				}
+				else if (al_key_down(&keyState, ALLEGRO_KEY_UP) && al_key_down(&keyState, ALLEGRO_KEY_SPACE) && jump == true)
+				{
+					hit = true;
+					vely = -jumpSpeed;
+					jump = false;
+
+				}
 			else if (al_key_down(&keyState, ALLEGRO_KEY_UP) && jump == true)
 			{
 				vely = -jumpSpeed;
-				dir = UP;
 				jump = false;
 			}
 			else if (al_key_down(&keyState, ALLEGRO_KEY_RIGHT))
 			{
+					hit = false;
 				velx = moveSpeed;
 				dir = RIGHT;
 				check = 1;
@@ -334,6 +426,7 @@ void drawMulti(first startloop, first endloop, first plusplus,second object[],fi
 			}
 			else if (al_key_down(&keyState, ALLEGRO_KEY_LEFT))
 			{
+					hit = false;
 				velx = -moveSpeed;
 				dir = LEFT;
 				check = 2;
@@ -345,11 +438,13 @@ void drawMulti(first startloop, first endloop, first plusplus,second object[],fi
 			{
 				if (check == 1 || check == 0)
 				{
+						hit = false;
 					dir = NONE1;
 					
 				}
 				else
 				{
+						hit = false;
 					dir = NONE2;
 					
 				}
@@ -357,7 +452,9 @@ void drawMulti(first startloop, first endloop, first plusplus,second object[],fi
 				active = false;
 			}
 
-		
+			}
+			else if (events.timer.source == mariotimer)
+			{
 			if (active)
 			{
 				sourceXa += 81.5;  //al_get_bitmap_width(Duck) / 10;
@@ -368,10 +465,14 @@ void drawMulti(first startloop, first endloop, first plusplus,second object[],fi
 				sourceXf += 71.5; //al_get_bitmap_width(Jump1) / 10; 
 				sourceXg += 107.5;//al_get_bitmap_width(Walk1) / 10;
 				sourceXh += 73.5;//al_get_bitmap_width(Stand1) / 10;
+			
+
+					
 			}
 				//sourceX += al_get_bitmap_width(Mario) / 3;
 
 			//if (sourceX >= al_get_bitmap_width(Mario))
+
 			if (sourceXa >= al_get_bitmap_width(Duck))
 				sourceXa = 0;
 			if (sourceXb >= al_get_bitmap_width(Jump))
@@ -388,6 +489,28 @@ void drawMulti(first startloop, first endloop, first plusplus,second object[],fi
 				sourceXg = 0;
 			if (sourceXh >= al_get_bitmap_width(Stand1))
 				sourceXh = 0;
+				
+		}
+			else if (events.timer.source == weapontimer)
+			{
+				
+					if (active||hitcheck == true)
+					{
+						sourceXi += 467;
+						sourceXj += 467;
+					}
+					if (sourceXi >= al_get_bitmap_width(AttackL))
+					{
+						hitcheck = false;
+						sourceXi = 0;
+					}
+
+					if (sourceXj >= al_get_bitmap_width(AttackR))
+					{
+						hitcheck = false;
+						sourceXj = 0;
+					}
+				
 		}
 		if (!jump)
 			vely += gravity;
@@ -397,11 +520,16 @@ void drawMulti(first startloop, first endloop, first plusplus,second object[],fi
 		x += velx;
 		y += vely;
 		if (y < 600)
+			{
+				if (hit == true)
+					dir = ATT;
+				else
 			dir = UP;
-		jump = (y  >= 600);
+			}
+			jump = (y >= 600);
 		if (jump)
 			y = 600;
-
+		}
 		draw = true;
 		cameraUpdate(cameraposition, x, y, length / 2, width / 2);//updates the position of camera as mario moves
 		al_identity_transform(&CAMERA);                           //transforms the image
@@ -417,31 +545,35 @@ void drawMulti(first startloop, first endloop, first plusplus,second object[],fi
 
 		if (draw)
 		{
-
-		
 				//al_draw_bitmap_region(Mario, sourceX, dir*al_get_bitmap_height(Mario) / 6, al_get_bitmap_width(Mario) / 3, al_get_bitmap_height(Mario) / 6, x, y, NULL);
 			switch (dir)
 			{
 			case 0:
-				if(check2==1)
+				if (check2 == 1)
 					al_draw_bitmap_region(Jump1, sourceXf, 0, al_get_bitmap_width(Jump1) / 10, al_get_bitmap_height(Jump1), x, y, NULL);
 				else
 					al_draw_bitmap_region(Jump, sourceXb, 0, al_get_bitmap_width(Jump) / 10, al_get_bitmap_height(Jump), x, y, NULL);
 				break;
 			case 1:
 				if (check2 == 1)
-					al_draw_bitmap_region(Duck1, sourceXe, 0, al_get_bitmap_width(Duck1) / 10, al_get_bitmap_height(Duck1), x, y +20, NULL);
+					al_draw_bitmap_region(Duck1, sourceXe, 0, al_get_bitmap_width(Duck1) / 10, al_get_bitmap_height(Duck1), x, y + 20, NULL);
 				else
-					al_draw_bitmap_region(Duck, sourceXa, 0, al_get_bitmap_width(Duck) / 10, al_get_bitmap_height(Duck), x, y+20 , NULL);
+					al_draw_bitmap_region(Duck, sourceXa, 0, al_get_bitmap_width(Duck) / 10, al_get_bitmap_height(Duck), x, y + 20, NULL);
 				break;
-			case 2:al_draw_bitmap_region(Walk, sourceXc, 0, al_get_bitmap_width(Walk) / 10, al_get_bitmap_height(Walk), x, y, NULL);
+			case 2:al_draw_bitmap_region(Walk, sourceXc, 0, al_get_bitmap_width(Walk) / 10, al_get_bitmap_height(Walk), x-20, y, NULL);
 				break;
-			case 3:al_draw_bitmap_region(Walk1, sourceXg, 0, al_get_bitmap_width(Walk1) / 10, al_get_bitmap_height(Walk1), x, y, NULL);
+			case 3:al_draw_bitmap_region(Walk1, sourceXg, 0, al_get_bitmap_width(Walk1) / 10, al_get_bitmap_height(Walk1), x-20, y, NULL);
 				break;
 			case 4:al_draw_bitmap_region(Stand1, sourceXh, 0, al_get_bitmap_width(Stand1) / 10, al_get_bitmap_height(Stand1), x, y, NULL); 
 				break;
 			case 5:
 				al_draw_bitmap_region(Stand, sourceXd, 0, al_get_bitmap_width(Stand) / 10, al_get_bitmap_height(Stand), x, y, NULL);
+				break;
+			case 6:
+					if (check2 == 1)
+						al_draw_bitmap_region(AttackR, sourceXj, 0, al_get_bitmap_width(AttackR) / 10, al_get_bitmap_height(AttackR), x - 11, y - 19, NULL);
+					else
+						al_draw_bitmap_region(AttackL, sourceXi, 0, al_get_bitmap_width(AttackL) / 10, al_get_bitmap_height(AttackL), x - 148, y - 19, NULL);
 				break;
 			}
 			
@@ -500,8 +632,30 @@ void drawMulti(first startloop, first endloop, first plusplus,second object[],fi
 				lightning.draw(light, (events.timer.source == enemyTimer));
 				//al_draw_bitmap(manhole, 7450, 670, NULL);
 			}
+			
+			if (level == 3){
+
+				for (int j = 12; j < 17; j++){
+					obstacleC[j]->draw(imagecar, imagecopcar, imagebus);
+				}
+				for (int j = 39; j < 100; j++){
+					obstacleP[j]->draw(smallPillar, medPillar, medPillar);
+				}
+
+					for (int j = 1; j < 15; j++){
+						obstacleMH[j]->draw(manhole, manhole, manhole);
 		}
 
+					for (int j = 0; j < 100; j++){
+						Obsspikes[j]->draw(spike, spike, spike);
+
+					}
+				for (int i = 10; i < numOfEnemys; i++)
+				{
+					gangster[i].draw(punch_gangster, chain_gangster, (events.timer.source == enemyTimer));	// draw method from Enemies class
+				}
+			}
+		}
 
 	}
 	
