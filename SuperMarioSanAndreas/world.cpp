@@ -764,16 +764,16 @@ void drawMulti(first startloop, first endloop, first plusplus,second object[],fi
 
 					ALLEGRO_BITMAP *currMario;
 
-					//if (dir == RIGHT)
-					//{
+					if (check2 == 1)
+					{
 						currMario = al_create_sub_bitmap(AttackR, sourceXj + 100 , 0, 133, 140);	//get current animation of mario
-						gangster[i].getHitWithHammer(punch_gangster, chain_gangster, currMario, x + 100, y, al_get_bitmap_width(currMario), 140, hit);	//checks if enemy gets hit with hammer, if true, enemy dies
-					//}
-					//else
-					//{
-						//currMario = al_create_sub_bitmap(AttackL, sourceXi, 0, 233, 140);	//get current animation of mario
-						//gangster[i].getHitWithHammer(punch_gangster, chain_gangster, currMario, x, y, al_get_bitmap_width(currMario), 140, hit);	//checks if enemy gets hit with hammer, if true, enemy dies
-					//}
+						gangster[i].getHitWithHammer(punch_gangster, chain_gangster, currMario, x + 89, y, al_get_bitmap_width(currMario), 140, hit);	//checks if enemy gets hit with hammer, if true, enemy dies
+					}
+					else
+					{
+						currMario = al_create_sub_bitmap(AttackL, sourceXi, 0, 133, 140);	//get current animation of mario
+						gangster[i].getHitWithHammer(punch_gangster, chain_gangster, currMario, x - 148, y, al_get_bitmap_width(currMario), 140, hit);	//checks if enemy gets hit with hammer, if true, enemy dies
+					}
 					
 					gangster[i].draw(punch_gangster, chain_gangster, (events.timer.source == enemyTimer));	// draw method from Enemies class
 					al_destroy_bitmap(currMario);
