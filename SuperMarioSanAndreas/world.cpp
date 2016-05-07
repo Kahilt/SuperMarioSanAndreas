@@ -279,7 +279,39 @@ void drawMulti(first startloop, first endloop, first plusplus,second object[],fi
 		l2b6 += 32;
 	}
 	drawMulti(97, 105, 32, obstacleP, 20, 450, 1);
-	
+
+	int l2b7 = 0;
+	for (int i = 100; i < 104; i++){
+
+		obstacleP[i]->setvalue(4000 + l2b7, 380, 1);
+		l2b7 += 32;
+	}
+	int l2b8 = 0;
+	for (int i = 105; i < 108; i++){
+
+		obstacleP[i]->setvalue(4200 + l2b8, 480, 1);
+		l2b8 += 32;
+	}
+	int l2b9 = 0;
+	for (int i = 109; i < 115; i++){
+
+		obstacleP[i]->setvalue(5200 + l2b9, 550, 1);
+		l2b9 += 32;
+	}
+	int l2b10 = 0;
+	for (int i = 116; i < 120; i++){
+
+		obstacleP[i]->setvalue(6050 + l2b10, 480, 1);
+		l2b10 += 32;
+	}
+	obstacleP[121]->setvalue(5940, 550, 1);
+	obstacleP[122]->setvalue(5908, 550, 1);
+	int l2b11 = 0;
+	for (int i = 123; i < 133; i++){
+
+		obstacleP[i]->setvalue(6200 + l2b11, 400, 1);
+		l2b11 += 32;
+	}
 
 	////////////////////////////////////////////Level 3 Bricks
 
@@ -291,9 +323,9 @@ void drawMulti(first startloop, first endloop, first plusplus,second object[],fi
 		obstacleP[i]->setvalue(450 + l3b1, 620, 1);
 	}*/
 	////////////////////////////////////////////man hole poistion  level 2//////////////////////////////////////////////////////////////////////////////////////////
-	manHole manH[15];
-	worldObstacles *obstacleMH[15];
-	for (int i = 0; i < 15; i++)
+	manHole manH[50];
+	worldObstacles *obstacleMH[50];
+	for (int i = 0; i < 50; i++)
 	{
 		obstacleMH[i] = &manH[i];
 	}
@@ -308,6 +340,11 @@ void drawMulti(first startloop, first endloop, first plusplus,second object[],fi
 	for (int i = 7; i < 13; i++){
 		obstacleMH[i]->setvalue(3610 + mh1l2, 660, 1);
 		mh1l2 += 146;
+	}
+		int mh2l2 = 0;
+	for (int i = 14; i < 19; i++){
+		obstacleMH[i]->setvalue(6000 + mh2l2, 660, 1);
+		mh2l2 += 146;
 	}
 	//obstacleMH[7]->setvalue(3608, 660, 1);
 	////////////////////////////////////////////gansters level 2//////////////////////////////////////////////////////////////////////////////////////////
@@ -615,7 +652,7 @@ void drawMulti(first startloop, first endloop, first plusplus,second object[],fi
 					obstacleP[j]->draw(smallPillar, medPillar, medPillar);
 
 				}
-				for (int j = 1; j < 15; j++){
+				for (int j = 1; j < 19; j++){
 					obstacleMH[j]->draw(manhole, manhole, manhole);
 				}
 
@@ -625,9 +662,7 @@ void drawMulti(first startloop, first endloop, first plusplus,second object[],fi
 					gangster[i].draw(punch_gangster, chain_gangster, (events.timer.source == enemyTimer));	// draw method from Enemies class
 				}
 
-				luigi.draw(luigiBM, (events.timer.source == luigiTimer), lightning.active);
-				lightning.active = luigi.lightning_active();
-				lightning.draw(light, (events.timer.source == enemyTimer));
+				
 				//al_draw_bitmap(manhole, 7450, 670, NULL);
 			}
 			
@@ -650,8 +685,12 @@ void drawMulti(first startloop, first endloop, first plusplus,second object[],fi
 				{
 					gangster[i].draw(punch_gangster, chain_gangster, (events.timer.source == enemyTimer));	// draw method from Enemies class
 				}
+				luigi.draw(luigiBM, (events.timer.source == luigiTimer), lightning.active);
+				lightning.active = luigi.lightning_active();
+				lightning.draw(light, (events.timer.source == enemyTimer));
 			}
 		}
+		
 
 	}
 	
