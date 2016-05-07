@@ -154,9 +154,9 @@ void drawMulti(first startloop, first endloop, first plusplus,second object[],fi
 
 	//////////////////////////////////////////////////////Songs///////////////////////////////////////////////////
 	ALLEGRO_SAMPLE *startSound = al_load_sample("1.wav");
-	ALLEGRO_SAMPLE_ID id1;
+	//ALLEGRO_SAMPLE_ID id1;
 	ALLEGRO_SAMPLE *gameSong = al_load_sample("Mario Theme Song (thewcoop Trap Remix).wav");
-	ALLEGRO_SAMPLE_ID id2;
+	//ALLEGRO_SAMPLE_ID id2;
 	al_reserve_samples(2);
 	///////////////////////////////////////////////////CALLING CLASSES/////////////////////////////////////////////////////////////////////////////
 
@@ -450,7 +450,7 @@ void drawMulti(first startloop, first endloop, first plusplus,second object[],fi
 		}
 	}
 
-	al_stop_sample(&id1);
+	//al_stop_sample(id1);
 	al_destroy_sample(startSound);
 
 	/////////////////////////////////////////////////////////End Of Start SplashScreen////////////////////////////////
@@ -776,7 +776,7 @@ void drawMulti(first startloop, first endloop, first plusplus,second object[],fi
 		}
 		
 	}
-	al_stop_sample(&id2);
+	//al_stop_sample(&id2);
 
 	
 	//al_init_font_addon();
