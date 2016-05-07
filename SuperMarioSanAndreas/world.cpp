@@ -67,8 +67,8 @@ void drawMulti(first startloop, first endloop, first plusplus,second object[],fi
 	 int state = NULL;
 	 const float FPS = 60.0;
 	
-	 const float EFPS = 15.0;
-	 const float LFPS = 5.0;
+	 const float EFPS = 15.0;		//controls speed of enemy animation
+	 const float LFPS = 5.0;		//controls speed of Luigi animation
 	 const float MFPS = 8.0;
 	 const float WFPS = 9.0;
 	 enum Direction {UP, DOWN, LEFT, RIGHT, NONE1, NONE2, ATT};
@@ -141,7 +141,7 @@ void drawMulti(first startloop, first endloop, first plusplus,second object[],fi
 
 	ALLEGRO_BITMAP *light = al_load_bitmap("Lightning sprite.png");
 	ALLEGRO_BITMAP *luigiBM = al_load_bitmap("Luigi.png");
-	
+	ALLEGRO_BITMAP *luigiHealth = al_load_bitmap("Luigi_health_bar.png");
 
 	///////////////////////////////////////////////////CALLING CLASSES/////////////////////////////////////////////////////////////////////////////
 
@@ -691,6 +691,7 @@ void drawMulti(first startloop, first endloop, first plusplus,second object[],fi
 				luigi.draw(luigiBM, (events.timer.source == luigiTimer), lightning.active);
 				lightning.active = luigi.lightning_active();
 				lightning.draw(light, (events.timer.source == enemyTimer));
+				luigi.drawHealth(luigiHealth);
 			}
 		}
 		
@@ -722,6 +723,7 @@ void drawMulti(first startloop, first endloop, first plusplus,second object[],fi
 	al_destroy_bitmap(light);
 	al_destroy_bitmap(luigiBM);
 	al_destroy_timer(luigiTimer);
+	al_destroy_bitmap(luigiHealth);
 	
 	return 0;
 }
