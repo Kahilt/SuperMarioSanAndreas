@@ -15,6 +15,7 @@ using namespace std;
 #include "Luigi_lightning.cpp"
 #include "Luigi.cpp"
 #include "SuperMario.cpp"
+#include "SplashScreens.cpp"
 
 void cameraUpdate(float *camerposition, float x, float y, int w, int h){
 	camerposition[0] = -(length / 2) + (x + w / 2);				//positioning the camera at midpoint of the screen on the x axis
@@ -47,7 +48,7 @@ void cameraUpdate(float *camerposition, float x, float y, int w, int h){
 	 float jumpSpeed = 23;
 	 //enum NewDirection{ RIGHT, LEFT, DOWN, UP, NONE1, NONE2 }; //Defines the different states or directions of mario. NONE1=facing right NONE2=facing left	
 	 int moveSpeed = 5;
-	 int check; //will record Marios last left or right movement to decide which side he will face after the key is left
+	 int check=1; //will record Marios last left or right movement to decide which side he will face after the key is left
 	 int dir; //the initial direction of Mario is set to down
 	// bool dead;//used to determine when mario will die
 	 bool active; //will help cause the animation ONLY if key is pressed in particular direction
@@ -87,7 +88,9 @@ void cameraUpdate(float *camerposition, float x, float y, int w, int h){
 	
 	ALLEGRO_TIMER *timer = al_create_timer(1.0 / FPS);
 	ALLEGRO_TIMER *mariotimer = al_create_timer(1.0 / MFPS); 
+
 	ALLEGRO_TIMER *weapontimer = al_create_timer(1.0 /WFPS);
+	ALLEGRO_TIMER *splash = al_create_timer(1.0 / 5.0);
 	ALLEGRO_TIMER *enemyTimer = al_create_timer(1.0 / EFPS);			//controls the animation of enemies  
 	ALLEGRO_TIMER *luigiTimer = al_create_timer(1.0 / LFPS);			//controls the animation of Luigi
 	
@@ -95,13 +98,14 @@ void cameraUpdate(float *camerposition, float x, float y, int w, int h){
 	al_register_event_source(event_queue, al_get_keyboard_event_source());
 	al_register_event_source(event_queue, al_get_timer_event_source(timer));
 	al_register_event_source(event_queue, al_get_timer_event_source(mariotimer));
+	al_register_event_source(event_queue, al_get_timer_event_source(splash));
 	al_register_event_source(event_queue, al_get_timer_event_source(weapontimer));
 	al_register_event_source(event_queue, al_get_timer_event_source(enemyTimer));
 	al_register_event_source(event_queue, al_get_timer_event_source(luigiTimer));
 	ALLEGRO_TRANSFORM CAMERA;
 
 	///////////////////////////////////////////////////////////////////////IMAGE LOADING/////////////////////////////////////////////////////////////
-
+	ALLEGRO_BITMAP *start = al_load_bitmap("start.png");
 
 	ALLEGRO_BITMAP *Duck = al_load_bitmap("Duck.png");
 	ALLEGRO_BITMAP *Jump = al_load_bitmap("Jump.png");
@@ -260,6 +264,7 @@ void cameraUpdate(float *camerposition, float x, float y, int w, int h){
 	////////////////////////////////////////////GAME START//////////////////////////////////////////////////////////////////////////////////////////////
 	al_start_timer(timer);	// main timer
 	al_start_timer(mariotimer);
+	al_start_timer(splash);
 	al_start_timer(weapontimer);	// mario timer
 	al_start_timer(enemyTimer);	// enemy timer
 	al_start_timer(luigiTimer);	// luigi timer
@@ -267,140 +272,180 @@ void cameraUpdate(float *camerposition, float x, float y, int w, int h){
 	jumpCheck = false;
 	x = 0;
 	y = 600;
+	/////////////////////////////////////////////////////////Start SplashScreen////////////////////////////////////////////////
+
+	
 	while (!done)	// main game loop
 	{
-	
 		ALLEGRO_EVENT events;
 		al_wait_for_event(event_queue, &events);
-
-		if (events.type == ALLEGRO_EVENT_KEY_DOWN)
-		{
-			switch (events.keyboard.keycode)
-			{
-			case ALLEGRO_KEY_ESCAPE:
-				done = true;
-				break;
-			}
-		}
-		
-		else if (events.type == ALLEGRO_EVENT_DISPLAY_CLOSE)
-			done = true;
-
-
 		if (events.type == ALLEGRO_EVENT_TIMER)
 		{
+
+
 			if (events.timer.source == timer)
 			{
 				active = true;
+
 				al_get_keyboard_state(&keyState);
 
-				if (al_key_down(&keyState, ALLEGRO_KEY_DOWN))
+				if (al_key_down(&keyState, ALLEGRO_KEY_ENTER))
 				{
-					hit = false;
-					velx = 0;
-					y += moveSpeed;
-					dir = DOWN;
+					done = true;
 				}
-				else if (al_key_down(&keyState, ALLEGRO_KEY_SPACE))
+				draw = true;
+			}
+			if (draw)
+			{
+				al_draw_scaled_bitmap(start, 0, 0, al_get_bitmap_width(start), al_get_bitmap_height(start), 0, 0, al_get_bitmap_width(start), al_get_bitmap_height(start), 0);
+				al_flip_display();
+				draw = false;
+			}
+		}
+	}
+
+
+	/////////////////////////////////////////////////////////End Of Start SplashScreen////////////////////////////////
+	done = false;
+		while (!done)	// main game loop
+		{
+
+			ALLEGRO_EVENT events;
+			al_wait_for_event(event_queue, &events);
+
+
+			if (events.type == ALLEGRO_EVENT_KEY_DOWN)
+			{
+
+				switch (events.keyboard.keycode)
 				{
-					
-					hitcheck = true; 
+				case ALLEGRO_KEY_ESCAPE:
+					done = true;
+					break;
+				}
+			}
+
+			else if (events.type == ALLEGRO_EVENT_DISPLAY_CLOSE)
+				done = true;
+
+
+			if (events.type == ALLEGRO_EVENT_TIMER)
+			{
+
+
+				if (events.timer.source == timer)
+				{
+					active = true;
+
+					al_get_keyboard_state(&keyState);
+
+					if (al_key_down(&keyState, ALLEGRO_KEY_DOWN))
+					{
+						hit = false;
+						velx = 0;
+						y += moveSpeed;
+						dir = DOWN;
+					}
+					else if (al_key_down(&keyState, ALLEGRO_KEY_SPACE))
+					{
+
+						hitcheck = true;
 						hit = true;
 						velx = 0;
 						dir = ATT;
-					
-				}
-				else if (al_key_down(&keyState, ALLEGRO_KEY_UP) && al_key_down(&keyState, ALLEGRO_KEY_SPACE) && jump == true)
-				{
-					hit = true;
-					vely = -jumpSpeed;
-					jump = false;
-
-				}
-				else if (al_key_down(&keyState, ALLEGRO_KEY_UP) && jump == true)
-				{
-					vely = -jumpSpeed;
-					jump = false;
-				}
-				else if (al_key_down(&keyState, ALLEGRO_KEY_RIGHT))
-				{
-					hit = false;
-					velx = moveSpeed;
-					dir = RIGHT;
-					check = 1;
-					check2 = 1;
-				}
-				else if (al_key_down(&keyState, ALLEGRO_KEY_LEFT))
-				{
-					hit = false;
-					velx = -moveSpeed;
-					dir = LEFT;
-					check = 2;
-					check2 = 2;
-				}
-
-
-				else
-				{
-					if (check == 1 || check == 0)
-					{
-						hit = false;
-						dir = NONE1;
 
 					}
+					else if (al_key_down(&keyState, ALLEGRO_KEY_UP) && al_key_down(&keyState, ALLEGRO_KEY_SPACE) && jump == true)
+					{
+						hit = true;
+						vely = -jumpSpeed;
+						jump = false;
+
+					}
+					else if (al_key_down(&keyState, ALLEGRO_KEY_UP) && jump == true)
+					{
+						vely = -jumpSpeed;
+						jump = false;
+					}
+					else if (al_key_down(&keyState, ALLEGRO_KEY_RIGHT))
+					{
+						hit = false;
+						velx = moveSpeed;
+						dir = RIGHT;
+						check = 1;
+						check2 = 1;
+					}
+					else if (al_key_down(&keyState, ALLEGRO_KEY_LEFT))
+					{
+						hit = false;
+						velx = -moveSpeed;
+						dir = LEFT;
+						check = 2;
+						check2 = 2;
+					}
+
+
 					else
 					{
-						hit = false;
-						dir = NONE2;
+						if (check == 1 || check == 0)
+						{
+							hit = false;
+							dir = NONE1;
+
+						}
+						else
+						{
+							hit = false;
+							dir = NONE2;
+
+						}
+						velx = 0;
+						active = false;
+					}
+
+				}
+				else if (events.timer.source == mariotimer)
+				{
+					if (active)
+					{
+						sourceXa += 81.5;  //al_get_bitmap_width(Duck) / 10;
+						sourceXb += 71.5; //al_get_bitmap_width(Jump) / 10;
+						sourceXc += (float)(al_get_bitmap_width(Walk)) / (float)(10);
+						sourceXd += 73.5;//al_get_bitmap_width(Stand) / 10;
+						sourceXe += 81.5;//al_get_bitmap_width(Duck1) / 10;
+						sourceXf += 71.5; //al_get_bitmap_width(Jump1) / 10; 
+						sourceXg += 107.5;//al_get_bitmap_width(Walk1) / 10;
+						sourceXh += 73.5;//al_get_bitmap_width(Stand1) / 10;
+
+
 
 					}
-					velx = 0;
-					active = false;
-				}
+					//sourceX += al_get_bitmap_width(Mario) / 3;
 
-			}
-			else if (events.timer.source == mariotimer)
-			{
-				if (active)
+					//if (sourceX >= al_get_bitmap_width(Mario))
+
+					if (sourceXa >= al_get_bitmap_width(Duck))
+						sourceXa = 0;
+					if (sourceXb >= al_get_bitmap_width(Jump))
+						sourceXb = 0;
+					if (sourceXc >= al_get_bitmap_width(Walk))
+						sourceXc = 0;
+					if (sourceXd >= al_get_bitmap_width(Stand))
+						sourceXd = 0;
+					if (sourceXe >= al_get_bitmap_width(Duck1))
+						sourceXe = 0;
+					if (sourceXf >= al_get_bitmap_width(Jump1))
+						sourceXf = 0;
+					if (sourceXg >= al_get_bitmap_width(Walk1))
+						sourceXg = 0;
+					if (sourceXh >= al_get_bitmap_width(Stand1))
+						sourceXh = 0;
+
+				}
+				else if (events.timer.source == weapontimer)
 				{
-					sourceXa += 81.5;  //al_get_bitmap_width(Duck) / 10;
-					sourceXb += 71.5; //al_get_bitmap_width(Jump) / 10;
-					sourceXc += (float)(al_get_bitmap_width(Walk)) / (float)(10);
-					sourceXd += 73.5;//al_get_bitmap_width(Stand) / 10;
-					sourceXe += 81.5;//al_get_bitmap_width(Duck1) / 10;
-					sourceXf += 71.5; //al_get_bitmap_width(Jump1) / 10; 
-					sourceXg += 107.5;//al_get_bitmap_width(Walk1) / 10;
-					sourceXh += 73.5;//al_get_bitmap_width(Stand1) / 10;
-			
 
-					
-				}
-				//sourceX += al_get_bitmap_width(Mario) / 3;
-
-				//if (sourceX >= al_get_bitmap_width(Mario))
-
-				if (sourceXa >= al_get_bitmap_width(Duck))
-					sourceXa = 0;
-				if (sourceXb >= al_get_bitmap_width(Jump))
-					sourceXb = 0;
-				if (sourceXc >= al_get_bitmap_width(Walk))
-					sourceXc = 0;
-				if (sourceXd >= al_get_bitmap_width(Stand))
-					sourceXd = 0;
-				if (sourceXe >= al_get_bitmap_width(Duck1))
-					sourceXe = 0;
-				if (sourceXf >= al_get_bitmap_width(Jump1))
-					sourceXf = 0;
-				if (sourceXg >= al_get_bitmap_width(Walk1))
-					sourceXg = 0;
-				if (sourceXh >= al_get_bitmap_width(Stand1))
-					sourceXh = 0;
-				
-			}
-			else if (events.timer.source == weapontimer)
-			{
-				
-					if (active||hitcheck == true)
+					if (active || hitcheck == true)
 					{
 						sourceXi += 467;
 						sourceXj += 467;
@@ -416,131 +461,132 @@ void cameraUpdate(float *camerposition, float x, float y, int w, int h){
 						hitcheck = false;
 						sourceXj = 0;
 					}
-				
+
+				}
+				if (!jump)
+					vely += gravity;
+				else
+					vely = 0;
+
+				x += velx;
+				y += vely;
+				if (y < 600)
+				{
+					if (hit == true)
+						dir = ATT;
+					else
+						dir = UP;
+				}
+				jump = (y >= 600);
+				if (jump)
+					y = 600;
 			}
-			if (!jump)
-				vely += gravity;
-			else
-				vely = 0;
+			draw = true;
+			cameraUpdate(cameraposition, x, y, length / 2, width / 2);//updates the position of camera as mario moves
+			al_identity_transform(&CAMERA);                           //transforms the image
+			al_translate_transform(&CAMERA, -cameraposition[0], -cameraposition[1]);//translates the camera position
+			al_use_transform(&CAMERA);
 
-			x += velx;
-			y += vely;
-			if (y < 600)
+			for (int i = 0; i < numOfEnemys; i++)
 			{
-				if (hit == true)
-					dir = ATT;
-				else
-					dir = UP;
+				gangster[i].move(movespeed / 2);
 			}
-			jump = (y >= 600);
-			if (jump)
-				y = 600;
-		}
-		draw = true;
-		cameraUpdate(cameraposition, x, y, length / 2, width / 2);//updates the position of camera as mario moves
-		al_identity_transform(&CAMERA);                           //transforms the image
-		al_translate_transform(&CAMERA, -cameraposition[0], -cameraposition[1]);//translates the camera position
-		al_use_transform(&CAMERA);
-
-		for (int i = 0; i < numOfEnemys; i++)
-		{
-			gangster[i].move(movespeed / 2);
-		}
 
 
 
-		if (draw)
-		{
-//al_draw_bitmap_region(Mario, sourceX, dir*al_get_bitmap_height(Mario) / 6, al_get_bitmap_width(Mario) / 3, al_get_bitmap_height(Mario) / 6, x, y, NULL);
-			switch (dir)
+			if (draw)
 			{
-			case 0:
-				if(check2==1)
-					al_draw_bitmap_region(Jump1, sourceXf, 0, al_get_bitmap_width(Jump1) / 10, al_get_bitmap_height(Jump1), x, y, NULL);
-				else
-					al_draw_bitmap_region(Jump, sourceXb, 0, al_get_bitmap_width(Jump) / 10, al_get_bitmap_height(Jump), x, y, NULL);
-				break;
-			case 1:
-				if (check2 == 1)
-					al_draw_bitmap_region(Duck1, sourceXe, 0, al_get_bitmap_width(Duck1) / 10, al_get_bitmap_height(Duck1), x, y +20, NULL);
-				else
-					al_draw_bitmap_region(Duck, sourceXa, 0, al_get_bitmap_width(Duck) / 10, al_get_bitmap_height(Duck), x, y+20 , NULL);
-				break;
-			case 2:al_draw_bitmap_region(Walk, sourceXc, 0, al_get_bitmap_width(Walk) / 10, al_get_bitmap_height(Walk), x-20, y, NULL);
-				break;
-			case 3:al_draw_bitmap_region(Walk1, sourceXg, 0, al_get_bitmap_width(Walk1) / 10, al_get_bitmap_height(Walk1), x-20, y, NULL);
-				break;
-			case 4:al_draw_bitmap_region(Stand1, sourceXh, 0, al_get_bitmap_width(Stand1) / 10, al_get_bitmap_height(Stand1), x, y, NULL); 
-				break;
-			case 5:
-				al_draw_bitmap_region(Stand, sourceXd, 0, al_get_bitmap_width(Stand) / 10, al_get_bitmap_height(Stand), x, y, NULL);
-				break;
-			case 6:
+				//al_draw_bitmap_region(Mario, sourceX, dir*al_get_bitmap_height(Mario) / 6, al_get_bitmap_width(Mario) / 3, al_get_bitmap_height(Mario) / 6, x, y, NULL);
+				switch (dir)
+				{
+				case 0:
+					if (check2 == 1)
+						al_draw_bitmap_region(Jump1, sourceXf, 0, al_get_bitmap_width(Jump1) / 10, al_get_bitmap_height(Jump1), x, y, NULL);
+					else
+						al_draw_bitmap_region(Jump, sourceXb, 0, al_get_bitmap_width(Jump) / 10, al_get_bitmap_height(Jump), x, y, NULL);
+					break;
+				case 1:
+					if (check2 == 1)
+						al_draw_bitmap_region(Duck1, sourceXe, 0, al_get_bitmap_width(Duck1) / 10, al_get_bitmap_height(Duck1), x, y + 20, NULL);
+					else
+						al_draw_bitmap_region(Duck, sourceXa, 0, al_get_bitmap_width(Duck) / 10, al_get_bitmap_height(Duck), x, y + 20, NULL);
+					break;
+				case 2:
+					al_draw_bitmap_region(Walk, sourceXc, 0, al_get_bitmap_width(Walk) / 10, al_get_bitmap_height(Walk), x - 20, y, NULL);
+					break;
+				case 3:al_draw_bitmap_region(Walk1, sourceXg, 0, al_get_bitmap_width(Walk1) / 10, al_get_bitmap_height(Walk1), x - 20, y, NULL);
+					break;
+				case 4:al_draw_bitmap_region(Stand1, sourceXh, 0, al_get_bitmap_width(Stand1) / 10, al_get_bitmap_height(Stand1), x, y, NULL);
+					break;
+				case 5:
+					al_draw_bitmap_region(Stand, sourceXd, 0, al_get_bitmap_width(Stand) / 10, al_get_bitmap_height(Stand), x, y, NULL);
+					break;
+				case 6:
 					if (check2 == 1)
 						al_draw_bitmap_region(AttackR, sourceXj, 0, al_get_bitmap_width(AttackR) / 10, al_get_bitmap_height(AttackR), x - 11, y - 19, NULL);
 					else
 						al_draw_bitmap_region(AttackL, sourceXi, 0, al_get_bitmap_width(AttackL) / 10, al_get_bitmap_height(AttackL), x - 148, y - 19, NULL);
-				break;
-			}
-			
-			
-		
-			draw = false;
-			al_flip_display();//shows the display window on pc window
-			//			al_draw_bitmap(imagewindowsky,/* 1*/x + (length*i), 2, NULL);
-			for (int i = 0; i <= 5; i++)//for loop created to redraw the background according to level lenght
-			{
-				al_draw_bitmap(imagewindowsky, (length*i), 0, NULL);	// draws sky to window
-				al_draw_bitmap(imagewindow, (length*i), 3, NULL);	// draws buildings to window.
-			}
-
-			level = 2;
-			if (level == 2)
-				//////////////////////////LEVEL 1//////////////////////////////////////////////////////////////////
-			{
-
-				for (int j = 0; j < 6; j++){
-					obstacleC[j]->draw(imagecar, imagecopcar, imagebus);
-				}
-				for (int j = 0; j < 50; j++){
-					obstacleP[j]->draw(smallPillar, medPillar, medPillar);
-
+					break;
 				}
 
 
-				for (int i = 0; i < numOfEnemys; i++)
+
+				draw = false;
+				al_flip_display();//shows the display window on pc window
+				//			al_draw_bitmap(imagewindowsky,/* 1*/x + (length*i), 2, NULL);
+				for (int i = 0; i <= 5; i++)//for loop created to redraw the background according to level lenght
 				{
-					gangster[i].draw(punch_gangster, chain_gangster, (events.timer.source == enemyTimer));	// draw method from Enemies class
-				}
-				obstacleMH[0]->draw(manhole, manhole, manhole);
-			}
-			//////////////////////////LEVEL 2//////////////////////////////////////////////////////////////////
-			if (level == 2){
-				for (int j = 6; j < 11; j++){
-					obstacleC[j]->draw(imagecar, imagecopcar, imagebus);
-				}
-				for (int j = 39; j < 100; j++){
-					obstacleP[j]->draw(smallPillar, medPillar, medPillar);
-
-				}
-				for (int j = 1; j < 15; j++){
-					obstacleMH[j]->draw(manhole, manhole, manhole);
+					al_draw_bitmap(imagewindowsky, (length*i), 0, NULL);	// draws sky to window
+					al_draw_bitmap(imagewindow, (length*i), 3, NULL);	// draws buildings to window.
 				}
 
+				level = 2;
 
-				for (int i = 0; i < numOfEnemys; i++)
+
+				if (level == 2)
+					//////////////////////////LEVEL 1//////////////////////////////////////////////////////////////////
 				{
-					gangster[i].draw(punch_gangster, chain_gangster, (events.timer.source == enemyTimer));	// draw method from Enemies class
+
+					for (int j = 0; j < 6; j++){
+						obstacleC[j]->draw(imagecar, imagecopcar, imagebus);
+					}
+					for (int j = 0; j < 50; j++){
+						obstacleP[j]->draw(smallPillar, medPillar, medPillar);
+
+					}
+
+
+					for (int i = 0; i < numOfEnemys; i++)
+					{
+						gangster[i].draw(punch_gangster, chain_gangster, (events.timer.source == enemyTimer));	// draw method from Enemies class
+					}
+					obstacleMH[0]->draw(manhole, manhole, manhole);
 				}
+				//////////////////////////LEVEL 2//////////////////////////////////////////////////////////////////
+				if (level == 2){
+					for (int j = 6; j < 11; j++){
+						obstacleC[j]->draw(imagecar, imagecopcar, imagebus);
+					}
+					for (int j = 39; j < 100; j++){
+						obstacleP[j]->draw(smallPillar, medPillar, medPillar);
 
-				luigi.draw(luigiBM, (events.timer.source == luigiTimer), lightning.active);
-				lightning.active = luigi.lightning_active();
-				lightning.draw(light, (events.timer.source == enemyTimer));
-				//al_draw_bitmap(manhole, 7450, 670, NULL);
+					}
+					for (int j = 1; j < 15; j++){
+						obstacleMH[j]->draw(manhole, manhole, manhole);
+					}
+
+
+					for (int i = 0; i < numOfEnemys; i++)
+					{
+						gangster[i].draw(punch_gangster, chain_gangster, (events.timer.source == enemyTimer));	// draw method from Enemies class
+					}
+
+					luigi.draw(luigiBM, (events.timer.source == luigiTimer), lightning.active);
+					lightning.active = luigi.lightning_active();
+					lightning.draw(light, (events.timer.source == enemyTimer));
+					//al_draw_bitmap(manhole, 7450, 670, NULL);
+				}
 			}
-		}
-
-
 	}
 	
 
