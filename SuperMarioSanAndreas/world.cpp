@@ -21,7 +21,16 @@ void cameraUpdate(float *camerposition, float x, float y, int w, int h){
 	if (camerposition[0] < 0)									//check if the position is less then zero and if true then make it equal to zero
 		camerposition[0] = 0;
 }
+template<class first, class second>
+void drawMulti(first startloop, first endloop, first plusplus,second object[],first posx,first posy,first type)
+		{
+			int val =0;
+			for (int i = startloop; i < endloop; i++){
+				object[startloop]->setvalue(posx + val, posy,type);
+				val +=plusplus;
 
+			}
+		}
  int main(){//main function
 
 	 al_init();
@@ -37,25 +46,25 @@ void cameraUpdate(float *camerposition, float x, float y, int w, int h){
 	 float velx, vely;
 	 velx = 0;
 	 vely = 0;
-	 const float gravity=1;
+	 const float gravity=0.2;
 	 bool jump = false;
-	 float jumpSpeed = 23;
+	 float jumpSpeed = 8;
 	 //enum NewDirection{ RIGHT, LEFT, DOWN, UP, NONE1, NONE2 }; //Defines the different states or directions of mario. NONE1=facing right NONE2=facing left	
-	 int moveSpeed = 5;
+	 int moveSpeed = 2;
 	 int check; //will record Marios last left or right movement to decide which side he will face after the key is left
 	 int dir; //the initial direction of Mario is set to down
 	 bool dead;//used to determine when mario will die
 	 bool active; //will help cause the animation ONLY if key is pressed in particular direction
 	 bool draw=false;//for timer, used for smooth animations
 	 bool done = false;
-	 int x = 0, y = 0, movespeed = 5;
+	 int x = 0, y = 0, movespeed = 2;
 	 int state = NULL;
 	 const float FPS = 60.0;
 	 const float EFPS = 15.0;
 	 const float LFPS = 5.0;
 	 enum Direction {UP, DOWN, LEFT, RIGHT, NONE1, NONE2, NONE3,NONE4 };
 	 int level;//tells you what level you are currently drawing
-	 const int numOfEnemys = 10;					//contains the number of enemies
+	 const int numOfEnemys = 15;					//contains the number of enemies
 	 bool jumpCheck;
 	 int check2;
 	// int dir = DOWN;
@@ -139,7 +148,7 @@ void cameraUpdate(float *camerposition, float x, float y, int w, int h){
 
 	
    
-	///////////////////////setting values for the position of cars//////////////////////////////////////////
+	///////////////////////setting values for the position of cars level 1//////////////////////////////////////////
 	Cars car[20];
 	
 	worldObstacles *obstacleC[20];
@@ -160,14 +169,14 @@ void cameraUpdate(float *camerposition, float x, float y, int w, int h){
 	obstacleC[6]->setvalue(800, 650, 1);
 	obstacleC[7]->setvalue(1600, 650, 1);
 	obstacleC[8]->setvalue(2300, 650, 1);
-	obstacleC[9]->setvalue(-2000, 800, 2);
-	obstacleC[10]->setvalue(3900, 660, 2);
-	obstacleC[11]->setvalue(4900, 590, 3);
+	//obstacleC[9]->setvalue(-2000, 800, 2);
+	//obstacleC[10]->setvalue(3900, 660, 2);
+	//obstacleC[11]->setvalue(4900, 590, 3);
 	/*obstacle[12]->setvalue(, 590, 3);
 	obstacle[13]->setvalue(4900, 590, 3); 
 	obstacle[14]->setvalue(4900, 590, 3);*/
 
-	///////////////////////////////////////setting positions of pillars(brikes) for level 1////////////////////////////////////////////////
+	///////////////////////////////////////setting positions of pillars(bricks) for level 1////////////////////////////////////////////////
 	pilars pilar[300];
 
 	worldObstacles *obstacleP[300];
@@ -199,7 +208,7 @@ void cameraUpdate(float *camerposition, float x, float y, int w, int h){
 		b4 += 32;
 		obstacleP[i]->setvalue(3288 + b4, 400, 1);
 	}
-	///////////////////////////////////////setting positions of pillars(brikes) for level 1////////////////////////////////////////////////
+	///////////////////////////////////////setting positions of pillars(bricks) for level 2////////////////////////////////////////////////
 	int l2b1 = 0;
 	for (int i = 39; i < 48; i++){
 
@@ -221,12 +230,26 @@ void cameraUpdate(float *camerposition, float x, float y, int w, int h){
 	int l2b4 = 0;
 	for (int i = 78; i < 88; i++){
 
-		l2b4 += 32;
 		obstacleP[i]->setvalue(3288 + l2b4, 400, 1);
+		l2b4 += 32;
 	}
 	obstacleP[89]->setvalue(2600, 550, 1);
 	obstacleP[90]->setvalue(2750, 550, 1);
 	obstacleP[91]->setvalue(2782, 550, 1);
+	int l2b5 = 0;
+	for (int i = 92; i < 96; i++){
+
+		obstacleP[i]->setvalue(3660+ l2b5, 300, 1);
+		l2b5 += 32;
+	}
+	int l2b6 = 0;
+	for (int i = 97; i < 100; i++){
+
+		obstacleP[i]->setvalue(3850 + l2b6, 450, 1);
+		l2b6 += 32;
+	}
+	drawMulti(97, 105, 32, obstacleP, 20, 450, 1);
+	
 	////////////////////////////////////////////man hole poistion  level 2//////////////////////////////////////////////////////////////////////////////////////////
 	manHole manH[15];
 	worldObstacles *obstacleMH[15];
@@ -235,15 +258,25 @@ void cameraUpdate(float *camerposition, float x, float y, int w, int h){
 		obstacleMH[i] = &manH[i];
 	}
 	obstacleMH[1]->setvalue(360, 660, 1);
-	int by = 0;
+	int mhl2 = 0;
 	for (int i = 2; i < 5; i++){
-		obstacleMH[i]->setvalue(2500+by, 660, 1);
-		by += 146;
+		obstacleMH[i]->setvalue(2500+mhl2, 660, 1);
+		mhl2 += 146;
 	}
+	obstacleMH[6]->setvalue(3300, 660, 1);
+	int mh1l2 = 0;
+	for (int i = 7; i < 13; i++){
+		obstacleMH[i]->setvalue(3610 + mh1l2, 660, 1);
+		mh1l2 += 146;
+	}
+	//obstacleMH[7]->setvalue(3608, 660, 1);
 	////////////////////////////////////////////gansters level 2//////////////////////////////////////////////////////////////////////////////////////////
-	gangster[6].setValues(450, 500, 450, 690, 2);
-	gangster[7].setValues(1900, 430, 1900, 2140, 2);
-	gangster[8].setValues(3000, 430, 3000, 3256, 2);
+	gangster[7].setValues(1000, 590, 1000, 1500, 1);	//sets values to enemy
+	gangster[8].setValues(1800, 590, 1800, 2200, 1);
+	gangster[9].setValues(2943, 600, 2943, 3270, 2);
+	gangster[10].setValues(450, 500, 450, 690, 2);
+	gangster[11].setValues(1900, 430, 1900, 2140, 2);
+	gangster[12].setValues(3000, 430, 3000, 3250, 2);
 	////////////////////////////////////////////Summon Mario//////////////////////////////////////////////////////////////////////////////////////////////
 
 	////////////////////////////////////////////GAME START//////////////////////////////////////////////////////////////////////////////////////////////
@@ -424,7 +457,7 @@ void cameraUpdate(float *camerposition, float x, float y, int w, int h){
 			}
 
 			level = 2;
-			if (level == 2)
+			if (level == 1)
 				//////////////////////////LEVEL 1//////////////////////////////////////////////////////////////////
 			{
 
@@ -437,7 +470,7 @@ void cameraUpdate(float *camerposition, float x, float y, int w, int h){
 				}
 
 
-				for (int i = 0; i < numOfEnemys; i++)
+				for (int i = 0; i <6/* numOfEnemys*/; i++)
 				{
 					gangster[i].draw(punch_gangster, chain_gangster, (events.timer.source == enemyTimer));	// draw method from Enemies class
 				}
@@ -448,7 +481,7 @@ void cameraUpdate(float *camerposition, float x, float y, int w, int h){
 				for (int j = 6; j < 11; j++){
 					obstacleC[j]->draw(imagecar, imagecopcar, imagebus);
 				}
-				for (int j = 39; j < 100; j++){
+				for (int j = 39; j < 200; j++){
 					obstacleP[j]->draw(smallPillar, medPillar, medPillar);
 
 				}
@@ -457,7 +490,7 @@ void cameraUpdate(float *camerposition, float x, float y, int w, int h){
 				}
 
 
-				for (int i = 0; i < numOfEnemys; i++)
+				for (int i = 7; i < numOfEnemys; i++)
 				{
 					gangster[i].draw(punch_gangster, chain_gangster, (events.timer.source == enemyTimer));	// draw method from Enemies class
 				}
