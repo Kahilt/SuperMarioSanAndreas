@@ -452,6 +452,7 @@ void drawMulti(first startloop, first endloop, first plusplus,second object[],fi
 
 	al_stop_sample(&id1);
 	al_destroy_sample(startSound);
+
 	/////////////////////////////////////////////////////////End Of Start SplashScreen////////////////////////////////
 	done = false;
 	while (!done)	// main game loop
