@@ -4,7 +4,34 @@
 #include <allegro5/allegro_primitives.h>
 #include <allegro5/allegro_font.h>
 #include <allegro5/allegro_ttf.h>
-/*#include "world.cpp"
+
+using namespace std;
+
+class SplashScreens
+{
+public:
+
+	SplashScreens()
+	{
+		//ALLEGRO_DISPLAY *display = al_create_display(1360, 770);
+		
+	}
+	~SplashScreens()
+	{
+
+	}
+	void createSplash(ALLEGRO_DISPLAY *display, ALLEGRO_BITMAP *start)
+	{
+		
+	}
+};
+
+
+
+
+/*
+
+#include "world.cpp"
 
 
 using namespace std;
@@ -20,7 +47,7 @@ enum PAGE{ MENU, PLAYING, PAUSE, GAMEOVER };
  
 void ChangePage(int &page, int newPage);
 
-
+/*
 int splash(int argc, char **argv)
 {
 	bool done = false;
@@ -47,6 +74,7 @@ int splash(int argc, char **argv)
 	//###################################################
 	// INITIALIZING ALLEGRO
 	//###################################################
+	al_init();
 	if (!al_init())
 	{
 		return -1;
@@ -58,7 +86,7 @@ int splash(int argc, char **argv)
 	{
 		return -1;
 	}
-
+	
 
 	//###################################################
 	// INITAILIZING ADDONS
@@ -88,7 +116,7 @@ int splash(int argc, char **argv)
 	gameover = al_load_bitmap("wasted screen.png");
 	
 
-	ChangePage(page, MENU);
+	//ChangePage(page, MENU);
 
 	//###################################################
 	// TIMER INITIALIZATION AND STARTUP
@@ -111,34 +139,19 @@ int splash(int argc, char **argv)
 			switch (evnt.keyboard.keycode)
 			{
 			case ALLEGRO_KEY_ESCAPE:
-				keys[ESCAPE] = true;
+				done = true;
 				break;
 			case ALLEGRO_KEY_ENTER:
-				keys[ENTER] = true;
-				break;
-			}
-		}
-
-		else if (evnt.type == ALLEGRO_EVENT_KEY_UP)
-		{
-			switch (evnt.keyboard.keycode)
-			{
-			case ALLEGRO_KEY_ESCAPE:
-				keys[ESCAPE] = false;
-				break;
-			case ALLEGRO_KEY_ENTER:
-				keys[ENTER] = false;
+				//keys[ENTER] = true;
 				break;
 			}
 		}
 		
-
-
 		//###################################################
 		//GAME UPDATES
 		//###################################################
 		
-		else if (evnt.type == ALLEGRO_EVENT_TIMER)
+		if (evnt.type == ALLEGRO_EVENT_TIMER)
 		{
 			render = true;
 
@@ -224,7 +237,7 @@ int splash(int argc, char **argv)
 				al_draw_bitmap(gameover, 0,0,0);
 
 			}
-
+			al_draw_bitmap(start,0,0,0);
 			al_flip_display();
 			al_clear_to_color(al_map_rgb(0, 0, 0));
 		}
@@ -241,13 +254,13 @@ int splash(int argc, char **argv)
 	al_destroy_display(display);
 	return 0;
 }
-*/
+
 //###################################################
 // OPTIONAL PART
 //###################################################
 
 
-/*void ChangePage(int &page, int newPage)
+void ChangePage(int &page, int newPage)
 {
 	if (page == MENU)
 	{

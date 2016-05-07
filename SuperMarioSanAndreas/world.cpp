@@ -15,6 +15,7 @@ using namespace std;
 #include "Luigi_lightning.cpp"
 #include "Luigi.cpp"
 #include "SuperMario.cpp"
+#include "SplashScreens.cpp"
 #include "Spikes.cpp"
 void cameraUpdate(float *camerposition, float x, float y, int w, int h){
 	camerposition[0] = -(length / 2) + (x + w / 2);				//positioning the camera at midpoint of the screen on the x axis
@@ -57,7 +58,7 @@ void drawMulti(first startloop, first endloop, first plusplus,second object[],fi
 	 
 	 //enum NewDirection{ RIGHT, LEFT, DOWN, UP, NONE1, NONE2 }; //Defines the different states or directions of mario. NONE1=facing right NONE2=facing left	
 	 int moveSpeed = 5;
-	 int check; //will record Marios last left or right movement to decide which side he will face after the key is left
+	 int check=1; //will record Marios last left or right movement to decide which side he will face after the key is left
 	 int dir; //the initial direction of Mario is set to down
 	// bool dead;//used to determine when mario will die
 	 bool active; //will help cause the animation ONLY if key is pressed in particular direction
@@ -98,7 +99,9 @@ void drawMulti(first startloop, first endloop, first plusplus,second object[],fi
 	
 	ALLEGRO_TIMER *timer = al_create_timer(1.0 / FPS);
 	ALLEGRO_TIMER *mariotimer = al_create_timer(1.0 / MFPS); 
+
 	ALLEGRO_TIMER *weapontimer = al_create_timer(1.0 /WFPS);
+	ALLEGRO_TIMER *splash = al_create_timer(1.0 / 5.0);
 	ALLEGRO_TIMER *enemyTimer = al_create_timer(1.0 / EFPS);			//controls the animation of enemies  
 	ALLEGRO_TIMER *luigiTimer = al_create_timer(1.0 / LFPS);			//controls the animation of Luigi
 	
@@ -106,13 +109,14 @@ void drawMulti(first startloop, first endloop, first plusplus,second object[],fi
 	al_register_event_source(event_queue, al_get_keyboard_event_source());
 	al_register_event_source(event_queue, al_get_timer_event_source(timer));
 	al_register_event_source(event_queue, al_get_timer_event_source(mariotimer));
+	al_register_event_source(event_queue, al_get_timer_event_source(splash));
 	al_register_event_source(event_queue, al_get_timer_event_source(weapontimer));
 	al_register_event_source(event_queue, al_get_timer_event_source(enemyTimer));
 	al_register_event_source(event_queue, al_get_timer_event_source(luigiTimer));
 	ALLEGRO_TRANSFORM CAMERA;
 
 	///////////////////////////////////////////////////////////////////////IMAGE LOADING/////////////////////////////////////////////////////////////
-
+	ALLEGRO_BITMAP *start = al_load_bitmap("start.png");
 
 	ALLEGRO_BITMAP *Duck = al_load_bitmap("Duck.png");
 	ALLEGRO_BITMAP *Jump = al_load_bitmap("Jump.png");
@@ -394,6 +398,7 @@ void drawMulti(first startloop, first endloop, first plusplus,second object[],fi
 	////////////////////////////////////////////GAME START//////////////////////////////////////////////////////////////////////////////////////////////
 	al_start_timer(timer);	// main timer
 	al_start_timer(mariotimer);
+	al_start_timer(splash);
 	al_start_timer(weapontimer);	// mario timer
 	al_start_timer(enemyTimer);	// enemy timer
 	al_start_timer(luigiTimer);	// luigi timer
@@ -401,14 +406,51 @@ void drawMulti(first startloop, first endloop, first plusplus,second object[],fi
 	jumpCheck = false;
 	x = 0;
 	y = 600;
+	/////////////////////////////////////////////////////////Start SplashScreen////////////////////////////////////////////////
+
+	
+	while (!done)	// main game loop
+	{
+		ALLEGRO_EVENT events;
+		al_wait_for_event(event_queue, &events);
+		if (events.type == ALLEGRO_EVENT_TIMER)
+		{
+
+
+			if (events.timer.source == timer)
+			{
+				active = true;
+
+				al_get_keyboard_state(&keyState);
+
+				if (al_key_down(&keyState, ALLEGRO_KEY_ENTER))
+				{
+					done = true;
+				}
+				draw = true;
+			}
+			if (draw)
+			{
+				al_draw_scaled_bitmap(start, 0, 0, al_get_bitmap_width(start), al_get_bitmap_height(start), 0, 0, al_get_bitmap_width(start), al_get_bitmap_height(start), 0);
+				al_flip_display();
+				draw = false;
+			}
+		}
+	}
+
+
+	/////////////////////////////////////////////////////////End Of Start SplashScreen////////////////////////////////
+	done = false;
 	while (!done)	// main game loop
 	{
 	
 		ALLEGRO_EVENT events;
 		al_wait_for_event(event_queue, &events);
 
+
 		if (events.type == ALLEGRO_EVENT_KEY_DOWN)
 		{
+
 			switch (events.keyboard.keycode)
 			{
 			case ALLEGRO_KEY_ESCAPE:
@@ -423,9 +465,12 @@ void drawMulti(first startloop, first endloop, first plusplus,second object[],fi
 
 		if (events.type == ALLEGRO_EVENT_TIMER)
 		{
+
+
 			if (events.timer.source == timer)
 			{
 			active = true;
+
 			al_get_keyboard_state(&keyState);
 			
 			if (al_key_down(&keyState, ALLEGRO_KEY_DOWN))
@@ -534,7 +579,7 @@ void drawMulti(first startloop, first endloop, first plusplus,second object[],fi
 			else if (events.timer.source == weapontimer)
 			{
 				
-					if (active||hitcheck == true)
+					if (active || hitcheck == true)
 					{
 						sourceXi += 467;
 						sourceXj += 467;
@@ -600,9 +645,10 @@ void drawMulti(first startloop, first endloop, first plusplus,second object[],fi
 				else
 					al_draw_bitmap_region(Duck, sourceXa, 0, al_get_bitmap_width(Duck) / 10, al_get_bitmap_height(Duck), x, y + 20, NULL);
 				break;
-			case 2:al_draw_bitmap_region(Walk, sourceXc, 0, al_get_bitmap_width(Walk) / 10, al_get_bitmap_height(Walk), x-20, y, NULL);
+				case 2:
+					al_draw_bitmap_region(Walk, sourceXc, 0, al_get_bitmap_width(Walk) / 10, al_get_bitmap_height(Walk), x - 20, y, NULL);
 				break;
-			case 3:al_draw_bitmap_region(Walk1, sourceXg, 0, al_get_bitmap_width(Walk1) / 10, al_get_bitmap_height(Walk1), x-20, y, NULL);
+				case 3:al_draw_bitmap_region(Walk1, sourceXg, 0, al_get_bitmap_width(Walk1) / 10, al_get_bitmap_height(Walk1), x - 20, y, NULL);
 				break;
 			case 4:al_draw_bitmap_region(Stand1, sourceXh, 0, al_get_bitmap_width(Stand1) / 10, al_get_bitmap_height(Stand1), x, y, NULL); 
 				break;
@@ -694,8 +740,6 @@ void drawMulti(first startloop, first endloop, first plusplus,second object[],fi
 				luigi.drawHealth(luigiHealth);
 			}
 		}
-		
-
 	}
 	
 
