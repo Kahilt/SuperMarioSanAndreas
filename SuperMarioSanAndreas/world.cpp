@@ -25,6 +25,9 @@ void cameraUpdate(float *camerposition, float x, float y, int w, int h){
  int main(){//main function
 
 	 al_init();
+	 int delay = 0;
+	 bool hit = false;
+	 bool hitcheck = false;
 
 	 float sourceXa=0;//used for cropping the SpriteSheet for animation
 	 float sourceXb = 0;
@@ -34,6 +37,8 @@ void cameraUpdate(float *camerposition, float x, float y, int w, int h){
 	 float sourceXf = 0;
 	 float sourceXg = 0;
 	 float sourceXh = 0;
+	 float sourceXi = 0;
+	 float sourceXj = 0;
 	 float velx, vely;
 	 velx = 0;
 	 vely = 0;
@@ -44,7 +49,7 @@ void cameraUpdate(float *camerposition, float x, float y, int w, int h){
 	 int moveSpeed = 5;
 	 int check; //will record Marios last left or right movement to decide which side he will face after the key is left
 	 int dir; //the initial direction of Mario is set to down
-	 bool dead;//used to determine when mario will die
+	// bool dead;//used to determine when mario will die
 	 bool active; //will help cause the animation ONLY if key is pressed in particular direction
 	 bool draw=false;//for timer, used for smooth animations
 	 bool done = false;
@@ -54,7 +59,9 @@ void cameraUpdate(float *camerposition, float x, float y, int w, int h){
 	
 	 const float EFPS = 15.0;
 	 const float LFPS = 5.0;
-	 enum Direction {UP, DOWN, LEFT, RIGHT, NONE1, NONE2, NONE3,NONE4 };
+	 const float MFPS = 8.0;
+	 const float WFPS = 9.0;
+	 enum Direction {UP, DOWN, LEFT, RIGHT, NONE1, NONE2, ATT};
 	 int level;//tells you what level you are currently drawing
 	 const int numOfEnemys = 20;					//contains the number of enemies
 	 bool jumpCheck;
@@ -80,7 +87,8 @@ void cameraUpdate(float *camerposition, float x, float y, int w, int h){
 	
 	
 	ALLEGRO_TIMER *timer = al_create_timer(1.0 / FPS);
-	ALLEGRO_TIMER *mariotimer = al_create_timer(1.0 / FPS); //event 1/60 sec, the game will update
+	ALLEGRO_TIMER *mariotimer = al_create_timer(1.0 / MFPS); 
+	ALLEGRO_TIMER *weapontimer = al_create_timer(1.0 /WFPS);
 	ALLEGRO_TIMER *enemyTimer = al_create_timer(1.0 / EFPS);			//controls the animation of enemies  
 	ALLEGRO_TIMER *luigiTimer = al_create_timer(1.0 / LFPS);			//controls the animation of Luigi
 	
@@ -88,6 +96,7 @@ void cameraUpdate(float *camerposition, float x, float y, int w, int h){
 	al_register_event_source(event_queue, al_get_keyboard_event_source());
 	al_register_event_source(event_queue, al_get_timer_event_source(timer));
 	al_register_event_source(event_queue, al_get_timer_event_source(mariotimer));
+	al_register_event_source(event_queue, al_get_timer_event_source(weapontimer));
 	al_register_event_source(event_queue, al_get_timer_event_source(enemyTimer));
 	al_register_event_source(event_queue, al_get_timer_event_source(luigiTimer));
 	ALLEGRO_TRANSFORM CAMERA;
@@ -103,6 +112,8 @@ void cameraUpdate(float *camerposition, float x, float y, int w, int h){
 	ALLEGRO_BITMAP *Jump1 = al_load_bitmap("Jump1.png");
 	ALLEGRO_BITMAP *Stand1 = al_load_bitmap("Stand1.png");
 	ALLEGRO_BITMAP *Walk1 = al_load_bitmap("Walk1.png");
+	ALLEGRO_BITMAP *AttackL = al_load_bitmap("attackleft.png");
+	ALLEGRO_BITMAP *AttackR = al_load_bitmap("attackright.png");
 
 	ALLEGRO_BITMAP *imagewindow = al_load_bitmap("bgc.png");
 	ALLEGRO_BITMAP *imagewindowsky = al_load_bitmap("sky1.png");
@@ -165,7 +176,7 @@ void cameraUpdate(float *camerposition, float x, float y, int w, int h){
 	obstacleC[9]->setvalue(-2000, 800, 2);
 	obstacleC[10]->setvalue(3900, 660, 2);
 	obstacleC[11]->setvalue(4900, 590, 3);
-	
+
 	////////////////////cars level 3
 
 	obstacleC[12]->setvalue(800, 650, 1);
@@ -178,7 +189,7 @@ void cameraUpdate(float *camerposition, float x, float y, int w, int h){
 
 	///////////////////////////////////////setting positions of pillars(brikes) for level 1////////////////////////////////////////////////
 	pilars pilar[300];
-	
+
 	
 
 	worldObstacles *obstacleP[300];
@@ -309,7 +320,8 @@ void cameraUpdate(float *camerposition, float x, float y, int w, int h){
 
 	////////////////////////////////////////////GAME START//////////////////////////////////////////////////////////////////////////////////////////////
 	al_start_timer(timer);	// main timer
-	al_start_timer(mariotimer);	// mario timer
+	al_start_timer(mariotimer);
+	al_start_timer(weapontimer);	// mario timer
 	al_start_timer(enemyTimer);	// enemy timer
 	al_start_timer(luigiTimer);	// luigi timer
 	al_get_keyboard_state(&keyState);
@@ -338,23 +350,42 @@ void cameraUpdate(float *camerposition, float x, float y, int w, int h){
 
 		if (events.type == ALLEGRO_EVENT_TIMER)
 		{
+			if (events.timer.source == timer)
+			{
 			active = true;
 			al_get_keyboard_state(&keyState);
 			
 			if (al_key_down(&keyState, ALLEGRO_KEY_DOWN))
 			{
+					hit = false;
 				velx = 0;
 				y += moveSpeed;
 				dir = DOWN;
 			}
+				else if (al_key_down(&keyState, ALLEGRO_KEY_SPACE))
+				{
+					
+					hitcheck = true; 
+						hit = true;
+						velx = 0;
+						dir = ATT;
+					
+				}
+				else if (al_key_down(&keyState, ALLEGRO_KEY_UP) && al_key_down(&keyState, ALLEGRO_KEY_SPACE) && jump == true)
+				{
+					hit = true;
+					vely = -jumpSpeed;
+					jump = false;
+
+				}
 			else if (al_key_down(&keyState, ALLEGRO_KEY_UP) && jump == true)
 			{
 				vely = -jumpSpeed;
-				dir = UP;
 				jump = false;
 			}
 			else if (al_key_down(&keyState, ALLEGRO_KEY_RIGHT))
 			{
+					hit = false;
 				velx = moveSpeed;
 				dir = RIGHT;
 				check = 1;
@@ -362,6 +393,7 @@ void cameraUpdate(float *camerposition, float x, float y, int w, int h){
 			}
 			else if (al_key_down(&keyState, ALLEGRO_KEY_LEFT))
 			{
+					hit = false;
 				velx = -moveSpeed;
 				dir = LEFT;
 				check = 2;
@@ -373,11 +405,13 @@ void cameraUpdate(float *camerposition, float x, float y, int w, int h){
 			{
 				if (check == 1 || check == 0)
 				{
+						hit = false;
 					dir = NONE1;
 					
 				}
 				else
 				{
+						hit = false;
 					dir = NONE2;
 					
 				}
@@ -385,7 +419,9 @@ void cameraUpdate(float *camerposition, float x, float y, int w, int h){
 				active = false;
 			}
 
-		
+			}
+			else if (events.timer.source == mariotimer)
+			{
 			if (active)
 			{
 				sourceXa += 81.5;  //al_get_bitmap_width(Duck) / 10;
@@ -396,10 +432,14 @@ void cameraUpdate(float *camerposition, float x, float y, int w, int h){
 				sourceXf += 71.5; //al_get_bitmap_width(Jump1) / 10; 
 				sourceXg += 107.5;//al_get_bitmap_width(Walk1) / 10;
 				sourceXh += 73.5;//al_get_bitmap_width(Stand1) / 10;
+			
+
+					
 			}
 				//sourceX += al_get_bitmap_width(Mario) / 3;
 
 			//if (sourceX >= al_get_bitmap_width(Mario))
+
 			if (sourceXa >= al_get_bitmap_width(Duck))
 				sourceXa = 0;
 			if (sourceXb >= al_get_bitmap_width(Jump))
@@ -416,6 +456,28 @@ void cameraUpdate(float *camerposition, float x, float y, int w, int h){
 				sourceXg = 0;
 			if (sourceXh >= al_get_bitmap_width(Stand1))
 				sourceXh = 0;
+				
+			}
+			else if (events.timer.source == weapontimer)
+			{
+				
+					if (active||hitcheck == true)
+					{
+						sourceXi += 467;
+						sourceXj += 467;
+					}
+					if (sourceXi >= al_get_bitmap_width(AttackL))
+					{
+						hitcheck = false;
+						sourceXi = 0;
+					}
+
+					if (sourceXj >= al_get_bitmap_width(AttackR))
+					{
+						hitcheck = false;
+						sourceXj = 0;
+					}
+				
 		}
 		if (!jump)
 			vely += gravity;
@@ -425,11 +487,16 @@ void cameraUpdate(float *camerposition, float x, float y, int w, int h){
 		x += velx;
 		y += vely;
 		if (y < 600)
+			{
+				if (hit == true)
+					dir = ATT;
+				else
 			dir = UP;
-		jump = (y  >= 600);
+			}
+			jump = (y >= 600);
 		if (jump)
 			y = 600;
-
+		}
 		draw = true;
 		cameraUpdate(cameraposition, x, y, length / 2, width / 2);//updates the position of camera as mario moves
 		al_identity_transform(&CAMERA);                           //transforms the image
@@ -445,9 +512,7 @@ void cameraUpdate(float *camerposition, float x, float y, int w, int h){
 
 		if (draw)
 		{
-
-
-			//al_draw_bitmap_region(Mario, sourceX, dir*al_get_bitmap_height(Mario) / 6, al_get_bitmap_width(Mario) / 3, al_get_bitmap_height(Mario) / 6, x, y, NULL);
+				//al_draw_bitmap_region(Mario, sourceX, dir*al_get_bitmap_height(Mario) / 6, al_get_bitmap_width(Mario) / 3, al_get_bitmap_height(Mario) / 6, x, y, NULL);
 			switch (dir)
 			{
 			case 0:
@@ -462,19 +527,25 @@ void cameraUpdate(float *camerposition, float x, float y, int w, int h){
 				else
 					al_draw_bitmap_region(Duck, sourceXa, 0, al_get_bitmap_width(Duck) / 10, al_get_bitmap_height(Duck), x, y + 20, NULL);
 				break;
-			case 2:al_draw_bitmap_region(Walk, sourceXc, 0, al_get_bitmap_width(Walk) / 10, al_get_bitmap_height(Walk), x, y, NULL);
+			case 2:al_draw_bitmap_region(Walk, sourceXc, 0, al_get_bitmap_width(Walk) / 10, al_get_bitmap_height(Walk), x-20, y, NULL);
 				break;
-			case 3:al_draw_bitmap_region(Walk1, sourceXg, 0, al_get_bitmap_width(Walk1) / 10, al_get_bitmap_height(Walk1), x, y, NULL);
+			case 3:al_draw_bitmap_region(Walk1, sourceXg, 0, al_get_bitmap_width(Walk1) / 10, al_get_bitmap_height(Walk1), x-20, y, NULL);
 				break;
-			case 4:al_draw_bitmap_region(Stand1, sourceXh, 0, al_get_bitmap_width(Stand1) / 10, al_get_bitmap_height(Stand1), x, y, NULL);
+			case 4:al_draw_bitmap_region(Stand1, sourceXh, 0, al_get_bitmap_width(Stand1) / 10, al_get_bitmap_height(Stand1), x, y, NULL); 
 				break;
 			case 5:
 				al_draw_bitmap_region(Stand, sourceXd, 0, al_get_bitmap_width(Stand) / 10, al_get_bitmap_height(Stand), x, y, NULL);
 				break;
+			case 6:
+					if (check2 == 1)
+						al_draw_bitmap_region(AttackR, sourceXj, 0, al_get_bitmap_width(AttackR) / 10, al_get_bitmap_height(AttackR), x - 11, y - 19, NULL);
+					else
+						al_draw_bitmap_region(AttackL, sourceXi, 0, al_get_bitmap_width(AttackL) / 10, al_get_bitmap_height(AttackL), x - 148, y - 19, NULL);
+				break;
 			}
-
-
-
+			
+			
+		
 			draw = false;
 			al_flip_display();//shows the display window on pc window
 			//			al_draw_bitmap(imagewindowsky,/* 1*/x + (length*i), 2, NULL);
@@ -540,7 +611,7 @@ void cameraUpdate(float *camerposition, float x, float y, int w, int h){
 
 					for (int j = 1; j < 15; j++){
 						obstacleMH[j]->draw(manhole, manhole, manhole);
-					}
+		}
 
 					for (int j = 0; j < 100; j++){
 						Obsspikes[j]->draw(spike, spike, spike);
