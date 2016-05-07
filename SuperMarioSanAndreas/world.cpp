@@ -470,12 +470,16 @@ void drawMulti(first startloop, first endloop, first plusplus,second object[],fi
 			{
 			case ALLEGRO_KEY_ESCAPE:
 				done = true;
+				return -1;
 				break;
 			}
 		}     
 		       
 		else if (events.type == ALLEGRO_EVENT_DISPLAY_CLOSE)
+		{
 			done = true;
+			return -1;
+		}
 
 
 		if (events.type == ALLEGRO_EVENT_TIMER)
