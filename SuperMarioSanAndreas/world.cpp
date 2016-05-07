@@ -154,8 +154,10 @@ void drawMulti(first startloop, first endloop, first plusplus,second object[],fi
 
 	//////////////////////////////////////////////////////Songs///////////////////////////////////////////////////
 	ALLEGRO_SAMPLE *startSound = al_load_sample("1.wav");
-	ALLEGRO_SAMPLE_ID id;
-	al_reserve_samples(1);
+	ALLEGRO_SAMPLE_ID id1;
+	ALLEGRO_SAMPLE *gameSong = al_load_sample("Mario Theme Song (thewcoop Trap Remix).wav");
+	ALLEGRO_SAMPLE_ID id2;
+	al_reserve_samples(2);
 	///////////////////////////////////////////////////CALLING CLASSES/////////////////////////////////////////////////////////////////////////////
 
 	Enemies gangster[numOfEnemys];						//creates 1 object of enemies class
@@ -448,12 +450,13 @@ void drawMulti(first startloop, first endloop, first plusplus,second object[],fi
 		}
 	}
 
-	al_stop_sample(&id);
+	al_stop_sample(&id1);
+	al_destroy_sample(startSound);
 	/////////////////////////////////////////////////////////End Of Start SplashScreen////////////////////////////////
 	done = false;
 	while (!done)	// main game loop
 	{
-	
+		al_play_sample(gameSong, 1.0, 0.0, 1.0, ALLEGRO_PLAYMODE_LOOP, 0);
 		ALLEGRO_EVENT events;
 		al_wait_for_event(event_queue, &events);
 
@@ -750,11 +753,12 @@ void drawMulti(first startloop, first endloop, first plusplus,second object[],fi
 				luigi.draw(luigiBM, (events.timer.source == luigiTimer), lightning.active);
 				lightning.active = luigi.lightning_active();
 				lightning.draw(light, (events.timer.source == enemyTimer));
-				luigi.drawHealth(luigiHealth);
+				//luigi.drawHealth(luigiHealth);
 			}
 		}
+		
 	}
-	
+	al_stop_sample(&id2);
 
 	
 	//al_init_font_addon();
@@ -767,7 +771,8 @@ void drawMulti(first startloop, first endloop, first plusplus,second object[],fi
 	//al_destroy_font(font);
 	al_rest(2.0);//delay
 	al_destroy_display(display);
-	al_destroy_sample(startSound);
+	al_destroy_sample(gameSong);
+	
 	al_destroy_bitmap(imagewindow);
 	al_destroy_bitmap(imagewindowsky); 
 	al_destroy_bitmap(imagecar);
