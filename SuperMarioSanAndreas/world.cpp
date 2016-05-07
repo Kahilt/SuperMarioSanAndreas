@@ -332,7 +332,7 @@ void cameraUpdate(float *camerposition, float x, float y, int w, int h){
 				sourceXc += (float)(al_get_bitmap_width(Walk)) / (float)(10);
 				sourceXd += 73.5;//al_get_bitmap_width(Stand) / 10;
 				sourceXe += 81.5;//al_get_bitmap_width(Duck1) / 10;
-				sourceXf += 71.5; //al_get_bitmap_width(Jump1) / 10;
+				sourceXf += 71.5; //al_get_bitmap_width(Jump1) / 10; 
 				sourceXg += 107.5;//al_get_bitmap_width(Walk1) / 10;
 				sourceXh += 73.5;//al_get_bitmap_width(Stand1) / 10;
 			}
