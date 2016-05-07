@@ -3,7 +3,9 @@
 #include <allegro5/allegro_image.h>//telling compiler to include allegro 5 image file
 #include <allegro5/allegro_primitives.h>//telling compiler to include allegro 5 primitives
 //#include <allegro5/allegro_ttf.h>
-//#include <allegro5/allegro_font.h>	
+//#include <allegro5/allegro_font.h>
+#include <allegro5/allegro_audio.h>
+#include <allegro5/allegro_acodec.h>
 using namespace std;
 #define length 1366 //defining the screen lenght 
 #define width 770  //defining the screen width 
@@ -87,6 +89,8 @@ void drawMulti(first startloop, first endloop, first plusplus,second object[],fi
 	al_init_image_addon();
 	al_init_primitives_addon();
 	al_install_keyboard();
+	al_install_audio();
+	al_init_acodec_addon();
 	float cameraposition[2] = { 0, 0 };
 
 	ALLEGRO_KEYBOARD_STATE keyState;
@@ -146,7 +150,10 @@ void drawMulti(first startloop, first endloop, first plusplus,second object[],fi
 	ALLEGRO_BITMAP *light = al_load_bitmap("Lightning sprite.png");
 	ALLEGRO_BITMAP *luigiBM = al_load_bitmap("Luigi.png");
 
-
+	//////////////////////////////////////////////////////Songs///////////////////////////////////////////////////
+	ALLEGRO_SAMPLE *startSound = al_load_sample("1.wav");
+	ALLEGRO_SAMPLE_ID id;
+	al_reserve_samples(1);
 	///////////////////////////////////////////////////CALLING CLASSES/////////////////////////////////////////////////////////////////////////////
 
 	Enemies gangster[numOfEnemys];						//creates 1 object of enemies class
@@ -419,8 +426,9 @@ void drawMulti(first startloop, first endloop, first plusplus,second object[],fi
 
 			if (events.timer.source == timer)
 			{
+				al_play_sample(startSound,1.0,0.0,1.0,ALLEGRO_PLAYMODE_LOOP,0);
 				active = true;
-
+			
 				al_get_keyboard_state(&keyState);
 
 				if (al_key_down(&keyState, ALLEGRO_KEY_ENTER))
@@ -437,13 +445,13 @@ void drawMulti(first startloop, first endloop, first plusplus,second object[],fi
 			}
 		}
 	}
-
-
+	
+	al_stop_sample(&id);
 	/////////////////////////////////////////////////////////End Of Start SplashScreen////////////////////////////////
 	done = false;
 	while (!done)	// main game loop
 	{
-	
+		
 		ALLEGRO_EVENT events;
 		al_wait_for_event(event_queue, &events);
 
@@ -672,7 +680,10 @@ void drawMulti(first startloop, first endloop, first plusplus,second object[],fi
 				al_draw_bitmap(imagewindow, (length*i), 3, NULL);	// draws buildings to window.
 			}
 
-			level = 3;
+			level = 3; //The level
+
+
+
 			if (level == 1)
 				//////////////////////////LEVEL 1//////////////////////////////////////////////////////////////////
 			{
@@ -753,6 +764,7 @@ void drawMulti(first startloop, first endloop, first plusplus,second object[],fi
 	//al_destroy_font(font);
 	al_rest(2.0);//delay
 	al_destroy_display(display);
+	al_destroy_sample(startSound);
 	al_destroy_bitmap(imagewindow);
 	al_destroy_bitmap(imagewindowsky); 
 	al_destroy_bitmap(imagecar);
