@@ -327,7 +327,7 @@ void cameraUpdate(float *camerposition, float x, float y, int w, int h){
 		
 			if (active)
 			{
-				sourceXa += 81.5;//al_get_bitmap_width(Duck) / 10;
+				sourceXa += 81.5;  //al_get_bitmap_width(Duck) / 10;
 				sourceXb += 71.5; //al_get_bitmap_width(Jump) / 10;
 				sourceXc += (float)(al_get_bitmap_width(Walk)) / (float)(10);
 				sourceXd += 73.5;//al_get_bitmap_width(Stand) / 10;
