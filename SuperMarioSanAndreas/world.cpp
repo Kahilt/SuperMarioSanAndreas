@@ -55,14 +55,14 @@ void drawMulti(first startloop, first endloop, first plusplus,second object[],fi
 	 bool jump = false;
 	 float jumpSpeed = 8;
 	 //enum NewDirection{ RIGHT, LEFT, DOWN, UP, NONE1, NONE2 }; //Defines the different states or directions of mario. NONE1=facing right NONE2=facing left	
-	 int moveSpeed = 2;
+	 int moveSpeed = 5;
 	 int check; //will record Marios last left or right movement to decide which side he will face after the key is left
 	 int dir; //the initial direction of Mario is set to down
 	// bool dead;//used to determine when mario will die
 	 bool active; //will help cause the animation ONLY if key is pressed in particular direction
 	 bool draw=false;//for timer, used for smooth animations
 	 bool done = false;
-	 int x = 0, y = 0, movespeed = 2;
+	 int x = 0, y = 0, movespeed = 5;
 	 int state = NULL;
 	 const float FPS = 60.0;
 	
@@ -575,9 +575,7 @@ void drawMulti(first startloop, first endloop, first plusplus,second object[],fi
 					else
 						al_draw_bitmap_region(AttackL, sourceXi, 0, al_get_bitmap_width(AttackL) / 10, al_get_bitmap_height(AttackL), x - 148, y - 19, NULL);
 				break;
-			}
-			
-			
+			}			
 		
 			draw = false;
 			al_flip_display();//shows the display window on pc window
@@ -622,7 +620,7 @@ void drawMulti(first startloop, first endloop, first plusplus,second object[],fi
 				}
 
 
-				for (int i = 7; i < numOfEnemys; i++)
+				for (int i = 7; i < 10; i++)
 				{
 					gangster[i].draw(punch_gangster, chain_gangster, (events.timer.source == enemyTimer));	// draw method from Enemies class
 				}
@@ -641,11 +639,9 @@ void drawMulti(first startloop, first endloop, first plusplus,second object[],fi
 				for (int j = 39; j < 100; j++){
 					obstacleP[j]->draw(smallPillar, medPillar, medPillar);
 				}
-
 					for (int j = 1; j < 15; j++){
 						obstacleMH[j]->draw(manhole, manhole, manhole);
 		}
-
 					for (int j = 0; j < 100; j++){
 						Obsspikes[j]->draw(spike, spike, spike);
 
