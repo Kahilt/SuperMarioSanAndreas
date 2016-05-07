@@ -67,6 +67,7 @@ void drawMulti(first startloop, first endloop, first plusplus,second object[],fi
 	 bool draw=false;//for timer, used for smooth animations
 	 bool done = false;
 	 int x = 0, y = 0, movespeed = 5;
+	 int enemyMovespeed = 5;
 	 int state = NULL;
 	 const float FPS = 60.0;
 	
@@ -635,12 +636,7 @@ void drawMulti(first startloop, first endloop, first plusplus,second object[],fi
 		al_translate_transform(&CAMERA, -cameraposition[0], -cameraposition[1]);//translates the camera position
 		al_use_transform(&CAMERA);
 
-		for (int i = 0; i < numOfEnemys; i++)
-		{
-			gangster[i].move(movespeed / 2);
-		}
-
-
+		
 
 		if (draw)
 		{
@@ -693,6 +689,7 @@ void drawMulti(first startloop, first endloop, first plusplus,second object[],fi
 			if (level == 1)
 				//////////////////////////LEVEL 1//////////////////////////////////////////////////////////////////
 			{
+				enemyMovespeed = 2;
 
 				for (int j = 0; j < 6; j++){
 					obstacleC[j]->draw(imagecar, imagecopcar, imagebus);
@@ -705,12 +702,16 @@ void drawMulti(first startloop, first endloop, first plusplus,second object[],fi
 
 				for (int i = 0; i <6/* numOfEnemys*/; i++)
 				{
+					gangster[i].move(enemyMovespeed);
 					gangster[i].draw(punch_gangster, chain_gangster, (events.timer.source == enemyTimer));	// draw method from Enemies class
 				}
 				obstacleMH[0]->draw(manhole, manhole, manhole);
 			}
 			//////////////////////////LEVEL 2//////////////////////////////////////////////////////////////////
-			if (level == 2){
+			if (level == 2)
+			{
+				enemyMovespeed = 3;
+
 				for (int j = 6; j < 11; j++){
 					obstacleC[j]->draw(imagecar, imagecopcar, imagebus);
 				}
@@ -725,6 +726,7 @@ void drawMulti(first startloop, first endloop, first plusplus,second object[],fi
 
 				for (int i = 7; i < 10; i++)
 				{
+					gangster[i].move(enemyMovespeed);
 					gangster[i].draw(punch_gangster, chain_gangster, (events.timer.source == enemyTimer));	// draw method from Enemies class
 				}
 
@@ -732,7 +734,9 @@ void drawMulti(first startloop, first endloop, first plusplus,second object[],fi
 				//al_draw_bitmap(manhole, 7450, 670, NULL);
 			}
 			
-			if (level == 3){
+			if (level == 3)
+			{
+				enemyMovespeed = 4;
 
 				for (int j = 12; j < 17; j++){
 					obstacleC[j]->draw(imagecar, imagecopcar, imagebus);
@@ -749,6 +753,8 @@ void drawMulti(first startloop, first endloop, first plusplus,second object[],fi
 					}
 				for (int i = 10; i < numOfEnemys; i++)
 				{
+					gangster[i].move(enemyMovespeed);
+
 					al_lock_bitmap(AttackR, al_get_bitmap_format(AttackR), ALLEGRO_LOCK_READONLY);
 					al_lock_bitmap(AttackL, al_get_bitmap_format(AttackL), ALLEGRO_LOCK_READONLY);
 
@@ -771,7 +777,7 @@ void drawMulti(first startloop, first endloop, first plusplus,second object[],fi
 				luigi.draw(luigiBM, (events.timer.source == luigiTimer), lightning.active);
 				lightning.active = luigi.lightning_active();
 				lightning.draw(light, (events.timer.source == enemyTimer));
-				//luigi.drawHealth(luigiHealth);
+				luigi.drawHealth(luigiHealth);
 			}
 		}
 		
