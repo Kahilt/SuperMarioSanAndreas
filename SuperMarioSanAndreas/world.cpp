@@ -471,8 +471,8 @@ void drawMulti(first startloop, first endloop, first plusplus,second object[],fi
 				done = true;
 				break;
 			}
-		}
-		
+		}     
+		       
 		else if (events.type == ALLEGRO_EVENT_DISPLAY_CLOSE)
 			done = true;
 
