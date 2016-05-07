@@ -4,6 +4,8 @@
 #include <allegro5/allegro_primitives.h>//telling compiler to include allegro 5 primitives
 //#include <allegro5/allegro_ttf.h>
 //#include <allegro5/allegro_font.h>	
+#include <allegro5/allegro_audio.h>
+#include <allegro5/allegro_acodec.h>
 using namespace std;
 #define length 1366 //defining the screen lenght 
 #define width 770  //defining the screen width 
@@ -87,6 +89,8 @@ void drawMulti(first startloop, first endloop, first plusplus,second object[],fi
 	al_init_image_addon();
 	al_init_primitives_addon();
 	al_install_keyboard();
+	al_install_audio();
+	al_init_acodec_addon();
 	float cameraposition[2] = { 0, 0 };
 
 	ALLEGRO_KEYBOARD_STATE keyState;
@@ -147,6 +151,11 @@ void drawMulti(first startloop, first endloop, first plusplus,second object[],fi
 	ALLEGRO_BITMAP *luigiBM = al_load_bitmap("Luigi.png");
 	ALLEGRO_BITMAP *luigiHealth = al_load_bitmap("Luigi_health_bar.png");
 
+
+	//////////////////////////////////////////////////////Songs///////////////////////////////////////////////////
+	ALLEGRO_SAMPLE *startSound = al_load_sample("1.wav");
+	ALLEGRO_SAMPLE_ID id;
+	al_reserve_samples(1);
 	///////////////////////////////////////////////////CALLING CLASSES/////////////////////////////////////////////////////////////////////////////
 
 	Enemies gangster[numOfEnemys];						//creates 1 object of enemies class
@@ -419,6 +428,7 @@ void drawMulti(first startloop, first endloop, first plusplus,second object[],fi
 
 			if (events.timer.source == timer)
 			{
+				al_play_sample(startSound,1.0,0.0,1.0,ALLEGRO_PLAYMODE_LOOP,0);
 				active = true;
 
 				al_get_keyboard_state(&keyState);
@@ -438,7 +448,7 @@ void drawMulti(first startloop, first endloop, first plusplus,second object[],fi
 		}
 	}
 
-
+	al_stop_sample(&id);
 	/////////////////////////////////////////////////////////End Of Start SplashScreen////////////////////////////////
 	done = false;
 	while (!done)	// main game loop
@@ -469,17 +479,17 @@ void drawMulti(first startloop, first endloop, first plusplus,second object[],fi
 
 			if (events.timer.source == timer)
 			{
-			active = true;
+				active = true;
 
-			al_get_keyboard_state(&keyState);
-			
-			if (al_key_down(&keyState, ALLEGRO_KEY_DOWN))
-			{
+				al_get_keyboard_state(&keyState);
+
+				if (al_key_down(&keyState, ALLEGRO_KEY_DOWN))
+				{
 					hit = false;
-				velx = 0;
-				y += moveSpeed;
-				dir = DOWN;
-			}
+					velx = 0;
+					y += moveSpeed;
+					dir = DOWN;
+				}
 				else if (al_key_down(&keyState, ALLEGRO_KEY_SPACE))
 				{
 					
@@ -496,86 +506,86 @@ void drawMulti(first startloop, first endloop, first plusplus,second object[],fi
 					jump = false;
 
 				}
-			else if (al_key_down(&keyState, ALLEGRO_KEY_UP) && jump == true)
-			{
-				vely = -jumpSpeed;
-				jump = false;
-			}
-			else if (al_key_down(&keyState, ALLEGRO_KEY_RIGHT))
-			{
-					hit = false;
-				velx = moveSpeed;
-				dir = RIGHT;
-				check = 1;
-				check2 = 1;
-			}
-			else if (al_key_down(&keyState, ALLEGRO_KEY_LEFT))
-			{
-					hit = false;
-				velx = -moveSpeed;
-				dir = LEFT;
-				check = 2;
-				check2 = 2;
-			}
-		
-			
-			else
-			{
-				if (check == 1 || check == 0)
+				else if (al_key_down(&keyState, ALLEGRO_KEY_UP) && jump == true)
 				{
-						hit = false;
-					dir = NONE1;
-					
+					vely = -jumpSpeed;
+					jump = false;
 				}
+				else if (al_key_down(&keyState, ALLEGRO_KEY_RIGHT))
+				{
+					hit = false;
+					velx = moveSpeed;
+					dir = RIGHT;
+					check = 1;
+					check2 = 1;
+				}
+				else if (al_key_down(&keyState, ALLEGRO_KEY_LEFT))
+				{
+					hit = false;
+					velx = -moveSpeed;
+					dir = LEFT;
+					check = 2;
+					check2 = 2;
+				}
+
+
 				else
 				{
+					if (check == 1 || check == 0)
+					{
 						hit = false;
-					dir = NONE2;
-					
+						dir = NONE1;
+
+					}
+					else
+					{
+						hit = false;
+						dir = NONE2;
+
+					}
+					velx = 0;
+					active = false;
 				}
-				velx = 0;
-				active = false;
-			}
 
 			}
 			else if (events.timer.source == mariotimer)
 			{
-			if (active)
-			{
-				sourceXa += 81.5;  //al_get_bitmap_width(Duck) / 10;
-				sourceXb += 71.5; //al_get_bitmap_width(Jump) / 10;
-				sourceXc += (float)(al_get_bitmap_width(Walk)) / (float)(10);
-				sourceXd += 73.5;//al_get_bitmap_width(Stand) / 10;
-				sourceXe += 81.5;//al_get_bitmap_width(Duck1) / 10;
-				sourceXf += 71.5; //al_get_bitmap_width(Jump1) / 10; 
-				sourceXg += 107.5;//al_get_bitmap_width(Walk1) / 10;
-				sourceXh += 73.5;//al_get_bitmap_width(Stand1) / 10;
+				if (active)
+				{
+					sourceXa += 81.5;  //al_get_bitmap_width(Duck) / 10;
+					sourceXb += 71.5; //al_get_bitmap_width(Jump) / 10;
+					sourceXc += (float)(al_get_bitmap_width(Walk)) / (float)(10);
+					sourceXd += 73.5;//al_get_bitmap_width(Stand) / 10;
+					sourceXe += 81.5;//al_get_bitmap_width(Duck1) / 10;
+					sourceXf += 71.5; //al_get_bitmap_width(Jump1) / 10; 
+					sourceXg += 107.5;//al_get_bitmap_width(Walk1) / 10;
+					sourceXh += 73.5;//al_get_bitmap_width(Stand1) / 10;
 			
 
 					
-			}
+				}
 				//sourceX += al_get_bitmap_width(Mario) / 3;
 
-			//if (sourceX >= al_get_bitmap_width(Mario))
+				//if (sourceX >= al_get_bitmap_width(Mario))
 
-			if (sourceXa >= al_get_bitmap_width(Duck))
-				sourceXa = 0;
-			if (sourceXb >= al_get_bitmap_width(Jump))
-				sourceXb = 0;
-			if (sourceXc >= al_get_bitmap_width(Walk))
-				sourceXc = 0;
-			if (sourceXd >= al_get_bitmap_width(Stand))
-				sourceXd = 0;
-			if (sourceXe >= al_get_bitmap_width(Duck1))
-				sourceXe = 0;
-			if (sourceXf >= al_get_bitmap_width(Jump1))
-				sourceXf = 0;
-			if (sourceXg >= al_get_bitmap_width(Walk1))
-				sourceXg = 0;
-			if (sourceXh >= al_get_bitmap_width(Stand1))
-				sourceXh = 0;
+				if (sourceXa >= al_get_bitmap_width(Duck))
+					sourceXa = 0;
+				if (sourceXb >= al_get_bitmap_width(Jump))
+					sourceXb = 0;
+				if (sourceXc >= al_get_bitmap_width(Walk))
+					sourceXc = 0;
+				if (sourceXd >= al_get_bitmap_width(Stand))
+					sourceXd = 0;
+				if (sourceXe >= al_get_bitmap_width(Duck1))
+					sourceXe = 0;
+				if (sourceXf >= al_get_bitmap_width(Jump1))
+					sourceXf = 0;
+				if (sourceXg >= al_get_bitmap_width(Walk1))
+					sourceXg = 0;
+				if (sourceXh >= al_get_bitmap_width(Stand1))
+					sourceXh = 0;
 				
-		}
+			}
 			else if (events.timer.source == weapontimer)
 			{
 				
@@ -596,24 +606,24 @@ void drawMulti(first startloop, first endloop, first plusplus,second object[],fi
 						sourceXj = 0;
 					}
 				
-		}
-		if (!jump)
-			vely += gravity;
-		else
-			vely = 0;
+			}
+			if (!jump)
+				vely += gravity;
+			else
+				vely = 0;
 
-		x += velx;
-		y += vely;
-		if (y < 600)
+			x += velx;
+			y += vely;
+			if (y < 600)
 			{
 				if (hit == true)
 					dir = ATT;
 				else
-			dir = UP;
+					dir = UP;
 			}
 			jump = (y >= 600);
-		if (jump)
-			y = 600;
+			if (jump)
+				y = 600;
 		}
 		draw = true;
 		cameraUpdate(cameraposition, x, y, length / 2, width / 2);//updates the position of camera as mario moves
@@ -630,7 +640,7 @@ void drawMulti(first startloop, first endloop, first plusplus,second object[],fi
 
 		if (draw)
 		{
-				//al_draw_bitmap_region(Mario, sourceX, dir*al_get_bitmap_height(Mario) / 6, al_get_bitmap_width(Mario) / 3, al_get_bitmap_height(Mario) / 6, x, y, NULL);
+//al_draw_bitmap_region(Mario, sourceX, dir*al_get_bitmap_height(Mario) / 6, al_get_bitmap_width(Mario) / 3, al_get_bitmap_height(Mario) / 6, x, y, NULL);
 			switch (dir)
 			{
 			case 0:
@@ -661,8 +671,8 @@ void drawMulti(first startloop, first endloop, first plusplus,second object[],fi
 					else
 						al_draw_bitmap_region(AttackL, sourceXi, 0, al_get_bitmap_width(AttackL) / 10, al_get_bitmap_height(AttackL), x - 148, y - 19, NULL);
 				break;
-			}			
-		
+			}
+			
 			draw = false;
 			al_flip_display();//shows the display window on pc window
 			//			al_draw_bitmap(imagewindowsky,/* 1*/x + (length*i), 2, NULL);
@@ -672,7 +682,10 @@ void drawMulti(first startloop, first endloop, first plusplus,second object[],fi
 				al_draw_bitmap(imagewindow, (length*i), 3, NULL);	// draws buildings to window.
 			}
 
-			level = 3;
+			level = 3; //The level
+
+
+
 			if (level == 1)
 				//////////////////////////LEVEL 1//////////////////////////////////////////////////////////////////
 			{
@@ -756,6 +769,7 @@ void drawMulti(first startloop, first endloop, first plusplus,second object[],fi
 	//al_destroy_font(font);
 	al_rest(2.0);//delay
 	al_destroy_display(display);
+	al_destroy_sample(startSound);
 	al_destroy_bitmap(imagewindow);
 	al_destroy_bitmap(imagewindowsky); 
 	al_destroy_bitmap(imagecar);
