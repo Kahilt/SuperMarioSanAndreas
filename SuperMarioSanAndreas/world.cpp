@@ -3,7 +3,7 @@
 #include <allegro5/allegro_image.h>//telling compiler to include allegro 5 image file
 #include <allegro5/allegro_primitives.h>//telling compiler to include allegro 5 primitives
 //#include <allegro5/allegro_ttf.h>
-//#include <allegro5/allegro_font.h>
+//#include <allegro5/allegro_font.h>	
 #include <allegro5/allegro_audio.h>
 #include <allegro5/allegro_acodec.h>
 using namespace std;
@@ -70,8 +70,8 @@ void drawMulti(first startloop, first endloop, first plusplus,second object[],fi
 	 int state = NULL;
 	 const float FPS = 60.0;
 	
-	 const float EFPS = 15.0;
-	 const float LFPS = 5.0;
+	 const float EFPS = 15.0;		//controls speed of enemy animation
+	 const float LFPS = 5.0;		//controls speed of Luigi animation
 	 const float MFPS = 8.0;
 	 const float WFPS = 9.0;
 	 enum Direction {UP, DOWN, LEFT, RIGHT, NONE1, NONE2, ATT};
@@ -149,6 +149,8 @@ void drawMulti(first startloop, first endloop, first plusplus,second object[],fi
 
 	ALLEGRO_BITMAP *light = al_load_bitmap("Lightning sprite.png");
 	ALLEGRO_BITMAP *luigiBM = al_load_bitmap("Luigi.png");
+	ALLEGRO_BITMAP *luigiHealth = al_load_bitmap("Luigi_health_bar.png");
+
 
 	//////////////////////////////////////////////////////Songs///////////////////////////////////////////////////
 	ALLEGRO_SAMPLE *startSound = al_load_sample("1.wav");
@@ -428,7 +430,7 @@ void drawMulti(first startloop, first endloop, first plusplus,second object[],fi
 			{
 				al_play_sample(startSound,1.0,0.0,1.0,ALLEGRO_PLAYMODE_LOOP,0);
 				active = true;
-			
+
 				al_get_keyboard_state(&keyState);
 
 				if (al_key_down(&keyState, ALLEGRO_KEY_ENTER))
@@ -445,13 +447,13 @@ void drawMulti(first startloop, first endloop, first plusplus,second object[],fi
 			}
 		}
 	}
-	
+
 	al_stop_sample(&id);
 	/////////////////////////////////////////////////////////End Of Start SplashScreen////////////////////////////////
 	done = false;
 	while (!done)	// main game loop
 	{
-		
+	
 		ALLEGRO_EVENT events;
 		al_wait_for_event(event_queue, &events);
 
@@ -748,6 +750,7 @@ void drawMulti(first startloop, first endloop, first plusplus,second object[],fi
 				luigi.draw(luigiBM, (events.timer.source == luigiTimer), lightning.active);
 				lightning.active = luigi.lightning_active();
 				lightning.draw(light, (events.timer.source == enemyTimer));
+				luigi.drawHealth(luigiHealth);
 			}
 		}
 	}
@@ -778,6 +781,7 @@ void drawMulti(first startloop, first endloop, first plusplus,second object[],fi
 	al_destroy_bitmap(light);
 	al_destroy_bitmap(luigiBM);
 	al_destroy_timer(luigiTimer);
+	al_destroy_bitmap(luigiHealth);
 	
 	return 0;
 }

@@ -24,7 +24,7 @@ public :
 		aniWidth = 125.0;
 		aniHeight = 185.0;
 
-		health = 100;
+		health = 10;
 		sourceX = 0;
 
 	}
@@ -57,5 +57,43 @@ public :
 			return true;
 		else
 			return false;
+	}
+
+	void drawHealth(ALLEGRO_BITMAP *healthBar)	//draws the health status of Luigi
+	{
+		if (health == 10)
+			al_draw_bitmap_region(healthBar, 0, 0, 264, 22, x, y - 100, NULL);
+		else if (health == 9)
+			al_draw_bitmap_region(healthBar, 0, 22, 264, 28, x, y - 100, NULL);
+		else if (health == 8)
+			al_draw_bitmap_region(healthBar, 0, 50, 264, 29, x, y - 100, NULL);
+		else if (health == 7)
+			al_draw_bitmap_region(healthBar, 0, 79, 264, 32, x, y - 100, NULL);
+		else if (health == 6)
+			al_draw_bitmap_region(healthBar, 0, 111, 264, 33, x, y - 100, NULL);
+		else if (health == 5)
+			al_draw_bitmap_region(healthBar, 0, 144, 264, 29, x, y - 100, NULL);
+		else if (health == 4)
+			al_draw_bitmap_region(healthBar, 0, 173, 264, 31, x, y - 100, NULL);
+		else if (health == 3)
+			al_draw_bitmap_region(healthBar, 0, 204, 264, 33, x, y - 100, NULL);
+		else if (health == 2)
+			al_draw_bitmap_region(healthBar, 0, 237, 264, 34, x, y - 100, NULL);
+		else if (health == 1)
+			al_draw_bitmap_region(healthBar, 0, 271, 264, 32, x, y - 100, NULL);
+		else if (health == 0)
+		{
+			al_draw_bitmap_region(healthBar, 0, 303, 264, 25, x, y - 100, NULL);
+			x = -1000;		//removes luigi from game window
+			y = -1000;
+			alive = false;		//luigi dead
+		}
+
+		/*if (check)			//used to test health bar
+		{
+			health -= 1;
+			if (health == 0)
+				health = 10;
+		}*/
 	}
 };
