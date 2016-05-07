@@ -54,6 +54,7 @@ void drawMulti(first startloop, first endloop, first plusplus,second object[],fi
 	 const float gravity=0.2;
 	 bool jump = false;
 	 float jumpSpeed = 8;
+	 
 	 //enum NewDirection{ RIGHT, LEFT, DOWN, UP, NONE1, NONE2 }; //Defines the different states or directions of mario. NONE1=facing right NONE2=facing left	
 	 int moveSpeed = 5;
 	 int check; //will record Marios last left or right movement to decide which side he will face after the key is left
@@ -136,9 +137,11 @@ void drawMulti(first startloop, first endloop, first plusplus,second object[],fi
 	ALLEGRO_BITMAP *smallPillar = al_load_bitmap("brick_grey.png");
 	ALLEGRO_BITMAP *medPillar = al_load_bitmap("download.png");
 	ALLEGRO_BITMAP *manhole = al_load_bitmap("manhole.png");
+	ALLEGRO_BITMAP *spike = al_load_bitmap("Spike.png");
+
 	ALLEGRO_BITMAP *light = al_load_bitmap("Lightning sprite.png");
 	ALLEGRO_BITMAP *luigiBM = al_load_bitmap("Luigi.png");
-	ALLEGRO_BITMAP *spike = al_load_bitmap("Spike.png");
+	
 
 	///////////////////////////////////////////////////CALLING CLASSES/////////////////////////////////////////////////////////////////////////////
 
@@ -623,7 +626,7 @@ void drawMulti(first startloop, first endloop, first plusplus,second object[],fi
 				al_draw_bitmap(imagewindow, (length*i), 3, NULL);	// draws buildings to window.
 			}
 
-			level = 2;
+			level = 3;
 			if (level == 1)
 				//////////////////////////LEVEL 1//////////////////////////////////////////////////////////////////
 			{

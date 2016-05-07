@@ -19,15 +19,15 @@ public:
 		x = -1000;
 		y = -1000;
 
-		sourceX[6] = 20;		//width of each animation
-		sourceX[5] = 55;
-		sourceX[4] = 139;
-		sourceX[3] = 214;
-		sourceX[2] = 215;
-		sourceX[1] = 216;
-		sourceX[0] = 212;
+		sourceX[6] = 60;		//width of each animation
+		sourceX[5] = 165;
+		sourceX[4] = 417;
+		sourceX[3] = 642;
+		sourceX[2] = 645;
+		sourceX[1] = 648;
+		sourceX[0] = 636;
 
-		tempX = 1051;
+		tempX = 3153;
 		i = 6;
 
 		active = false;
@@ -53,7 +53,7 @@ public:
 				if (i == -1)		//used to set i back to ending of array
 				{
 					i = 6;
-					tempX = 1051;
+					tempX = 3153;
 					active = false;
 				}
 			}

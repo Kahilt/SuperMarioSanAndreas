@@ -71,7 +71,7 @@ public:
 		x += (direction * speed);		//increments enemy's position 
 	}
 
-	void getShot(/*		will receive a Bullet object		*/)
+	void getHitWithHammer(/*		will receive a Bullet object		*/)
 	{
 		//check if bullet collides with enemy, if true : alive = false;
 	}
