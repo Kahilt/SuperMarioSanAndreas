@@ -1,6 +1,7 @@
 #include <allegro5/allegro.h>
 #include <allegro5/allegro_image.h>
 #include <iostream>
+#include <cmath>
 
 using namespace std;
 
@@ -22,7 +23,6 @@ public:
 	bool alive;			//determines whether enemy is alive or dead
 
 	float sourceX;		//sourceX to control which portion of the sprite is printed
-	float sourceXR;
 	int type;			//	1 = Punching gangster,	2 = Chain gangster
 
 	Enemies()
@@ -71,9 +71,48 @@ public:
 		x += (direction * speed);		//increments enemy's position 
 	}
 
-	void getHitWithHammer(/*		will receive a Bullet object		*/)
+	void getHitWithHammer(ALLEGRO_BITMAP *punch, ALLEGRO_BITMAP *chain, ALLEGRO_BITMAP *mario, float mx, float my, float m_width, float m_height, bool hit_check)
 	{
-		//check if bullet collides with enemy, if true : alive = false;
+		if (type == 1)
+		{
+			if ((x + aniWidth < mx || x > mx + m_width || y + aniWidth < my || y > my + m_height) && hit_check == false)
+			{
+				//do nothing since no contact
+			}
+			else
+			{
+				float top = max(y, my);					//calculates collision area
+				float bottom = min(y + aniHeight, my + m_height);
+				float left = max(x, mx);
+				float right = min(x + aniWidth, mx + m_width);
+
+				for (int i = top; i < bottom; i++)		//traverses through each pixel in collision area
+				{
+					for (int j = left; j < right; j++)
+					{
+						al_lock_bitmap(punch, al_get_bitmap_format(punch), ALLEGRO_LOCK_READONLY);
+						al_lock_bitmap(mario, al_get_bitmap_format(mario), ALLEGRO_LOCK_READONLY);
+
+						ALLEGRO_COLOR col = al_get_pixel(punch, j - x, i - y);
+						ALLEGRO_COLOR m_col = al_get_pixel(mario, j - mx, i - my);
+
+						if (col.a != 0 && m_col.a != 0 && hit_check == true)			//collision is true
+						{
+							alive = false;
+							x = -1000;
+							y = -1000;
+							startX = -1000;
+							endX = -1000;
+						}
+					}
+				}
+
+			}
+		}
+		else
+		{
+
+		}
 	}
 
 	void draw(ALLEGRO_BITMAP *punch, ALLEGRO_BITMAP *chain, bool time)	//receives an ALLEGRO_BITMAP from game loop, time controls how often animation changes
