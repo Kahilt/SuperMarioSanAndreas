@@ -17,6 +17,7 @@
     <ClCompile Include="manHoles.cpp" />
     <ClCompile Include="Luigi_lightning.cpp" />
     <ClCompile Include="pilars.cpp" />
+    <ClCompile Include="Spikes.cpp" />
     <ClCompile Include="SplashScreens.cpp" />
     <ClCompile Include="SuperMario.cpp" />
     <ClCompile Include="world obstacles.cpp" />

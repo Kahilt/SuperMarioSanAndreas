@@ -45,6 +45,9 @@
     <ClCompile Include="Luigi.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Spikes.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="SuperMario.h">

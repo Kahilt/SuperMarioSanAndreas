@@ -33,4 +33,13 @@ public:
 		y = posy;
 		cartype = type;
 	}
+	void drawMulti(int startloop, int endloop, int plusplus)
+	{
+		int val = 0;
+		for (int i = startloop; i < endloop; i++){
+			setvalue(x, y, cartype);
+			val +=plusplus;
+
+		}
+	}
 };
