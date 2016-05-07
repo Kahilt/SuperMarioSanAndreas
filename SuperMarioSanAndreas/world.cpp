@@ -26,14 +26,14 @@ void cameraUpdate(float *camerposition, float x, float y, int w, int h){
 
 	 al_init();
 
-	 int sourceXa=0;//used for cropping the SpriteSheet for animation
-	 int sourceXb = 0;
-	 int sourceXc = 0;
-	 int sourceXd = 0;
-	 int sourceXe = 0;
-	 int sourceXf = 0;
-	 int sourceXg = 0;
-	 int sourceXh = 0;
+	 float sourceXa=0;//used for cropping the SpriteSheet for animation
+	 float sourceXb = 0;
+	 float sourceXc = 0;
+	 float sourceXd = 0;
+	 float sourceXe = 0;
+	 float sourceXf = 0;
+	 float sourceXg = 0;
+	 float sourceXh = 0;
 	 float velx, vely;
 	 velx = 0;
 	 vely = 0;
@@ -327,14 +327,14 @@ void cameraUpdate(float *camerposition, float x, float y, int w, int h){
 		
 			if (active)
 			{
-				sourceXa += al_get_bitmap_width(Duck) / 10;
-				sourceXb += al_get_bitmap_width(Jump) / 10;
-				sourceXc += al_get_bitmap_width(Walk) / 10;
-				sourceXd += al_get_bitmap_width(Stand) / 10;
-				sourceXe += al_get_bitmap_width(Duck1) / 10;
-				sourceXf += al_get_bitmap_width(Jump1) / 10;
-				sourceXg += al_get_bitmap_width(Walk1) / 10;
-				sourceXh += al_get_bitmap_width(Stand1) / 10;
+				sourceXa += 81.5;//al_get_bitmap_width(Duck) / 10;
+				sourceXb += 71.5; //al_get_bitmap_width(Jump) / 10;
+				sourceXc += (float)(al_get_bitmap_width(Walk)) / (float)(10);
+				sourceXd += 73.5;//al_get_bitmap_width(Stand) / 10;
+				sourceXe += 81.5;//al_get_bitmap_width(Duck1) / 10;
+				sourceXf += 71.5; //al_get_bitmap_width(Jump1) / 10;
+				sourceXg += 107.5;//al_get_bitmap_width(Walk1) / 10;
+				sourceXh += 73.5;//al_get_bitmap_width(Stand1) / 10;
 			}
 				//sourceX += al_get_bitmap_width(Mario) / 3;
 
@@ -397,9 +397,9 @@ void cameraUpdate(float *camerposition, float x, float y, int w, int h){
 				break;
 			case 1:
 				if (check2 == 1)
-				    al_draw_bitmap_region(Duck1, sourceXe, 0, al_get_bitmap_width(Duck1) / 10, al_get_bitmap_height(Duck1), x, y, NULL);
+					al_draw_bitmap_region(Duck1, sourceXe, 0, al_get_bitmap_width(Duck1) / 10, al_get_bitmap_height(Duck1), x, y +20, NULL);
 				else
-					al_draw_bitmap_region(Duck, sourceXa, 0, al_get_bitmap_width(Duck) / 10, al_get_bitmap_height(Duck), x, y, NULL);
+					al_draw_bitmap_region(Duck, sourceXa, 0, al_get_bitmap_width(Duck) / 10, al_get_bitmap_height(Duck), x, y+20 , NULL);
 				break;
 			case 2:al_draw_bitmap_region(Walk, sourceXc, 0, al_get_bitmap_width(Walk) / 10, al_get_bitmap_height(Walk), x, y, NULL);
 				break;
