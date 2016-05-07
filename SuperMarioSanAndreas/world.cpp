@@ -732,6 +732,8 @@ void drawMulti(first startloop, first endloop, first plusplus,second object[],fi
 					}
 				for (int i = 10; i < numOfEnemys; i++)
 				{
+					
+					gangster[i].getHitWithHammer(punch_gangster, chain_gangster, AttackR, x, y, 233, 140, hitcheck);
 					gangster[i].draw(punch_gangster, chain_gangster, (events.timer.source == enemyTimer));	// draw method from Enemies class
 				}
 				luigi.draw(luigiBM, (events.timer.source == luigiTimer), lightning.active);
