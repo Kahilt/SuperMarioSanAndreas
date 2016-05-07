@@ -111,6 +111,39 @@ public:
 		}
 		else
 		{
+			if ((x + aniWidth < mx || x > mx + m_width || y + aniWidth < my || y > my + m_height) && hit_check == false)
+			{
+				//do nothing since no contact
+			}
+			else
+			{
+				float top = max(y, my);					//calculates collision area
+				float bottom = min(y + aniHeight, my + m_height);
+				float left = max(x, mx);
+				float right = min(x + aniWidth, mx + m_width);
+
+				for (int i = top; i < bottom; i++)		//traverses through each pixel in collision area
+				{
+					for (int j = left; j < right; j++)
+					{
+						al_lock_bitmap(chain, al_get_bitmap_format(chain), ALLEGRO_LOCK_READONLY);
+						al_lock_bitmap(mario, al_get_bitmap_format(mario), ALLEGRO_LOCK_READONLY);
+
+						ALLEGRO_COLOR col = al_get_pixel(chain, j - x, i - y);
+						ALLEGRO_COLOR m_col = al_get_pixel(mario, j - mx, i - my);
+
+						if (col.a != 0 && m_col.a != 0 && hit_check == true)			//collision is true
+						{
+							alive = false;
+							x = -1000;
+							y = -1000;
+							startX = -1000;
+							endX = -1000;
+						}
+					}
+				}
+
+			}
 
 		}
 	}
