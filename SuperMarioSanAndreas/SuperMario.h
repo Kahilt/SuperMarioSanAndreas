@@ -13,7 +13,7 @@ public:
 	bool draw ;//for timer, used for smooth animations
 	float x , y , moveSpeed ; // x and y are starting co-ordinates of Mario, moveSpeed is the increment of the co-ordinates hence will det how fast Mario moves
 
-	const float FPS =100; //used for the timer, will help determine the number of times the game will refresh per second (frames/sec)
+	
 
 
 	void startMovement(ALLEGRO_DISPLAY *, bool, ALLEGRO_EVENT, ALLEGRO_KEYBOARD_STATE, ALLEGRO_BITMAP *);

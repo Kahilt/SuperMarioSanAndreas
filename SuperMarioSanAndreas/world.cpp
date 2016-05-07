@@ -15,7 +15,7 @@ using namespace std;
 #include "Luigi_lightning.cpp"
 #include "Luigi.cpp"
 #include "SuperMario.cpp"
-
+#include "Spikes.cpp"
 void cameraUpdate(float *camerposition, float x, float y, int w, int h){
 	camerposition[0] = -(length / 2) + (x + w / 2);				//positioning the camera at midpoint of the screen on the x axis
 	if (camerposition[0] < 0)									//check if the position is less then zero and if true then make it equal to zero
@@ -51,11 +51,12 @@ void cameraUpdate(float *camerposition, float x, float y, int w, int h){
 	 int x = 0, y = 0, movespeed = 5;
 	 int state = NULL;
 	 const float FPS = 60.0;
+	
 	 const float EFPS = 15.0;
 	 const float LFPS = 5.0;
 	 enum Direction {UP, DOWN, LEFT, RIGHT, NONE1, NONE2, NONE3,NONE4 };
 	 int level;//tells you what level you are currently drawing
-	 const int numOfEnemys = 10;					//contains the number of enemies
+	 const int numOfEnemys = 20;					//contains the number of enemies
 	 bool jumpCheck;
 	 int check2;
 	// int dir = DOWN;
@@ -117,6 +118,7 @@ void cameraUpdate(float *camerposition, float x, float y, int w, int h){
 	ALLEGRO_BITMAP *manhole = al_load_bitmap("manhole.png");
 	ALLEGRO_BITMAP *light = al_load_bitmap("Lightning sprite.png");
 	ALLEGRO_BITMAP *luigiBM = al_load_bitmap("Luigi.png");
+	ALLEGRO_BITMAP *spike = al_load_bitmap("Spike.png");
 
 	///////////////////////////////////////////////////CALLING CLASSES/////////////////////////////////////////////////////////////////////////////
 
@@ -163,23 +165,35 @@ void cameraUpdate(float *camerposition, float x, float y, int w, int h){
 	obstacleC[9]->setvalue(-2000, 800, 2);
 	obstacleC[10]->setvalue(3900, 660, 2);
 	obstacleC[11]->setvalue(4900, 590, 3);
-	/*obstacle[12]->setvalue(, 590, 3);
-	obstacle[13]->setvalue(4900, 590, 3); 
-	obstacle[14]->setvalue(4900, 590, 3);*/
+	
+	////////////////////cars level 3
+
+	obstacleC[12]->setvalue(800, 650, 1);
+	//obstacleC[13]->setvalue(1600, 650, 1);
+	obstacleC[14]->setvalue(2300, 650, 1);
+	obstacleC[15]->setvalue(-2000, 800, 2);
+	obstacleC[16]->setvalue(3900, 660, 2);
+	obstacleC[17]->setvalue(4900, 590, 3);
+
 
 	///////////////////////////////////////setting positions of pillars(brikes) for level 1////////////////////////////////////////////////
 	pilars pilar[300];
+	
+	
 
 	worldObstacles *obstacleP[300];
+	
 	for (int i = 0; i < 300; i++)
 	{
 		obstacleP[i] = &pilar[i];
 	}
+	
 	int b1 = 0;
 	for (int i = 0; i < 9; i++){
 		
 			b1 += 32;
 		obstacleP[i]->setvalue(1100+b1, 550, 1);
+		
 	}
 	int b2 = 0;
 	for (int i = 10; i < 18; i++){
@@ -199,13 +213,15 @@ void cameraUpdate(float *camerposition, float x, float y, int w, int h){
 		b4 += 32;
 		obstacleP[i]->setvalue(3288 + b4, 400, 1);
 	}
-	///////////////////////////////////////setting positions of pillars(brikes) for level 1////////////////////////////////////////////////
+	///////////////////////////////////////setting positions of pillars(brikes) for level 2////////////////////////////////////////////////
 	int l2b1 = 0;
+	
 	for (int i = 39; i < 48; i++){
 
 		l2b1 += 32;
 		obstacleP[i]->setvalue(450 + l2b1, 620, 1);
 	}
+	
 	int l2b2 = 0;
 	for (int i = 49; i < 58; i++){
 
@@ -227,6 +243,16 @@ void cameraUpdate(float *camerposition, float x, float y, int w, int h){
 	obstacleP[89]->setvalue(2600, 550, 1);
 	obstacleP[90]->setvalue(2750, 550, 1);
 	obstacleP[91]->setvalue(2782, 550, 1);
+
+	////////////////////////////////////////////Level 3 Bricks
+
+	int l3b1 = 0;
+
+	/*for (int i = 92; i < 97; i++){
+
+		l3b1 += 32;
+		obstacleP[i]->setvalue(450 + l3b1, 620, 1);
+	}*/
 	////////////////////////////////////////////man hole poistion  level 2//////////////////////////////////////////////////////////////////////////////////////////
 	manHole manH[15];
 	worldObstacles *obstacleMH[15];
@@ -241,9 +267,44 @@ void cameraUpdate(float *camerposition, float x, float y, int w, int h){
 		by += 146;
 	}
 	////////////////////////////////////////////gansters level 2//////////////////////////////////////////////////////////////////////////////////////////
-	gangster[6].setValues(450, 500, 450, 690, 2);
-	gangster[7].setValues(1900, 430, 1900, 2140, 2);
-	gangster[8].setValues(3000, 430, 3000, 3256, 2);
+	gangster[7].setValues(450, 500, 460, 690, 2);
+	gangster[8].setValues(1900, 430, 1900, 2140, 2);
+	gangster[9].setValues(3000, 430, 3000, 3256, 2);
+
+	///////////////////////gangsters level 3
+	gangster[10].setValues(1000, 590, 1000, 1500, 1);	//sets values to enemy
+	gangster[11].setValues(1800, 590, 1800, 2200, 1);
+	gangster[12].setValues(3000, 600, 3000, 3800, 2);
+	gangster[13].setValues(4050, 600, 4080, 4800, 2);
+	gangster[14].setValues(6500, 590, 5400, 5900, 1);
+	gangster[15].setValues(6500, 590, 6000, 6700, 1);
+	gangster[16].setValues(6500, 600, 7600, 8000, 2);
+	gangster[17].setValues(450, 500, 460, 690, 2);
+	//gangster[18].setValues(1900, 430, 1900, 2140, 2);
+	gangster[19].setValues(3000, 430, 3000, 3256, 2);
+	//gangster[9].setValues(450, 500, 310, 500, 2);
+	////////////////////////////Spikes
+	Spikes spikes[100];
+	worldObstacles *Obsspikes[100];
+
+	for (int i = 0; i < 100; i++)
+	{
+		Obsspikes[i] = &spikes[i];
+	}
+
+	int l3s1 = 0;
+
+	for (int i = 0; i < 4; i++){
+
+		l3s1 += 32;
+		Obsspikes[i]->setvalue(100 + l3s1, 660, 1);
+	}
+	for (int i = 5; i < 10; i++){
+
+		l3s1 += 32;
+		Obsspikes[i]->setvalue(1450 + l3s1, 660, 1);
+	}
+
 	////////////////////////////////////////////Summon Mario//////////////////////////////////////////////////////////////////////////////////////////////
 
 	////////////////////////////////////////////GAME START//////////////////////////////////////////////////////////////////////////////////////////////
@@ -385,35 +446,35 @@ void cameraUpdate(float *camerposition, float x, float y, int w, int h){
 		if (draw)
 		{
 
-		
-				//al_draw_bitmap_region(Mario, sourceX, dir*al_get_bitmap_height(Mario) / 6, al_get_bitmap_width(Mario) / 3, al_get_bitmap_height(Mario) / 6, x, y, NULL);
+
+			//al_draw_bitmap_region(Mario, sourceX, dir*al_get_bitmap_height(Mario) / 6, al_get_bitmap_width(Mario) / 3, al_get_bitmap_height(Mario) / 6, x, y, NULL);
 			switch (dir)
 			{
 			case 0:
-				if(check2==1)
+				if (check2 == 1)
 					al_draw_bitmap_region(Jump1, sourceXf, 0, al_get_bitmap_width(Jump1) / 10, al_get_bitmap_height(Jump1), x, y, NULL);
 				else
 					al_draw_bitmap_region(Jump, sourceXb, 0, al_get_bitmap_width(Jump) / 10, al_get_bitmap_height(Jump), x, y, NULL);
 				break;
 			case 1:
 				if (check2 == 1)
-					al_draw_bitmap_region(Duck1, sourceXe, 0, al_get_bitmap_width(Duck1) / 10, al_get_bitmap_height(Duck1), x, y +20, NULL);
+					al_draw_bitmap_region(Duck1, sourceXe, 0, al_get_bitmap_width(Duck1) / 10, al_get_bitmap_height(Duck1), x, y + 20, NULL);
 				else
-					al_draw_bitmap_region(Duck, sourceXa, 0, al_get_bitmap_width(Duck) / 10, al_get_bitmap_height(Duck), x, y+20 , NULL);
+					al_draw_bitmap_region(Duck, sourceXa, 0, al_get_bitmap_width(Duck) / 10, al_get_bitmap_height(Duck), x, y + 20, NULL);
 				break;
 			case 2:al_draw_bitmap_region(Walk, sourceXc, 0, al_get_bitmap_width(Walk) / 10, al_get_bitmap_height(Walk), x, y, NULL);
 				break;
 			case 3:al_draw_bitmap_region(Walk1, sourceXg, 0, al_get_bitmap_width(Walk1) / 10, al_get_bitmap_height(Walk1), x, y, NULL);
 				break;
-			case 4:al_draw_bitmap_region(Stand1, sourceXh, 0, al_get_bitmap_width(Stand1) / 10, al_get_bitmap_height(Stand1), x, y, NULL); 
+			case 4:al_draw_bitmap_region(Stand1, sourceXh, 0, al_get_bitmap_width(Stand1) / 10, al_get_bitmap_height(Stand1), x, y, NULL);
 				break;
 			case 5:
 				al_draw_bitmap_region(Stand, sourceXd, 0, al_get_bitmap_width(Stand) / 10, al_get_bitmap_height(Stand), x, y, NULL);
 				break;
 			}
-			
-			
-		
+
+
+
 			draw = false;
 			al_flip_display();//shows the display window on pc window
 			//			al_draw_bitmap(imagewindowsky,/* 1*/x + (length*i), 2, NULL);
@@ -423,8 +484,8 @@ void cameraUpdate(float *camerposition, float x, float y, int w, int h){
 				al_draw_bitmap(imagewindow, (length*i), 3, NULL);	// draws buildings to window.
 			}
 
-			level = 2;
-			if (level == 2)
+			level = 3;
+			if (level == 1)
 				//////////////////////////LEVEL 1//////////////////////////////////////////////////////////////////
 			{
 
@@ -467,8 +528,30 @@ void cameraUpdate(float *camerposition, float x, float y, int w, int h){
 				lightning.draw(light, (events.timer.source == enemyTimer));
 				//al_draw_bitmap(manhole, 7450, 670, NULL);
 			}
-		}
+			
+			if (level == 3){
 
+				for (int j = 12; j < 17; j++){
+					obstacleC[j]->draw(imagecar, imagecopcar, imagebus);
+				}
+				for (int j = 39; j < 100; j++){
+					obstacleP[j]->draw(smallPillar, medPillar, medPillar);
+				}
+
+					for (int j = 1; j < 15; j++){
+						obstacleMH[j]->draw(manhole, manhole, manhole);
+					}
+
+					for (int j = 0; j < 100; j++){
+						Obsspikes[j]->draw(spike, spike, spike);
+
+					}
+				for (int i = 10; i < numOfEnemys; i++)
+				{
+					gangster[i].draw(punch_gangster, chain_gangster, (events.timer.source == enemyTimer));	// draw method from Enemies class
+				}
+			}
+		}
 
 	}
 	
