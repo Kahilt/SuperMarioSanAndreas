@@ -67,6 +67,7 @@ void drawMulti(first startloop, first endloop, first plusplus,second object[],fi
 	 bool draw=false;//for timer, used for smooth animations
 	 bool done = false;
 	 int x = 0, y = 0, movespeed = 5;
+	 int enemyMovespeed = 5;
 	 int state = NULL;
 	 const float FPS = 60.0;
 	
@@ -154,9 +155,9 @@ void drawMulti(first startloop, first endloop, first plusplus,second object[],fi
 
 	//////////////////////////////////////////////////////Songs///////////////////////////////////////////////////
 	ALLEGRO_SAMPLE *startSound = al_load_sample("1.wav");
-	ALLEGRO_SAMPLE_ID id1;
+	//ALLEGRO_SAMPLE_ID id1;
 	ALLEGRO_SAMPLE *gameSong = al_load_sample("Mario Theme Song (thewcoop Trap Remix).wav");
-	ALLEGRO_SAMPLE_ID id2;
+	//ALLEGRO_SAMPLE_ID id2;
 	al_reserve_samples(2);
 	///////////////////////////////////////////////////CALLING CLASSES/////////////////////////////////////////////////////////////////////////////
 
@@ -450,7 +451,7 @@ void drawMulti(first startloop, first endloop, first plusplus,second object[],fi
 		}
 	}
 
-	al_stop_sample(&id1);
+	//al_stop_sample(id1);
 	al_destroy_sample(startSound);
 
 	/////////////////////////////////////////////////////////End Of Start SplashScreen////////////////////////////////
@@ -473,12 +474,16 @@ void drawMulti(first startloop, first endloop, first plusplus,second object[],fi
 			{
 			case ALLEGRO_KEY_ESCAPE:
 				done = true;
+				return -1;
 				break;
 			}
 		}     
 		       
 		else if (events.type == ALLEGRO_EVENT_DISPLAY_CLOSE)
+		{
 			done = true;
+			return -1;
+		}
 
 
 		if (events.type == ALLEGRO_EVENT_TIMER)
@@ -639,12 +644,7 @@ void drawMulti(first startloop, first endloop, first plusplus,second object[],fi
 		al_translate_transform(&CAMERA, -cameraposition[0], -cameraposition[1]);//translates the camera position
 		al_use_transform(&CAMERA);
 
-		for (int i = 0; i < numOfEnemys; i++)
-		{
-			gangster[i].move(movespeed / 2);
-		}
-
-
+		
 
 		if (draw)
 		{
@@ -697,6 +697,7 @@ void drawMulti(first startloop, first endloop, first plusplus,second object[],fi
 			if (level == 1)
 				//////////////////////////LEVEL 1//////////////////////////////////////////////////////////////////
 			{
+				enemyMovespeed = 2;
 
 				for (int j = 0; j < 6; j++){
 					obstacleC[j]->draw(imagecar, imagecopcar, imagebus);
@@ -709,12 +710,16 @@ void drawMulti(first startloop, first endloop, first plusplus,second object[],fi
 
 				for (int i = 0; i <6/* numOfEnemys*/; i++)
 				{
+					gangster[i].move(enemyMovespeed);
 					gangster[i].draw(punch_gangster, chain_gangster, (events.timer.source == enemyTimer));	// draw method from Enemies class
 				}
 				obstacleMH[0]->draw(manhole, manhole, manhole);
 			}
 			//////////////////////////LEVEL 2//////////////////////////////////////////////////////////////////
-			if (level == 2){
+			if (level == 2)
+			{
+				enemyMovespeed = 3;
+
 				for (int j = 6; j < 11; j++){
 					obstacleC[j]->draw(imagecar, imagecopcar, imagebus);
 				}
@@ -729,6 +734,7 @@ void drawMulti(first startloop, first endloop, first plusplus,second object[],fi
 
 				for (int i = 7; i < 10; i++)
 				{
+					gangster[i].move(enemyMovespeed);
 					gangster[i].draw(punch_gangster, chain_gangster, (events.timer.source == enemyTimer));	// draw method from Enemies class
 				}
 
@@ -736,7 +742,9 @@ void drawMulti(first startloop, first endloop, first plusplus,second object[],fi
 				//al_draw_bitmap(manhole, 7450, 670, NULL);
 			}
 			
-			if (level == 3){
+			if (level == 3)
+			{
+				enemyMovespeed = 4;
 
 				for (int j = 12; j < 17; j++){
 					obstacleC[j]->draw(imagecar, imagecopcar, imagebus);
@@ -753,20 +761,36 @@ void drawMulti(first startloop, first endloop, first plusplus,second object[],fi
 					}
 				for (int i = 10; i < numOfEnemys; i++)
 				{
-					ALLEGRO_BITMAP *currMario = al_create_sub_bitmap(AttackR, sourceXj, 0, 233, 140);
-					gangster[i].getHitWithHammer(punch_gangster, chain_gangster, currMario, x, y, al_get_bitmap_width(currMario), 140, hit);
+					gangster[i].move(enemyMovespeed);
+
+					al_lock_bitmap(AttackR, al_get_bitmap_format(AttackR), ALLEGRO_LOCK_READONLY);
+					al_lock_bitmap(AttackL, al_get_bitmap_format(AttackL), ALLEGRO_LOCK_READONLY);
+
+					ALLEGRO_BITMAP *currMario;
+
+					if (check2 == 1)
+					{
+						currMario = al_create_sub_bitmap(AttackR, sourceXj + 100 , 0, 133, 140);	//get current animation of mario
+						gangster[i].getHitWithHammer(punch_gangster, chain_gangster, currMario, x + 89, y, al_get_bitmap_width(currMario), 140, hit);	//checks if enemy gets hit with hammer, if true, enemy dies
+					}
+					else
+					{
+						currMario = al_create_sub_bitmap(AttackL, sourceXi, 0, 133, 140);	//get current animation of mario
+						gangster[i].getHitWithHammer(punch_gangster, chain_gangster, currMario, x - 148, y, al_get_bitmap_width(currMario), 140, hit);	//checks if enemy gets hit with hammer, if true, enemy dies
+					}
+					
 					gangster[i].draw(punch_gangster, chain_gangster, (events.timer.source == enemyTimer));	// draw method from Enemies class
 					al_destroy_bitmap(currMario);
 				}
 				luigi.draw(luigiBM, (events.timer.source == luigiTimer), lightning.active);
 				lightning.active = luigi.lightning_active();
 				lightning.draw(light, (events.timer.source == enemyTimer));
-				//luigi.drawHealth(luigiHealth);
+				luigi.drawHealth(luigiHealth);
 			}
 		}
 		
 	}
-	al_stop_sample(&id2);
+	//al_stop_sample(&id2);
 
 	
 	//al_init_font_addon();
