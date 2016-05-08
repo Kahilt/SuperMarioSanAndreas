@@ -1027,10 +1027,12 @@ Line2:
 				}
 					for (int j = 1; j < 50; j++){
 						obstacleMH[j]->draw(manhole, manhole, manhole);
-		}
+						}
 					for (int j = 0; j < 100; j++){
 						Obsspikes[j]->draw(spike, spikeflip, spike);
 					}
+				
+					
 				for (int i = 10; i < numOfEnemys; i++)
 				{
 					gangster[i].move(enemyMovespeed);
@@ -1039,38 +1041,52 @@ Line2:
 					al_lock_bitmap(SuperAttackLeft, al_get_bitmap_format(SuperAttackLeft), ALLEGRO_LOCK_READONLY);
 
 					ALLEGRO_BITMAP *currMario;
-
-					if (check2 == 1)
+					
+					//////////////////checks if enemy dies////////////////////////
+  					if (check2 == 1)
 					{
-						currMario = al_create_sub_bitmap(SuperAttackRight, sourceXj + 100 , 0, 133, 140);	//get current animation of mario
-						gangster[i].getHitWithHammer(punch_gangster, chain_gangster, currMario, x + 89, y, al_get_bitmap_width(currMario), 140, hit);	//checks if enemy gets hit with hammer, if true, enemy dies
+						currMario = al_create_sub_bitmap(SuperAttackRight, sourceXj + 195 , 0, 553, 227);	//get current animation of mario
+						gangster[i].getHitWithHammer(punch_gangster, chain_gangster, currMario, x + 172, y, al_get_bitmap_width(currMario), 227, hit);	//checks if enemy gets hit with hammer, if true, enemy dies
 					}
 					else
 					{
-						currMario = al_create_sub_bitmap(SuperAttackLeft, sourceXi, 0, 133, 140);	//get current animation of mario
-						gangster[i].getHitWithHammer(punch_gangster, chain_gangster, currMario, x - 148, y, al_get_bitmap_width(currMario), 140, hit);	//checks if enemy gets hit with hammer, if true, enemy dies
+						currMario = al_create_sub_bitmap(SuperAttackLeft, sourceXi, 0, 553, 227);	//get current animation of mario
+						gangster[i].getHitWithHammer(punch_gangster, chain_gangster, currMario, x - 553, y, al_get_bitmap_width(currMario), 227, hit);	//checks if enemy gets hit with hammer, if true, enemy dies
 					}
-					currMario1 = al_create_sub_bitmap(SuperAttackLeft, sourceXj + 100, 0, 133, 140);
-					if (marioObject.marioCollide(x, y, gangster[i].x, gangster[i].y, al_get_bitmap_width(currMario), 100, currMario1, punch_gangster) || marioObject.marioCollide(x, y, gangster[i].x, gangster[i].y, al_get_bitmap_width(currMario), 100, currMario1, chain_gangster))
-					{
 					
-						reset = true;
-						goto Line2;
-					}
-					currMario2 = al_create_sub_bitmap(SuperAttackRight, sourceXj + 100, 0, 133, 140);
-					if (marioObject.marioCollide(x, y, gangster[i].x, gangster[i].y, al_get_bitmap_width(currMario), 100, currMario1, punch_gangster) || marioObject.marioCollide(x, y, gangster[i].x, gangster[i].y, al_get_bitmap_width(currMario), 100, currMario1, chain_gangster))
+					///////////////checks if mario dies////////////////////////
+					if (check2 == 1)
 					{
-						reset = true;
-					goto Line2;
+						currMario2 = al_create_sub_bitmap(SuperAttackRight, sourceXj, 100, 195, 127);
+						//al_draw_bitmap(currMario2, x - 23, y + 100,NULL);
+						if (marioObject.marioCollide(x, y + 127, gangster[i].x, gangster[i].y, al_get_bitmap_width(currMario2), 100, currMario2, punch_gangster,gangster[i].aniWidth,gangster[i].aniHeight) )//|| marioObject.marioCollide(x, y, gangster[i].x, gangster[i].y, al_get_bitmap_width(currMario), 100, currMario1, chain_gangster))
+						{
+							reset = true;
+							goto Line2;
+						}
 					}
+					else
+					{
+						currMario1 = al_create_sub_bitmap(SuperAttackLeft, sourceXj + 100, 0, 133, 100);
+						if (marioObject.marioCollide(x, y, gangster[i].x, gangster[i].y, al_get_bitmap_width(currMario1), 100, currMario1, punch_gangster, gangster[i].aniWidth, gangster[i].aniHeight))// || marioObject.marioCollide(x, y, gangster[i].x, gangster[i].y, al_get_bitmap_width(currMario), 100, currMario1, chain_gangster))
+						{
+
+							reset = true;
+							goto Line2;
+						}
+					}
+
 					gangster[i].draw(punch_gangster, chain_gangster, (events.timer.source == enemyTimer));	// draw method from Enemies class
 					al_destroy_bitmap(currMario);
 				}
+
+
 				luigi.draw(luigiBM, (events.timer.source == luigiTimer), lightning.active);
 				lightning.active = luigi.lightning_active();
 				lightning.draw(light, (events.timer.source == enemyTimer));
 				luigi.drawHealth(luigiHealth);
 			}
+
 		}
 		
 	}

@@ -11,16 +11,16 @@ class SuperMario{
 
 public:
 	int top, bot, lef, righ;
-	bool marioCollide(float x, float y, float ex, float ey, int len, int height, ALLEGRO_BITMAP *player, ALLEGRO_BITMAP *enemy)
-{
-	if (x+len<ex||x>ex+len||y+height<ey||y>ey+height)
+	bool marioCollide(float x, float y, float ex, float ey, int len, int height, ALLEGRO_BITMAP *player, ALLEGRO_BITMAP *enemy, int el, int eh)
+	{
+	if (x+len<ex||x>ex+el||y+height<ey||y>ey+eh)
 		return false;
 	else
 	{
 		top = max(y, ey);
-		bot = min(y + height, ey + height);
+		bot = min(y + height, ey + eh);
 		lef= max(x, ex);
-		righ = min(x + len, ex + len);
+		righ = min(x + len, ex + el);
 		for (int i= top; i < bot; i++)
 		{
 			for (int j = lef; j < righ; j++)
@@ -36,7 +36,8 @@ public:
 			}
 		}
 	}
-}
+	return false;
+	}
 };
 
 
