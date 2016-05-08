@@ -134,16 +134,17 @@ void drawMulti(first startloop, first endloop, first plusplus,second object[],fi
 	ALLEGRO_BITMAP *AttackL = al_load_bitmap("attackleft.png");
 	ALLEGRO_BITMAP *AttackR = al_load_bitmap("attackright.png");
 	/////////////////////////////////////////////////////////////////////// SuperSaiyan Pics /////////////////////////////////////////////////////////////
-	ALLEGRO_BITMAP *SuperDuckLeft = al_load_bitmap("SuperDuckLeft.png");
-	ALLEGRO_BITMAP *SuperJumpLeft = al_load_bitmap("SuperJumpLeft.png");
-	ALLEGRO_BITMAP *SuperStandLeft = al_load_bitmap("SuperStandLeft.png");
-	ALLEGRO_BITMAP *SuperWalkLeft = al_load_bitmap("SuperWalkLeft.png");
-	ALLEGRO_BITMAP *SuperDuckRight = al_load_bitmap("SuperDuckRight.png");
-	ALLEGRO_BITMAP *SuperJumpRight = al_load_bitmap("SuperJumpRight.png");
-	ALLEGRO_BITMAP *SuperStandRight = al_load_bitmap("SuperStandRight.png");
-	ALLEGRO_BITMAP *SuperWalkRight = al_load_bitmap("SuperWalkRight.png");
-	ALLEGRO_BITMAP *SuperAttackLeft = al_load_bitmap("SuperAttackLeft.png");
-	ALLEGRO_BITMAP *SuperAttackRight = al_load_bitmap("SuperAttackRight.png");
+	ALLEGRO_BITMAP *SuperDuckLeft = al_load_bitmap("superduckleft.png");
+	ALLEGRO_BITMAP *SuperJumpLeft = al_load_bitmap("superjumpleft.png");
+	ALLEGRO_BITMAP *SuperStandLeft = al_load_bitmap("superstandleft.png");
+	ALLEGRO_BITMAP *SuperWalkLeft = al_load_bitmap("superwalkleft.png");
+	ALLEGRO_BITMAP *SuperDuckRight = al_load_bitmap("superduckright.png");
+	ALLEGRO_BITMAP *SuperJumpRight = al_load_bitmap("superjumpright.png");
+	ALLEGRO_BITMAP *SuperStandRight = al_load_bitmap("superstandright.png");
+	ALLEGRO_BITMAP *SuperWalkRight = al_load_bitmap("superwalkright.png");
+	ALLEGRO_BITMAP *SuperAttackLeft = al_load_bitmap("newattackleft.png");
+	ALLEGRO_BITMAP *SuperAttackRight = al_load_bitmap("newattackright.png");
+
 	/////////////////////////////////////////////////////////////////////// End of SuperSaiyan Pics/////////////////////////////////////////////////////////////
 	ALLEGRO_BITMAP *imagewindow = al_load_bitmap("bgc.png");
 	ALLEGRO_BITMAP *imagewindowsky = al_load_bitmap("sky1.png");
@@ -427,8 +428,7 @@ void drawMulti(first startloop, first endloop, first plusplus,second object[],fi
 	al_start_timer(luigiTimer);	// luigi timer
 	al_get_keyboard_state(&keyState);
 	jumpCheck = false;
-	x = 0;
-	y = 600;
+	
 	/////////////////////////////////////////////////////////Start SplashScreen////////////////////////////////////////////////
 
 	
@@ -469,11 +469,17 @@ void drawMulti(first startloop, first endloop, first plusplus,second object[],fi
 	done = false;
 
 	level = 3; //The level
+	x = 0;
 
+
+	if (level == 3)
+		y = 500;
+	else
+		y = 600;
 
 	while (!done)	// main game loop
 	{
-		al_play_sample(gameSong, 1.0, 0.0, 1.0, ALLEGRO_PLAYMODE_LOOP, 0);
+		//al_play_sample(gameSong, 1.0, 0.0, 1.0, ALLEGRO_PLAYMODE_LOOP, 0);
 		ALLEGRO_EVENT events;
 		al_wait_for_event(event_queue, &events);
 
@@ -574,45 +580,106 @@ void drawMulti(first startloop, first endloop, first plusplus,second object[],fi
 			}
 			else if (events.timer.source == mariotimer)
 			{
+				
+				if (level == 3)
+				{
+					sourceXd += (float)321;
+					sourceXh += (float)321;
+				}
+				else{
+					sourceXd += 73.5;//al_get_bitmap_width(Stand) / 10;
+					sourceXh += 73.5;//al_get_bitmap_width(Stand1) / 10;
+				}
 				if (active)
 				{
-					sourceXa += 81.5;  //al_get_bitmap_width(Duck) / 10;
-					sourceXb += 71.5; //al_get_bitmap_width(Jump) / 10;
-					sourceXc += (float)(al_get_bitmap_width(Walk)) / (float)(10);
-					sourceXd += 73.5;//al_get_bitmap_width(Stand) / 10;
-					sourceXe += 81.5;//al_get_bitmap_width(Duck1) / 10;
-					sourceXf += 71.5; //al_get_bitmap_width(Jump1) / 10; 
-					sourceXg += 107.5;//al_get_bitmap_width(Walk1) / 10;
-					sourceXh += 73.5;//al_get_bitmap_width(Stand1) / 10;
-			
-
+					if (level == 3)
+					{
+						sourceXa += (float)al_get_bitmap_width(SuperDuckLeft) / (float)10;
+						sourceXb += (float)al_get_bitmap_width(SuperJumpLeft) / (float)10;
+						sourceXc += (float)(al_get_bitmap_width(SuperWalkLeft)) / (float)(10);
+						
+						sourceXe += (float)al_get_bitmap_width(SuperDuckRight) / (float)10;
+						sourceXf += (float)al_get_bitmap_width(SuperJumpRight) / (float)10;
+						sourceXg += (float)al_get_bitmap_width(SuperWalkRight) / (float)10;
+						
+						
+					}
+					else
+					{
+						sourceXa += 81.5;  //al_get_bitmap_width(Duck) / 10;
+						sourceXb += 71.5; //al_get_bitmap_width(Jump) / 10;
+						sourceXc += (float)(al_get_bitmap_width(Walk)) / (float)(10);
+						
+						sourceXe += 81.5;//al_get_bitmap_width(Duck1) / 10;
+						sourceXf += 71.5; //al_get_bitmap_width(Jump1) / 10; 
+						sourceXg += 107.5;//al_get_bitmap_width(Walk1) / 10;
+						
+					}
 					
 				}
-				//sourceX += al_get_bitmap_width(Mario) / 3;
-
-				//if (sourceX >= al_get_bitmap_width(Mario))
-
-				if (sourceXa >= al_get_bitmap_width(Duck))
-					sourceXa = 0;
-				if (sourceXb >= al_get_bitmap_width(Jump))
-					sourceXb = 0;
-				if (sourceXc >= al_get_bitmap_width(Walk))
-					sourceXc = 0;
-				if (sourceXd >= al_get_bitmap_width(Stand))
-					sourceXd = 0;
-				if (sourceXe >= al_get_bitmap_width(Duck1))
-					sourceXe = 0;
-				if (sourceXf >= al_get_bitmap_width(Jump1))
-					sourceXf = 0;
-				if (sourceXg >= al_get_bitmap_width(Walk1))
-					sourceXg = 0;
-				if (sourceXh >= al_get_bitmap_width(Stand1))
-					sourceXh = 0;
 				
+				if (level == 3)
+				{
+					if (sourceXa >= al_get_bitmap_width(SuperDuckLeft))
+						sourceXa = 0;
+					if (sourceXb >= al_get_bitmap_width(SuperJumpLeft))
+						sourceXb = 0;
+					if (sourceXc >= al_get_bitmap_width(SuperWalkLeft))
+						sourceXc = 0;
+					if (sourceXd >= al_get_bitmap_width(SuperStandLeft))
+						sourceXd = 0;
+					if (sourceXe >= al_get_bitmap_width(SuperDuckRight))
+						sourceXe = 0;
+					if (sourceXf >= al_get_bitmap_width(SuperJumpRight))
+						sourceXf = 0;
+					if (sourceXg >= al_get_bitmap_width(SuperWalkRight))
+						sourceXg = 0;
+					if (sourceXh >= al_get_bitmap_width(SuperStandRight))
+						sourceXh = 0;
+				}
+				else
+				{
+					if (sourceXa >= al_get_bitmap_width(Duck))
+						sourceXa = 0;
+					if (sourceXb >= al_get_bitmap_width(Jump))
+						sourceXb = 0;
+					if (sourceXc >= al_get_bitmap_width(Walk))
+						sourceXc = 0;
+					if (sourceXd >= al_get_bitmap_width(Stand))
+						sourceXd = 0;
+					if (sourceXe >= al_get_bitmap_width(Duck1))
+						sourceXe = 0;
+					if (sourceXf >= al_get_bitmap_width(Jump1))
+						sourceXf = 0;
+					if (sourceXg >= al_get_bitmap_width(Walk1))
+						sourceXg = 0;
+					if (sourceXh >= al_get_bitmap_width(Stand1))
+						sourceXh = 0;
+				}
 			}
 			else if (events.timer.source == weapontimer)
 			{
-				
+				if (level == 3)
+				{
+					if (active || hitcheck == true)
+					{
+						sourceXi += (float)al_get_bitmap_width(SuperAttackLeft)/4.0;
+						sourceXj += (float)al_get_bitmap_width(SuperAttackLeft)/4.0;
+					}
+					if (sourceXi >= al_get_bitmap_width(SuperAttackLeft))
+					{
+						hitcheck = false;
+						sourceXi = 0;
+					}
+
+					if (sourceXj >= al_get_bitmap_width(SuperAttackRight))
+					{
+						hitcheck = false;
+						sourceXj = 0;
+					}
+				}
+				else
+				{
 					if (active || hitcheck == true)
 					{
 						sourceXi += 467;
@@ -629,6 +696,7 @@ void drawMulti(first startloop, first endloop, first plusplus,second object[],fi
 						hitcheck = false;
 						sourceXj = 0;
 					}
+				}
 				
 			}
 			if (!jump)
@@ -638,16 +706,32 @@ void drawMulti(first startloop, first endloop, first plusplus,second object[],fi
 
 			x += velx;
 			y += vely;
-			if (y < 600)
+			if (level == 3)
 			{
-				if (hit == true)
-					dir = ATT;
-				else
-					dir = UP;
+				if (y < 500)
+				{
+					if (hit == true)
+						dir = ATT;
+					else
+						dir = UP;
+				}
+				jump = (y >= 500);
+				if (jump)
+					y = 500;
 			}
-			jump = (y >= 600);
-			if (jump)
-				y = 600;
+			else
+			{
+				if (y < 600)
+				{
+					if (hit == true)
+						dir = ATT;
+					else
+						dir = UP;
+				}
+				jump = (y >= 600);
+				if (jump)
+					y = 600;
+			}
 		}
 		draw = true;
 		cameraUpdate(cameraposition, x, y, length / 2, width / 2);//updates the position of camera as mario moves
@@ -656,42 +740,78 @@ void drawMulti(first startloop, first endloop, first plusplus,second object[],fi
 		al_use_transform(&CAMERA);
 
 		
-
 		if (draw)
 		{
-//al_draw_bitmap_region(Mario, sourceX, dir*al_get_bitmap_height(Mario) / 6, al_get_bitmap_width(Mario) / 3, al_get_bitmap_height(Mario) / 6, x, y, NULL);
-			switch (dir)
+			if (level == 3)
 			{
-			case 0:
-				if (check2 == 1)
-					al_draw_bitmap_region(Jump1, sourceXf, 0, al_get_bitmap_width(Jump1) / 10, al_get_bitmap_height(Jump1), x, y, NULL);
-				else
-					al_draw_bitmap_region(Jump, sourceXb, 0, al_get_bitmap_width(Jump) / 10, al_get_bitmap_height(Jump), x, y, NULL);
-				break;
-			case 1:
-				if (check2 == 1)
-					al_draw_bitmap_region(Duck1, sourceXe, 0, al_get_bitmap_width(Duck1) / 10, al_get_bitmap_height(Duck1), x, y + 20, NULL);
-				else
-					al_draw_bitmap_region(Duck, sourceXa, 0, al_get_bitmap_width(Duck) / 10, al_get_bitmap_height(Duck), x, y + 20, NULL);
-				break;
+
+
+				switch (dir)
+				{
+				case 0:
+					if (check2 == 1)
+						al_draw_bitmap_region(SuperJumpRight, sourceXf, 0, al_get_bitmap_width(SuperJumpRight) / 10, al_get_bitmap_height(SuperJumpRight), x-20, y, NULL);
+					else
+						al_draw_bitmap_region(SuperJumpLeft, sourceXb, 0, al_get_bitmap_width(SuperJumpLeft) / 10, al_get_bitmap_height(SuperJumpLeft), x-20, y, NULL);
+					break;
+				case 1:
+					if (check2 == 1)
+						al_draw_bitmap_region(SuperDuckRight, sourceXe, 0, al_get_bitmap_width(SuperDuckRight) / 10, al_get_bitmap_height(SuperDuckRight), x-18, y-3 , NULL);
+					else
+						al_draw_bitmap_region(SuperDuckLeft, sourceXa, 0, al_get_bitmap_width(SuperDuckLeft) / 10, al_get_bitmap_height(SuperDuckLeft), x-18, y-3 , NULL);
+					break;
+				case 2:
+					al_draw_bitmap_region(SuperWalkLeft, sourceXc, 0, al_get_bitmap_width(SuperWalkLeft) / 10, al_get_bitmap_height(SuperWalkLeft), x , y+20, NULL);
+					break;
+				case 3:al_draw_bitmap_region(SuperWalkRight, sourceXg, 0, al_get_bitmap_width(SuperWalkRight) / 10, al_get_bitmap_height(SuperWalkRight), x , y+20, NULL);
+					break;
+				case 4:al_draw_bitmap_region(SuperStandRight, sourceXh, 0, al_get_bitmap_width(SuperStandRight) / 10, al_get_bitmap_height(SuperStandRight), x, y, NULL);
+					break;
+				case 5:
+					al_draw_bitmap_region(SuperStandLeft, sourceXd, 0, al_get_bitmap_width(SuperStandLeft) / 10, al_get_bitmap_height(SuperStandLeft), x, y, NULL);
+					break;
+				case 6:
+					if (check2 == 1)
+						al_draw_bitmap_region(SuperAttackRight, sourceXj, 0, al_get_bitmap_width(SuperAttackRight) / 4, al_get_bitmap_height(SuperAttackRight), x - 23, y-1, NULL);
+					else
+						al_draw_bitmap_region(SuperAttackLeft, sourceXi, 0, al_get_bitmap_width(SuperAttackLeft) / 4, al_get_bitmap_height(SuperAttackLeft), x -565, y-1 , NULL);
+					break;
+				}
+			}
+			else
+			{
+				switch (dir)
+				{
+				case 0:
+					if (check2 == 1)
+						al_draw_bitmap_region(Jump1, sourceXf, 0, al_get_bitmap_width(Jump1) / 10, al_get_bitmap_height(Jump1), x, y, NULL);
+					else
+						al_draw_bitmap_region(Jump, sourceXb, 0, al_get_bitmap_width(Jump) / 10, al_get_bitmap_height(Jump), x, y, NULL);
+					break;
+				case 1:
+					if (check2 == 1)
+						al_draw_bitmap_region(Duck1, sourceXe, 0, al_get_bitmap_width(Duck1) / 10, al_get_bitmap_height(Duck1), x, y + 20, NULL);
+					else
+						al_draw_bitmap_region(Duck, sourceXa, 0, al_get_bitmap_width(Duck) / 10, al_get_bitmap_height(Duck), x, y + 20, NULL);
+					break;
 				case 2:
 					al_draw_bitmap_region(Walk, sourceXc, 0, al_get_bitmap_width(Walk) / 10, al_get_bitmap_height(Walk), x - 20, y, NULL);
-				break;
+					break;
 				case 3:al_draw_bitmap_region(Walk1, sourceXg, 0, al_get_bitmap_width(Walk1) / 10, al_get_bitmap_height(Walk1), x - 20, y, NULL);
-				break;
-			case 4:al_draw_bitmap_region(Stand1, sourceXh, 0, al_get_bitmap_width(Stand1) / 10, al_get_bitmap_height(Stand1), x, y, NULL); 
-				break;
-			case 5:
-				al_draw_bitmap_region(Stand, sourceXd, 0, al_get_bitmap_width(Stand) / 10, al_get_bitmap_height(Stand), x, y, NULL);
-				break;
-			case 6:
+					break;
+				case 4:al_draw_bitmap_region(Stand1, sourceXh, 0, al_get_bitmap_width(Stand1) / 10, al_get_bitmap_height(Stand1), x, y, NULL);
+					break;
+				case 5:
+					al_draw_bitmap_region(Stand, sourceXd, 0, al_get_bitmap_width(Stand) / 10, al_get_bitmap_height(Stand), x, y, NULL);
+					break;
+				case 6:
 					if (check2 == 1)
 						al_draw_bitmap_region(AttackR, sourceXj, 0, al_get_bitmap_width(AttackR) / 10, al_get_bitmap_height(AttackR), x - 11, y - 19, NULL);
 					else
 						al_draw_bitmap_region(AttackL, sourceXi, 0, al_get_bitmap_width(AttackL) / 10, al_get_bitmap_height(AttackL), x - 148, y - 19, NULL);
-				break;
+					break;
+				}
 			}
-			
 			draw = false;
 			al_flip_display();//shows the display window on pc window
 			//			al_draw_bitmap(imagewindowsky,/* 1*/x + (length*i), 2, NULL);
@@ -815,6 +935,25 @@ void drawMulti(first startloop, first endloop, first plusplus,second object[],fi
 	al_rest(2.0);//delay
 	al_destroy_display(display);
 	al_destroy_sample(gameSong);
+	al_destroy_bitmap(Jump);
+	al_destroy_bitmap(Stand);
+	al_destroy_bitmap(Walk);
+	al_destroy_bitmap(Duck);
+	al_destroy_bitmap(AttackL);
+	al_destroy_bitmap(Jump1);
+	al_destroy_bitmap(Stand1);
+	al_destroy_bitmap(Walk1);
+	al_destroy_bitmap(Duck1);
+	al_destroy_bitmap(AttackR);
+	al_destroy_bitmap(SuperDuckLeft);
+	al_destroy_bitmap(SuperStandLeft);
+	al_destroy_bitmap(SuperJumpLeft);
+	al_destroy_bitmap(SuperWalkLeft);
+	
+	al_destroy_bitmap(SuperDuckRight);
+	al_destroy_bitmap(SuperStandRight);
+	al_destroy_bitmap(SuperJumpRight);
+	al_destroy_bitmap(SuperWalkRight);
 	
 	al_destroy_bitmap(imagewindow);
 	al_destroy_bitmap(imagewindowsky); 
