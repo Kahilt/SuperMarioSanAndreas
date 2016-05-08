@@ -133,7 +133,18 @@ void drawMulti(first startloop, first endloop, first plusplus,second object[],fi
 	ALLEGRO_BITMAP *Walk1 = al_load_bitmap("Walk1.png");
 	ALLEGRO_BITMAP *AttackL = al_load_bitmap("attackleft.png");
 	ALLEGRO_BITMAP *AttackR = al_load_bitmap("attackright.png");
-
+	/////////////////////////////////////////////////////////////////////// SuperSaiyan Pics /////////////////////////////////////////////////////////////
+	ALLEGRO_BITMAP *SuperDuckLeft = al_load_bitmap("SuperDuckLeft.png");
+	ALLEGRO_BITMAP *SuperJumpLeft = al_load_bitmap("SuperJumpLeft.png");
+	ALLEGRO_BITMAP *SuperStandLeft = al_load_bitmap("SuperStandLeft.png");
+	ALLEGRO_BITMAP *SuperWalkLeft = al_load_bitmap("SuperWalkLeft.png");
+	ALLEGRO_BITMAP *SuperDuckRight = al_load_bitmap("SuperDuckRight.png");
+	ALLEGRO_BITMAP *SuperJumpRight = al_load_bitmap("SuperJumpRight.png");
+	ALLEGRO_BITMAP *SuperStandRight = al_load_bitmap("SuperStandRight.png");
+	ALLEGRO_BITMAP *SuperWalkRight = al_load_bitmap("SuperWalkRight.png");
+	ALLEGRO_BITMAP *SuperAttackLeft = al_load_bitmap("SuperAttackLeft.png");
+	ALLEGRO_BITMAP *SuperAttackRight = al_load_bitmap("SuperAttackRight.png");
+	/////////////////////////////////////////////////////////////////////// End of SuperSaiyan Pics/////////////////////////////////////////////////////////////
 	ALLEGRO_BITMAP *imagewindow = al_load_bitmap("bgc.png");
 	ALLEGRO_BITMAP *imagewindowsky = al_load_bitmap("sky1.png");
 	ALLEGRO_BITMAP *imagecar = al_load_bitmap("mcar.png");
