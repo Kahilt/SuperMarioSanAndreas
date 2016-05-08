@@ -63,14 +63,14 @@ int top, bot, lef, righ;
 	 float jumpSpeed = 8;
 	 
 	 //enum NewDirection{ RIGHT, LEFT, DOWN, UP, NONE1, NONE2 }; //Defines the different states or directions of mario. NONE1=facing right NONE2=facing left	
-	 int moveSpeed = 5;
+	 int moveSpeed = 10;
 	 int check=1; //will record Marios last left or right movement to decide which side he will face after the key is left
 	 int dir; //the initial direction of Mario is set to down
 	// bool dead;//used to determine when mario will die
 	 bool active; //will help cause the animation ONLY if key is pressed in particular direction
 	 bool draw=false;//for timer, used for smooth animations
 	 bool done = false;
-	 int x = 0, y = 0, movespeed = 5;
+	 int x = 0, y = 0, movespeed = 10;
 	 int enemyMovespeed = 5;
 	 int state = NULL;
 	 const float FPS = 60.0;
@@ -163,6 +163,7 @@ int top, bot, lef, righ;
 	ALLEGRO_BITMAP *medPillar = al_load_bitmap("download.png");
 	ALLEGRO_BITMAP *manhole = al_load_bitmap("manhole.png");
 	ALLEGRO_BITMAP *spike = al_load_bitmap("Spike.png");
+	ALLEGRO_BITMAP *spikeflip = al_load_bitmap("Spike_flip.png");
 
 	ALLEGRO_BITMAP *light = al_load_bitmap("Lightning sprite.png");
 	ALLEGRO_BITMAP *luigiBM = al_load_bitmap("Luigi.png");
@@ -380,6 +381,8 @@ int top, bot, lef, righ;
 		obstacleMH[i]->setvalue(6000 + mh2l2, 660, 1);
 		mh2l2 += 146;
 	}
+	/////////////////////////////////manHoles level 3////////////////////////////////////////////////////////////////////////////////////////////
+	obstacleMH[20]->setvalue(1600,660,1);
 	//obstacleMH[7]->setvalue(3608, 660, 1);
 	////////////////////////////////////////////gansters level 2//////////////////////////////////////////////////////////////////////////////////////////
 	gangster[7].setValues(450, 500, 460, 690, 2);
@@ -389,16 +392,16 @@ int top, bot, lef, righ;
 	///////////////////////gangsters level 3///////////////////////////////////////////////////////////////////////
 	gangster[10].setValues(1000, 590, 1000, 1500, 1);	//sets values to enemy
 	gangster[11].setValues(1800, 590, 1800, 2200, 1);
-	gangster[12].setValues(3000, 600, 3000, 3800, 2);
-	gangster[13].setValues(4050, 600, 4080, 4800, 2);
-	gangster[14].setValues(6500, 590, 5400, 5900, 1);
-	gangster[15].setValues(6500, 590, 6000, 6700, 1);
-	gangster[16].setValues(6500, 600, 7600, 8000, 2);
+	gangster[12].setValues(3000, 600, 3000, 3300, 2);
+	//gangster[13].setValues(4050, 600, 4050, 4, 2);
+	//gangster[14].setValues(6500, 590, 5400, 5900, 1);
+	//gangster[15].setValues(6500, 590, 6000, 6700, 1);
+	//gangster[16].setValues(6500, 600, 7600, 8000, 2);
 	gangster[17].setValues(530, 500, 530, 690, 1);
 	//gangster[18].setValues(1900, 430, 1900, 2140, 2);
-	gangster[19].setValues(3000, 430, 3000, 3256, 2);
+	gangster[19].setValues(3070, 430, 3070, 3256, 2);
 	//gangster[9].setValues(450, 500, 310, 500, 2);
-	////////////////////////////Spikes
+	////////////////////////////Spikes////////////////////////////////////////////////////////////////////////////////////////////////
 	Spikes spikes[100];
 	worldObstacles *Obsspikes[100];
 
@@ -414,12 +417,36 @@ int top, bot, lef, righ;
 		l3s1 += 32;
 		Obsspikes[i]->setvalue(450 + l3s1, 570, 1);
 	}
-	for (int i = 5; i < 10; i++){
+	int l3s2 = 0;
+	for (int i = 3; i < 6; i++){
 
-		l3s1 += 32;
-		Obsspikes[i]->setvalue(1450 + l3s1, 660, 1);
+		l3s2 += 32;
+		Obsspikes[i]->setvalue(1900 + l3s2, 500, 1);
 	}
+	int l3s3 = 0;
+	for (int i = 7; i < 9; i++){
 
+		l3s3 += 32;
+		Obsspikes[i]->setvalue(3000 + l3s3, 500, 1);
+	}
+	int l3s4 = 0;
+	for (int i = 10; i < 12; i++){
+
+		Obsspikes[i]->setvalue(3288 + l3s4, 345, 1);
+		l3s4 += 32;
+	}
+	int l3s5 = 0;
+	for (int i = 13; i < 15; i++){
+
+		Obsspikes[i]->setvalue(3480 + l3s4, 430, 2);
+		l3s4 += 32;
+	}
+	int l3s6 = 0;
+	for (int i = 16; i < 19; i++){
+
+		Obsspikes[i]->setvalue(3690 + l3s5, 332, 2);
+		l3s5 += 32;
+	}
 	////////////////////////////////////////////Summon Mario//////////////////////////////////////////////////////////////////////////////////////////////
 
 	////////////////////////////////////////////GAME START//////////////////////////////////////////////////////////////////////////////////////////////
@@ -992,18 +1019,17 @@ Line2:
 			{
 				enemyMovespeed = 4;
 
-				for (int j = 12; j < 17; j++){
+				for (int j = 12; j < 16; j++){
 					obstacleC[j]->draw(imagecar, imagecopcar, imagebus);
 				}
 				for (int j = 39; j < 100; j++){
 					obstacleP[j]->draw(smallPillar, medPillar, medPillar);
 				}
-					for (int j = 1; j < 15; j++){
+					for (int j = 1; j < 50; j++){
 						obstacleMH[j]->draw(manhole, manhole, manhole);
 		}
 					for (int j = 0; j < 100; j++){
-						Obsspikes[j]->draw(spike, spike, spike);
-						al_convert_mask_to_alpha(spike, al_map_rgb(255, 255, 255));
+						Obsspikes[j]->draw(spike, spikeflip, spike);
 					}
 				for (int i = 10; i < numOfEnemys; i++)
 				{
@@ -1096,6 +1122,8 @@ Line2:
 	al_destroy_bitmap(luigiBM);
 	al_destroy_timer(luigiTimer);
 	al_destroy_bitmap(luigiHealth);
+	al_destroy_bitmap(spike);
+	al_destroy_bitmap(spikeflip);
 	
 	return 0;
 }
