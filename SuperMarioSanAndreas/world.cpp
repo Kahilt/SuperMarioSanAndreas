@@ -36,6 +36,8 @@ void drawMulti(first startloop, first endloop, first plusplus,second object[],fi
 			}
 		}
 int top, bot, lef, righ;
+
+
 bool marioCollide(float x, float y, float ex, float ey, int len, int height, float &moveSpeed, int dir, ALLEGRO_BITMAP *player, ALLEGRO_BITMAP *enemy)
 {
 	if (x+len<ex||x>ex+len||y+height<ey||y>ey+height)
@@ -932,12 +934,12 @@ bool marioCollide(float x, float y, float ex, float ey, int len, int height, flo
 					if (check2 == 1)
 					{
 						currMario = al_create_sub_bitmap(AttackR, sourceXj + 100 , 0, 133, 140);	//get current animation of mario
-						gangster[i].getHitWithHammer(punch_gangster, chain_gangster, currMario, x + 89, y, al_get_bitmap_width(currMario), 140, hit);	//checks if enemy gets hit with hammer, if true, enemy dies
+						gangster[i].getHitWithHammer(punch_gangster, chain_gangster, currMario, x + -23, y, al_get_bitmap_width(currMario), 140, hit);	//checks if enemy gets hit with hammer, if true, enemy dies
 					}
 					else
 					{
 						currMario = al_create_sub_bitmap(AttackL, sourceXi, 0, 133, 140);	//get current animation of mario
-						gangster[i].getHitWithHammer(punch_gangster, chain_gangster, currMario, x - 148, y, al_get_bitmap_width(currMario), 140, hit);	//checks if enemy gets hit with hammer, if true, enemy dies
+						gangster[i].getHitWithHammer(punch_gangster, chain_gangster, currMario, x - 565, y, al_get_bitmap_width(currMario), 140, hit);	//checks if enemy gets hit with hammer, if true, enemy dies
 					}
 					
 					gangster[i].draw(punch_gangster, chain_gangster, (events.timer.source == enemyTimer));	// draw method from Enemies class
