@@ -1039,7 +1039,7 @@ Line2:
 						if (check2 == 1)
 						{
 							currMario2 = al_create_sub_bitmap(SuperAttackRight, sourceXj, 100, 195, 127);
-							al_draw_bitmap(currMario2, x - 23, y + 100,NULL);
+							//al_draw_bitmap(currMario2, x - 23, y + 100,NULL);
 							if (marioObject.spikeCollision(currMario2, spike, x - 23, y + 100, 195, 127, spikes[j].x, spikes[j].y, al_get_bitmap_width(spike), al_get_bitmap_height(spike)))
 							{
 								reset = true;
@@ -1049,7 +1049,7 @@ Line2:
 						else
 						{
 							currMario1 = al_create_sub_bitmap(SuperAttackLeft, sourceXi + 553, 100, 133, 127);
-							al_draw_bitmap(currMario1, x - 23, y + 100, NULL);
+							//al_draw_bitmap(currMario1, x - 23, y + 100, NULL);
 							if (marioObject.spikeCollision(currMario1, spike, x - 23, y + 100, 195, 127, spikes[j].x, spikes[j].y, al_get_bitmap_width(spike), al_get_bitmap_height(spike)))
 							{
 
