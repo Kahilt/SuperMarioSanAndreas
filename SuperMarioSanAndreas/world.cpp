@@ -60,7 +60,7 @@ int top, bot, lef, righ;
 	 vely = 0;
 	 const float gravity=0.2;
 	 bool jump = false;
-	 float jumpSpeed = 8;
+	 float jumpSpeed = 20;
 	 
 	 //enum NewDirection{ RIGHT, LEFT, DOWN, UP, NONE1, NONE2 }; //Defines the different states or directions of mario. NONE1=facing right NONE2=facing left	
 	 int moveSpeed = 10;
@@ -1051,14 +1051,14 @@ Line2:
 						gangster[i].getHitWithHammer(punch_gangster, chain_gangster, currMario, x - 148, y, al_get_bitmap_width(currMario), 140, hit);	//checks if enemy gets hit with hammer, if true, enemy dies
 					}
 					currMario1 = al_create_sub_bitmap(SuperAttackLeft, sourceXj + 100, 0, 133, 140);
-					if (marioObject.marioCollide(x, y, gangster[i].x, gangster[i].y, al_get_bitmap_width(currMario), al_get_bitmap_height(currMario), currMario1, punch_gangster) || marioObject.marioCollide(x, y, gangster[i].x, gangster[i].y, al_get_bitmap_width(currMario), al_get_bitmap_height(currMario), currMario1, chain_gangster))
+					if (marioObject.marioCollide(x, y, gangster[i].x, gangster[i].y, al_get_bitmap_width(currMario), 100, currMario1, punch_gangster) || marioObject.marioCollide(x, y, gangster[i].x, gangster[i].y, al_get_bitmap_width(currMario), 100, currMario1, chain_gangster))
 					{
 					
 						reset = true;
 						goto Line2;
 					}
 					currMario2 = al_create_sub_bitmap(SuperAttackRight, sourceXj + 100, 0, 133, 140);
-					if (marioObject.marioCollide(x, y, gangster[i].x, gangster[i].y, al_get_bitmap_width(currMario), al_get_bitmap_height(currMario), currMario1, punch_gangster) || marioObject.marioCollide(x, y, gangster[i].x, gangster[i].y, al_get_bitmap_width(currMario), al_get_bitmap_height(currMario), currMario1, chain_gangster))
+					if (marioObject.marioCollide(x, y, gangster[i].x, gangster[i].y, al_get_bitmap_width(currMario), 100, currMario1, punch_gangster) || marioObject.marioCollide(x, y, gangster[i].x, gangster[i].y, al_get_bitmap_width(currMario), 100, currMario1, chain_gangster))
 					{
 						reset = true;
 					goto Line2;
