@@ -38,6 +38,35 @@ public:
 	}
 	return false;
 	}
+
+	bool spikeCollision(ALLEGRO_BITMAP *mario, ALLEGRO_BITMAP * spike, int x, int y, int wid, int hei, int sx, int sy , int sw , int sh)
+	{
+		if (x + wid < sx || x > sx + sw || y + hei < sy || y > sy + sh)
+			return false;
+		else
+		{
+			int top1 = max(y, sy);
+			int bot1 = min(y + hei, sy + sh);
+			int left = max(x, sx);
+			int right = min(x + wid, sx + sw);
+
+			for (int i = top1; i < bot1; i++)
+			{
+				for (int j = left; j < right; j++)
+				{
+					al_lock_bitmap(mario, al_get_bitmap_format(mario), ALLEGRO_LOCK_READONLY);
+					al_lock_bitmap(spike, al_get_bitmap_format(spike), ALLEGRO_LOCK_READONLY);
+					ALLEGRO_COLOR color = al_get_pixel(mario, j - x, i - y);
+					ALLEGRO_COLOR color2 = al_get_pixel(spike, j - sx, i - sy);
+					
+					if (color.a != 0 && color2.a != 0)
+					{
+						return true;
+					}
+				}
+			}
+		}
+	}
 };
 
 
