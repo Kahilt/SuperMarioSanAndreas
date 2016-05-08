@@ -455,6 +455,10 @@ void drawMulti(first startloop, first endloop, first plusplus,second object[],fi
 
 	/////////////////////////////////////////////////////////End Of Start SplashScreen////////////////////////////////
 	done = false;
+
+	level = 3; //The level
+
+
 	while (!done)	// main game loop
 	{
 		al_play_sample(gameSong, 1.0, 0.0, 1.0, ALLEGRO_PLAYMODE_LOOP, 0);
@@ -686,7 +690,7 @@ void drawMulti(first startloop, first endloop, first plusplus,second object[],fi
 				al_draw_bitmap(imagewindow, (length*i), 3, NULL);	// draws buildings to window.
 			}
 
-			level = 3; //The level
+		
 
 
 
