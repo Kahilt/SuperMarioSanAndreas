@@ -8,7 +8,7 @@
 #include <allegro5/allegro_acodec.h>
 #include <cmath>
 using namespace std;
-#define length 1366 //defining the screen lenght 
+#define length 1366 //defining the screen length 
 #define width 770  //defining the screen width 
 #include "Enemies.cpp"
 #include "pilars.cpp"
@@ -36,32 +36,7 @@ void drawMulti(first startloop, first endloop, first plusplus,second object[],fi
 			}
 		}
 int top, bot, lef, righ;
-bool marioCollide(float x, float y, float ex, float ey, int len, int height, float &moveSpeed, int dir, ALLEGRO_BITMAP *player, ALLEGRO_BITMAP *enemy)
-{
-	if (x+len<ex||x>ex+len||y+height<ey||y>ey+height)
-		return false;
-	else
-	{
-		top = max(y, ey);
-		bot = min(y + height, ey + height);
-		lef= max(x, ex);
-		righ = min(x + len, ex + len);
-		for (int i= top; i < bot; i++)
-		{
-			for (int j = lef; j < righ; j++)
-			{
-				al_lock_bitmap(player, al_get_bitmap_format(player), ALLEGRO_LOCK_READONLY);
-				al_lock_bitmap(enemy, al_get_bitmap_format(enemy), ALLEGRO_LOCK_READONLY);
-				ALLEGRO_COLOR color = al_get_pixel(player, j - x, i - y);
-				ALLEGRO_COLOR color2 = al_get_pixel(enemy, j - ex, i - ey);
-				if (color.a != 0 && color2.a != 0)
-				{
-					return true;//collide
-				}
-			}
-		}
-	}
-}
+
 
  int main(){//main function
 
@@ -151,7 +126,7 @@ bool marioCollide(float x, float y, float ex, float ey, int len, int height, flo
 
 	///////////////////////////////////////////////////////////////////////IMAGE LOADING/////////////////////////////////////////////////////////////
 	ALLEGRO_BITMAP *start = al_load_bitmap("start.png");
-
+	ALLEGRO_BITMAP *wasted = al_load_bitmap("wasted screen.png");
 	ALLEGRO_BITMAP *Duck = al_load_bitmap("Duck.png");
 	ALLEGRO_BITMAP *Jump = al_load_bitmap("Jump.png");
 	ALLEGRO_BITMAP *Stand = al_load_bitmap("Stand.png");
@@ -193,14 +168,12 @@ bool marioCollide(float x, float y, float ex, float ey, int len, int height, flo
 	ALLEGRO_BITMAP *luigiBM = al_load_bitmap("Luigi.png");
 	ALLEGRO_BITMAP *luigiHealth = al_load_bitmap("Luigi_health_bar.png");
 
+	ALLEGRO_BITMAP *currMario1;
+	ALLEGRO_BITMAP *currMario2;
 
-	//////////////////////////////////////////////////////Songs///////////////////////////////////////////////////
-	ALLEGRO_SAMPLE *startSound = al_load_sample("1.wav");
-	//ALLEGRO_SAMPLE_ID id1;
-	ALLEGRO_SAMPLE *gameSong = al_load_sample("Mario Theme Song (thewcoop Trap Remix).wav");
-	//ALLEGRO_SAMPLE_ID id2;
-	al_reserve_samples(2);
 	///////////////////////////////////////////////////CALLING CLASSES/////////////////////////////////////////////////////////////////////////////
+	
+	SuperMario marioObject;
 
 	Enemies gangster[numOfEnemys];						//creates 1 object of enemies class
 	gangster[0].setValues(1000, 590, 1000, 1500,1);	//sets values to enemy
@@ -457,18 +430,37 @@ bool marioCollide(float x, float y, float ex, float ey, int len, int height, flo
 	al_start_timer(luigiTimer);	// luigi timer
 	al_get_keyboard_state(&keyState);
 	jumpCheck = false;
-	
+	//////////////////////////////////////////////////////Songs///////////////////////////////////////////////////
+ALLEGRO_SAMPLE *startSound = al_load_sample("1.wav");
+	//ALLEGRO_SAMPLE_ID id1;
+	ALLEGRO_SAMPLE *gameSong = al_load_sample("Mario Theme Song (thewcoop Trap Remix).wav");
+	//ALLEGRO_SAMPLE_ID id2;
+	al_reserve_samples(2);
 	/////////////////////////////////////////////////////////Start SplashScreen////////////////////////////////////////////////
-
 	
-	while (!done)	// main game loop
+	
+ while (!done)	// splash loop
 	{
 		ALLEGRO_EVENT events;
 		al_wait_for_event(event_queue, &events);
-		if (events.type == ALLEGRO_EVENT_TIMER)
+		if (events.type == ALLEGRO_EVENT_KEY_DOWN)
 		{
 
+			switch (events.keyboard.keycode)
+			{
+			case ALLEGRO_KEY_ESCAPE:
+				done = true;
+				break;
+			}
+		}
 
+		else if (events.type == ALLEGRO_EVENT_DISPLAY_CLOSE)
+		{
+			done = true;
+		}
+
+			if (events.type == ALLEGRO_EVENT_TIMER)
+			{
 			if (events.timer.source == timer)
 			{
 				al_play_sample(startSound,1.0,0.0,1.0,ALLEGRO_PLAYMODE_LOOP,0);
@@ -493,8 +485,59 @@ bool marioCollide(float x, float y, float ex, float ey, int len, int height, flo
 
 	//al_stop_sample(id1);
 	al_destroy_sample(startSound);
-
+	bool reset = false;
 	/////////////////////////////////////////////////////////End Of Start SplashScreen////////////////////////////////
+Line2:
+
+	/////////////////////////////////////////////////////////Reset////////////////////////////////
+	if (reset == true)
+	{
+		while (!done)	// main game loop
+		{
+			ALLEGRO_EVENT events;
+			al_wait_for_event(event_queue, &events);
+			if (events.type == ALLEGRO_EVENT_KEY_DOWN)
+			{
+
+				switch (events.keyboard.keycode)
+				{
+				case ALLEGRO_KEY_ESCAPE:
+					done = true;
+					break;
+				}
+			}
+
+			else if (events.type == ALLEGRO_EVENT_DISPLAY_CLOSE)
+			{
+				done = true;
+			}
+
+			if (events.type == ALLEGRO_EVENT_TIMER)
+			{
+				if (events.timer.source == timer)
+				{
+					active = true;
+
+					al_get_keyboard_state(&keyState);
+
+					if (al_key_down(&keyState, ALLEGRO_KEY_SPACE))
+					{
+						done = true;
+					}
+					draw = true;
+				}
+				if (draw)
+				{
+					
+					al_draw_bitmap(wasted, cameraposition[0], cameraposition[1], NULL);
+					al_flip_display();
+					reset = false;
+					draw = false;
+				}
+			}
+		}
+	}
+	/////////////////////////////////////////////////////////End Of Reset////////////////////////////////
 	done = false;
 
 	level = 3; //The level
@@ -508,11 +551,12 @@ bool marioCollide(float x, float y, float ex, float ey, int len, int height, flo
 
 	while (!done)	// main game loop
 	{
-		//al_play_sample(gameSong, 1.0, 0.0, 1.0, ALLEGRO_PLAYMODE_LOOP, 0);
+		al_play_sample(gameSong, 1.0, 0.0, 1.0, ALLEGRO_PLAYMODE_LOOP, 0);
 		ALLEGRO_EVENT events;
 		al_wait_for_event(event_queue, &events);
 
-
+		
+		
 		if (events.type == ALLEGRO_EVENT_KEY_DOWN)
 		{
 
@@ -779,31 +823,53 @@ bool marioCollide(float x, float y, float ex, float ey, int len, int height, flo
 				{
 				case 0:
 					if (check2 == 1)
-						al_draw_bitmap_region(SuperJumpRight, sourceXf, 0, al_get_bitmap_width(SuperJumpRight) / 10, al_get_bitmap_height(SuperJumpRight), x-20, y, NULL);
+					{
+						al_draw_bitmap_region(SuperJumpRight, sourceXf, 0, al_get_bitmap_width(SuperJumpRight) / 10, al_get_bitmap_height(SuperJumpRight), x - 20, y, NULL);
+						currMario2 = al_create_sub_bitmap(SuperJumpRight, sourceXf, 0, al_get_bitmap_width(SuperJumpRight) / 10, al_get_bitmap_height(SuperJumpRight));
+					}
 					else
-						al_draw_bitmap_region(SuperJumpLeft, sourceXb, 0, al_get_bitmap_width(SuperJumpLeft) / 10, al_get_bitmap_height(SuperJumpLeft), x-20, y, NULL);
+					{
+						al_draw_bitmap_region(SuperJumpLeft, sourceXb, 0, al_get_bitmap_width(SuperJumpLeft) / 10, al_get_bitmap_height(SuperJumpLeft), x - 20, y, NULL);
+						currMario1 = al_create_sub_bitmap(SuperJumpLeft, sourceXb, 0, al_get_bitmap_width(SuperJumpLeft) / 10, al_get_bitmap_height(SuperJumpLeft));
+					}
 					break;
 				case 1:
 					if (check2 == 1)
-						al_draw_bitmap_region(SuperDuckRight, sourceXe, 0, al_get_bitmap_width(SuperDuckRight) / 10, al_get_bitmap_height(SuperDuckRight), x-18, y-3 , NULL);
+					{
+						al_draw_bitmap_region(SuperDuckRight, sourceXe, 0, al_get_bitmap_width(SuperDuckRight) / 10, al_get_bitmap_height(SuperDuckRight), x - 18, y - 3, NULL);
+						currMario2 = al_create_sub_bitmap(SuperDuckRight, sourceXe, 0, al_get_bitmap_width(SuperDuckRight) / 10, al_get_bitmap_height(SuperDuckRight));
+					}
 					else
-						al_draw_bitmap_region(SuperDuckLeft, sourceXa, 0, al_get_bitmap_width(SuperDuckLeft) / 10, al_get_bitmap_height(SuperDuckLeft), x-18, y-3 , NULL);
+					{
+						al_draw_bitmap_region(SuperDuckLeft, sourceXa, 0, al_get_bitmap_width(SuperDuckLeft) / 10, al_get_bitmap_height(SuperDuckLeft), x - 18, y - 3, NULL);
+						currMario1 = al_create_sub_bitmap(SuperDuckLeft, sourceXa, 0, al_get_bitmap_width(SuperDuckLeft), al_get_bitmap_height(SuperDuckLeft));
+					}
 					break;
 				case 2:
 					al_draw_bitmap_region(SuperWalkLeft, sourceXc, 0, al_get_bitmap_width(SuperWalkLeft) / 10, al_get_bitmap_height(SuperWalkLeft), x , y+20, NULL);
+					currMario1 = al_create_sub_bitmap(SuperWalkLeft, sourceXc, 0, al_get_bitmap_width(SuperWalkLeft) / 10, al_get_bitmap_height(SuperWalkLeft));
 					break;
 				case 3:al_draw_bitmap_region(SuperWalkRight, sourceXg, 0, al_get_bitmap_width(SuperWalkRight) / 10, al_get_bitmap_height(SuperWalkRight), x , y+20, NULL);
+					currMario2 = al_create_sub_bitmap(SuperWalkRight, sourceXg, 0, al_get_bitmap_width(SuperWalkRight) / 10, al_get_bitmap_height(SuperWalkRight));
 					break;
 				case 4:al_draw_bitmap_region(SuperStandRight, sourceXh, 0, al_get_bitmap_width(SuperStandRight) / 10, al_get_bitmap_height(SuperStandRight), x, y, NULL);
+					currMario2 = al_create_sub_bitmap(SuperStandRight, sourceXh, 0, al_get_bitmap_width(SuperStandRight) / 10, al_get_bitmap_height(SuperStandRight));
 					break;
 				case 5:
 					al_draw_bitmap_region(SuperStandLeft, sourceXd, 0, al_get_bitmap_width(SuperStandLeft) / 10, al_get_bitmap_height(SuperStandLeft), x, y, NULL);
+					currMario1 = al_create_sub_bitmap(SuperStandLeft, sourceXd, 0, al_get_bitmap_width(SuperStandLeft) / 10, al_get_bitmap_height(SuperStandLeft));
 					break;
 				case 6:
 					if (check2 == 1)
-						al_draw_bitmap_region(SuperAttackRight, sourceXj, 0, al_get_bitmap_width(SuperAttackRight) / 4, al_get_bitmap_height(SuperAttackRight), x - 23, y-1, NULL);
+					{
+						al_draw_bitmap_region(SuperAttackRight, sourceXj, 0, al_get_bitmap_width(SuperAttackRight) / 4, al_get_bitmap_height(SuperAttackRight), x - 23, y - 1, NULL);
+						currMario2 = al_create_sub_bitmap(SuperAttackRight, sourceXj, 0, al_get_bitmap_width(SuperAttackRight) / 4, al_get_bitmap_height(SuperAttackRight));
+					}
 					else
-						al_draw_bitmap_region(SuperAttackLeft, sourceXi, 0, al_get_bitmap_width(SuperAttackLeft) / 4, al_get_bitmap_height(SuperAttackLeft), x -565, y-1 , NULL);
+					{
+						al_draw_bitmap_region(SuperAttackLeft, sourceXi, 0, al_get_bitmap_width(SuperAttackLeft) / 4, al_get_bitmap_height(SuperAttackLeft), x - 565, y - 1, NULL);
+						currMario1 = al_create_sub_bitmap(SuperAttackLeft, sourceXi, 0, al_get_bitmap_width(SuperAttackLeft) / 4, al_get_bitmap_height(SuperAttackLeft));
+					}
 					break;
 				}
 			}
@@ -813,31 +879,50 @@ bool marioCollide(float x, float y, float ex, float ey, int len, int height, flo
 				{
 				case 0:
 					if (check2 == 1)
+					{
 						al_draw_bitmap_region(Jump1, sourceXf, 0, al_get_bitmap_width(Jump1) / 10, al_get_bitmap_height(Jump1), x, y, NULL);
+						currMario2 = al_create_sub_bitmap(SuperAttackLeft, sourceXf, 0, al_get_bitmap_width(Jump1) / 10, al_get_bitmap_height(SuperAttackLeft));
+					}
 					else
+					{
 						al_draw_bitmap_region(Jump, sourceXb, 0, al_get_bitmap_width(Jump) / 10, al_get_bitmap_height(Jump), x, y, NULL);
+						currMario1 = al_create_sub_bitmap(SuperAttackLeft, sourceXb, 0, al_get_bitmap_width(Jump) / 10, al_get_bitmap_height(SuperAttackLeft));
+					}
 					break;
 				case 1:
 					if (check2 == 1)
+					{
 						al_draw_bitmap_region(Duck1, sourceXe, 0, al_get_bitmap_width(Duck1) / 10, al_get_bitmap_height(Duck1), x, y + 20, NULL);
+						currMario2 = al_create_sub_bitmap(Duck1, sourceXe, 0, al_get_bitmap_width(Duck1) / 10, al_get_bitmap_height(Duck1));
+					}
 					else
+					{
 						al_draw_bitmap_region(Duck, sourceXa, 0, al_get_bitmap_width(Duck) / 10, al_get_bitmap_height(Duck), x, y + 20, NULL);
+						currMario1 = al_create_sub_bitmap(Duck, sourceXa, 0, al_get_bitmap_width(Duck) / 10, al_get_bitmap_height(Duck));
+					}
 					break;
 				case 2:
 					al_draw_bitmap_region(Walk, sourceXc, 0, al_get_bitmap_width(Walk) / 10, al_get_bitmap_height(Walk), x - 20, y, NULL);
+					currMario1 = al_create_sub_bitmap(Walk, sourceXc, 0, al_get_bitmap_width(Walk)/10, al_get_bitmap_height(Walk)); 
 					break;
 				case 3:al_draw_bitmap_region(Walk1, sourceXg, 0, al_get_bitmap_width(Walk1) / 10, al_get_bitmap_height(Walk1), x - 20, y, NULL);
-					break;
+					currMario2 = al_create_sub_bitmap(Walk1, sourceXg, 0, al_get_bitmap_width(Walk1) / 10, al_get_bitmap_height(Walk1)); break;
 				case 4:al_draw_bitmap_region(Stand1, sourceXh, 0, al_get_bitmap_width(Stand1) / 10, al_get_bitmap_height(Stand1), x, y, NULL);
-					break;
+					currMario2 = al_create_sub_bitmap(Stand1, sourceXh, 0, al_get_bitmap_width(Stand1) / 10, al_get_bitmap_height(Stand1)); break;
 				case 5:
 					al_draw_bitmap_region(Stand, sourceXd, 0, al_get_bitmap_width(Stand) / 10, al_get_bitmap_height(Stand), x, y, NULL);
-					break;
+					currMario1 = al_create_sub_bitmap(Stand, sourceXd, 0, al_get_bitmap_width(Stand) / 10, al_get_bitmap_height(Stand)); break;
 				case 6:
 					if (check2 == 1)
+					{
 						al_draw_bitmap_region(AttackR, sourceXj, 0, al_get_bitmap_width(AttackR) / 10, al_get_bitmap_height(AttackR), x - 11, y - 19, NULL);
+						currMario2 = al_create_sub_bitmap(AttackR, sourceXj, 0, al_get_bitmap_width(AttackR) / 10, al_get_bitmap_height(AttackR));
+					}
 					else
+					{
 						al_draw_bitmap_region(AttackL, sourceXi, 0, al_get_bitmap_width(AttackL) / 10, al_get_bitmap_height(AttackL), x - 148, y - 19, NULL);
+						currMario1 = al_create_sub_bitmap(AttackL, sourceXi, 0, al_get_bitmap_width(AttackL) / 10, al_get_bitmap_height(AttackL));
+					}
 					break;
 				}
 			}
@@ -923,22 +1008,34 @@ bool marioCollide(float x, float y, float ex, float ey, int len, int height, flo
 				{
 					gangster[i].move(enemyMovespeed);
 
-					al_lock_bitmap(AttackR, al_get_bitmap_format(AttackR), ALLEGRO_LOCK_READONLY);
-					al_lock_bitmap(AttackL, al_get_bitmap_format(AttackL), ALLEGRO_LOCK_READONLY);
-
+					al_lock_bitmap(SuperAttackRight, al_get_bitmap_format(SuperAttackRight), ALLEGRO_LOCK_READONLY);
+					al_lock_bitmap(SuperAttackLeft, al_get_bitmap_format(SuperAttackLeft), ALLEGRO_LOCK_READONLY);
+					
 					ALLEGRO_BITMAP *currMario;
 
 					if (check2 == 1)
 					{
-						currMario = al_create_sub_bitmap(AttackR, sourceXj + 100 , 0, 133, 140);	//get current animation of mario
+						currMario = al_create_sub_bitmap(SuperAttackRight, sourceXj + 100 , 0, 133, 140);	//get current animation of mario
 						gangster[i].getHitWithHammer(punch_gangster, chain_gangster, currMario, x + 89, y, al_get_bitmap_width(currMario), 140, hit);	//checks if enemy gets hit with hammer, if true, enemy dies
 					}
 					else
 					{
-						currMario = al_create_sub_bitmap(AttackL, sourceXi, 0, 133, 140);	//get current animation of mario
+						currMario = al_create_sub_bitmap(SuperAttackLeft, sourceXi, 0, 133, 140);	//get current animation of mario
 						gangster[i].getHitWithHammer(punch_gangster, chain_gangster, currMario, x - 148, y, al_get_bitmap_width(currMario), 140, hit);	//checks if enemy gets hit with hammer, if true, enemy dies
 					}
-					
+					currMario1 = al_create_sub_bitmap(SuperAttackLeft, sourceXj + 100, 0, 133, 140);
+					if (marioObject.marioCollide(x, y, gangster[i].x, gangster[i].y, al_get_bitmap_width(currMario), al_get_bitmap_height(currMario), currMario1, punch_gangster) || marioObject.marioCollide(x, y, gangster[i].x, gangster[i].y, al_get_bitmap_width(currMario), al_get_bitmap_height(currMario), currMario1, chain_gangster))
+					{
+						
+						reset = true;
+						goto Line2;
+					}
+					currMario2 = al_create_sub_bitmap(SuperAttackRight, sourceXj + 100, 0, 133, 140);
+					if (marioObject.marioCollide(x, y, gangster[i].x, gangster[i].y, al_get_bitmap_width(currMario), al_get_bitmap_height(currMario), currMario1, punch_gangster) || marioObject.marioCollide(x, y, gangster[i].x, gangster[i].y, al_get_bitmap_width(currMario), al_get_bitmap_height(currMario), currMario1, chain_gangster))
+					{
+						reset = true;
+					goto Line2;
+					}
 					gangster[i].draw(punch_gangster, chain_gangster, (events.timer.source == enemyTimer));	// draw method from Enemies class
 					al_destroy_bitmap(currMario);
 				}
