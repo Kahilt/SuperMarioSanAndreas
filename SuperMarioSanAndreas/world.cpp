@@ -389,6 +389,7 @@ bool marioCollide(float x, float y, float ex, float ey, int len, int height, flo
 	{
 		obstacleMH[i] = &manH[i];
 	}
+	obstacleMH[0]->setvalue(7000, 660, 1);
 	obstacleMH[1]->setvalue(360, 660, 1);
 	int mhl2 = 0;
 	for (int i = 2; i < 5; i++){
@@ -412,7 +413,7 @@ bool marioCollide(float x, float y, float ex, float ey, int len, int height, flo
 	gangster[8].setValues(1900, 430, 1900, 2140, 2);
 	gangster[9].setValues(3000, 430, 3000, 3256, 2);
 
-	///////////////////////gangsters level 3
+	///////////////////////gangsters level 3///////////////////////////////////////////////////////////////////////
 	gangster[10].setValues(1000, 590, 1000, 1500, 1);	//sets values to enemy
 	gangster[11].setValues(1800, 590, 1800, 2200, 1);
 	gangster[12].setValues(3000, 600, 3000, 3800, 2);
@@ -420,7 +421,7 @@ bool marioCollide(float x, float y, float ex, float ey, int len, int height, flo
 	gangster[14].setValues(6500, 590, 5400, 5900, 1);
 	gangster[15].setValues(6500, 590, 6000, 6700, 1);
 	gangster[16].setValues(6500, 600, 7600, 8000, 2);
-	gangster[17].setValues(450, 500, 460, 690, 2);
+	gangster[17].setValues(530, 500, 530, 690, 1);
 	//gangster[18].setValues(1900, 430, 1900, 2140, 2);
 	gangster[19].setValues(3000, 430, 3000, 3256, 2);
 	//gangster[9].setValues(450, 500, 310, 500, 2);
@@ -435,10 +436,10 @@ bool marioCollide(float x, float y, float ex, float ey, int len, int height, flo
 
 	int l3s1 = 0;
 
-	for (int i = 0; i < 4; i++){
+	for (int i = 0; i < 2; i++){
 
 		l3s1 += 32;
-		Obsspikes[i]->setvalue(100 + l3s1, 660, 1);
+		Obsspikes[i]->setvalue(450 + l3s1, 570, 1);
 	}
 	for (int i = 5; i < 10; i++){
 
@@ -917,7 +918,7 @@ bool marioCollide(float x, float y, float ex, float ey, int len, int height, flo
 		}
 					for (int j = 0; j < 100; j++){
 						Obsspikes[j]->draw(spike, spike, spike);
-
+						al_convert_mask_to_alpha(spike, al_map_rgb(255, 255, 255));
 					}
 				for (int i = 10; i < numOfEnemys; i++)
 				{
