@@ -1025,9 +1025,20 @@ Line2:
 				for (int j = 39; j < 100; j++){
 					obstacleP[j]->draw(smallPillar, medPillar, medPillar);
 				}
-					for (int j = 1; j < 50; j++){
+					for (int j = 1; j < 50; j++)
+					{
 						obstacleMH[j]->draw(manhole, manhole, manhole);
-						}
+					
+						///////////check for manhole collision////////////////////
+						
+						//al_draw_bitmap(manhole, x + 85, 400, NULL);		used for testing purposes
+						if (marioObject.fall_in_manhole(x + 85, y + 100, manH[j].x, manH[j].y, al_get_bitmap_width(manhole)))
+						{
+							reset = true;
+							goto Line2;
+						}		
+					
+					}
 					
 					
 					for (int j = 0; j < 100; j++)

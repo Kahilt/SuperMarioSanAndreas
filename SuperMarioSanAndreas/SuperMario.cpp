@@ -66,7 +66,20 @@ public:
 				}
 			}
 		}
+		return false;
 	}
+
+	bool fall_in_manhole(int x, int y, int mx,int my,int mw)
+	{
+		if (x > mx && x < mx + mw && my < y + 100)
+		{
+			return true;
+		}
+		else
+			return false;
+	}
+
+	
 };
 
 
