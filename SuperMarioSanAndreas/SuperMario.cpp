@@ -79,39 +79,8 @@ public:
 			return false;
 	}
 
-
-	bool collideBlock(ALLEGRO_BITMAP *mario, int x, int y, int mw, int mh, ALLEGRO_BITMAP *block, int bx, int by, int bw, int bh)
-	{
-
-		if (x + mw < bx || x > bx + bw || y + mh < by || y > by + bh)
-			return false;
-		else
-		{
-			top = max(y, by);
-			bot = min(y + mh, by + bh);
-			lef = max(x, bx);
-			righ = min(x + mw, bx + bw);
-
-			for (int i = top; i < bot; i++)
-			{
-				for (int j = lef; j < righ; j++)
-				{
-					al_lock_bitmap(mario, al_get_bitmap_format(mario), ALLEGRO_LOCK_READONLY);
-					al_lock_bitmap(block, al_get_bitmap_format(block), ALLEGRO_LOCK_READONLY);
-
-					ALLEGRO_COLOR color = al_get_pixel(mario, j - x, i - y);
-					ALLEGRO_COLOR color2 = al_get_pixel(block, j - bx, i - by);
-
-					if (color.a != 0 && color2.a != 0)
-					{
-						return true;//die
-					}
-				}
-			}
-
-
-		}
-	}
+		
+	
 
 	
 };

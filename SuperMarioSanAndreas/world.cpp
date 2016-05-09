@@ -523,6 +523,9 @@ int top, bot, lef, righ;
 	al_destroy_sample(startSound);
 	bool reset = false;
 	/////////////////////////////////////////////////////////End Of Start SplashScreen////////////////////////////////
+	level = 1; //The level
+	
+
 Line2:
 
 	/////////////////////////////////////////////////////////Reset////////////////////////////////
@@ -576,9 +579,8 @@ Line2:
 	/////////////////////////////////////////////////////////End Of Reset////////////////////////////////
 	done = false;
 
-	level = 1; //The level
+	
 	x = 0;
-
 
 	if (level == 3)
 		y = 500;
@@ -982,7 +984,8 @@ Line2:
 			{
 				enemyMovespeed = 2;
 
-				for (int j = 0; j < 6; j++){
+				for (int j = 0; j < 6; j++)
+				{
 					obstacleC[j]->draw(imagecar, imagecopcar, imagebus);
 				}
 
@@ -990,15 +993,12 @@ Line2:
 				{
 					obstacleP[j]->draw(smallPillar, medPillar, medPillar);
 
-					//////check pillar collision///////////////
-					//al_draw_bitmap(smallPillar, x - 20, 400, NULL);
-					//al_draw_bitmap(smallPillar, x + 87, 400, NULL);
+					//////check block/pillar collision///////////////
+					
 					bool coll = false;
 					if ((x - 20 > pilar[j].x && x - 20 < pilar[j].x + 32) || (x + 87 > pilar[j].x  &&  x + 87 < pilar[j].x + 32))  //means mario is either above or below block
 					{
-						//al_draw_bitmap(smallPillar, x - 20, y, NULL);
-						//al_draw_bitmap(smallPillar, x + 87, 400, NULL);
-
+						
 						if (y > pilar[j].y && y < pilar[j].y + 32)		//stop mario jump when head hit bottom of block
 						{
 							vely = gravity;
@@ -1051,10 +1051,30 @@ Line2:
 					}
 					al_destroy_bitmap(currMario);
 
+					///////////checks if mario dies by enemy///////////////
+					if (marioObject.marioCollide(x - 20, y, gangster[i].x, gangster[i].y, al_get_bitmap_width(Walk) / 10, 123, Walk, punch_gangster, gangster[i].aniWidth, gangster[i].aniHeight))
+					{
+						reset = true;
+						goto Line2;
+					}
+
 
 					gangster[i].draw(punch_gangster, chain_gangster, (events.timer.source == enemyTimer));	// draw method from Enemies class
 				}
+
 				obstacleMH[0]->draw(manhole, manhole, manhole);
+				if (marioObject.fall_in_manhole(x + 20, y, manH[0].x, manH[0].y, al_get_bitmap_width(manhole)))
+				{
+					reset = true;
+					goto Line2;
+				}
+
+				if (x > 8160)			//moves to level 2
+				{
+					level = 2;
+					reset = true;
+					goto Line2;
+				}
 			}
 			//////////////////////////LEVEL 2//////////////////////////////////////////////////////////////////
 			if (level == 2)
@@ -1081,6 +1101,13 @@ Line2:
 
 				
 				//al_draw_bitmap(manhole, 7450, 670, NULL);
+
+				if (x > 8160)			//moves to level 3
+				{
+					level = 3;
+					reset = true;
+					goto Line2;
+				}
 			}
 			
 			if (level == 3)
@@ -1260,3 +1287,4 @@ Line2:
 	
 	return 0;
 }
+
