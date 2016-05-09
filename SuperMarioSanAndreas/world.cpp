@@ -127,6 +127,10 @@ int top, bot, lef, righ;
 	///////////////////////////////////////////////////////////////////////IMAGE LOADING/////////////////////////////////////////////////////////////
 	ALLEGRO_BITMAP *start = al_load_bitmap("start.png");
 	ALLEGRO_BITMAP *wasted = al_load_bitmap("wasted screen.png");
+	ALLEGRO_BITMAP *level1 = al_load_bitmap("level1.jpg");
+	ALLEGRO_BITMAP *level2 = al_load_bitmap("level2.jpg");
+	ALLEGRO_BITMAP *level3 = al_load_bitmap("level3.jpg");
+	ALLEGRO_BITMAP *victory = al_load_bitmap("victory.jpg");
 	ALLEGRO_BITMAP *Duck = al_load_bitmap("Duck.png");
 	ALLEGRO_BITMAP *Jump = al_load_bitmap("Jump.png");
 	ALLEGRO_BITMAP *Stand = al_load_bitmap("Stand.png");
@@ -459,11 +463,15 @@ int top, bot, lef, righ;
 	al_get_keyboard_state(&keyState);
 	jumpCheck = false;
 	//////////////////////////////////////////////////////Songs///////////////////////////////////////////////////
-ALLEGRO_SAMPLE *startSound = al_load_sample("1.wav");
+	ALLEGRO_SAMPLE *startSound = al_load_sample("1.wav");
 	//ALLEGRO_SAMPLE_ID id1;
 	ALLEGRO_SAMPLE *gameSong = al_load_sample("Mario Theme Song (thewcoop Trap Remix).wav");
+	ALLEGRO_SAMPLE *jumpsound = al_load_sample("jump.wav");
+	ALLEGRO_SAMPLE *hammerthrow = al_load_sample("hammer.wav");
+	ALLEGRO_SAMPLE *fire = al_load_sample("fire.wav");
+	ALLEGRO_SAMPLE *dying = al_load_sample("Dying.wav");
 	//ALLEGRO_SAMPLE_ID id2;
-	al_reserve_samples(2);
+	al_reserve_samples(6);
 	/////////////////////////////////////////////////////////Start SplashScreen////////////////////////////////////////////////
 
 	
@@ -568,7 +576,7 @@ Line2:
 	/////////////////////////////////////////////////////////End Of Reset////////////////////////////////
 	done = false;
 
-	level = 1; //The level
+	level = 3; //The level
 	x = 0;
 
 
@@ -628,6 +636,8 @@ Line2:
 						hit = true;
 						velx = 0;
 						dir = ATT;
+						al_play_sample(fire, 1.0, 0.0, 1.0, ALLEGRO_PLAYMODE_ONCE,0);
+
 					
 				}
 				else if (al_key_down(&keyState, ALLEGRO_KEY_UP) && al_key_down(&keyState, ALLEGRO_KEY_SPACE) && jump == true)
@@ -1149,6 +1159,8 @@ Line2:
 			}
 
 		}
+
+
 		
 	}
 	//al_stop_sample(&id2);
@@ -1165,6 +1177,10 @@ Line2:
 	al_rest(2.0);//delay
 	al_destroy_display(display);
 	al_destroy_sample(gameSong);
+	al_destroy_sample(jumpsound);
+	al_destroy_sample(hammerthrow);
+	al_destroy_sample(fire);
+	al_destroy_sample(dying);
 	al_destroy_bitmap(Jump);
 	al_destroy_bitmap(Stand);
 	al_destroy_bitmap(Walk);
