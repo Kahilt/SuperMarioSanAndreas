@@ -60,7 +60,7 @@ int top, bot, lef, righ;
 	 vely = 0;
 	 const float gravity=0.2;
 	 bool jump = false;
-	 float jumpSpeed = 20;
+	 float jumpSpeed = 10;
 	 
 	 //enum NewDirection{ RIGHT, LEFT, DOWN, UP, NONE1, NONE2 }; //Defines the different states or directions of mario. NONE1=facing right NONE2=facing left	
 	 int moveSpeed = 10;
@@ -576,7 +576,7 @@ Line2:
 	/////////////////////////////////////////////////////////End Of Reset////////////////////////////////
 	done = false;
 
-	level = 3; //The level
+	level = 1; //The level
 	x = 0;
 
 
@@ -985,9 +985,48 @@ Line2:
 				for (int j = 0; j < 6; j++){
 					obstacleC[j]->draw(imagecar, imagecopcar, imagebus);
 				}
-				for (int j = 0; j < 50; j++){
+
+				for (int j = 0; j < 50; j++)
+				{
 					obstacleP[j]->draw(smallPillar, medPillar, medPillar);
 
+					//////check pillar collision///////////////
+					//al_draw_bitmap(smallPillar, x - 20, 400, NULL);
+					//al_draw_bitmap(smallPillar, x + 87, 400, NULL);
+					bool coll = false;
+					if ((x - 20 > pilar[j].x && x - 20 < pilar[j].x + 32) || (x + 87 > pilar[j].x  &&  x + 87 < pilar[j].x + 32))  //means mario is either above or below block
+					{
+						//al_draw_bitmap(smallPillar, x - 20, y, NULL);
+						//al_draw_bitmap(smallPillar, x + 87, 400, NULL);
+
+						if (y > pilar[j].y && y < pilar[j].y + 32)		//stop mario jump when head hit bottom of block
+						{
+							vely = gravity;
+							y = pilar[j].y + 32;
+							coll = true;
+						}
+
+						if (y + 123 > pilar[j].y && y + 123 < pilar[j].y + 32)	//allows mario to land on block
+						{
+							y = pilar[j].y - 123;
+							coll = true;
+						}
+					}
+					if (!coll)
+					{
+						if ((pilar[j].y > y && pilar[j].y < y + 123) || (pilar[j].y + 32 > y && pilar[j].y + 32 < y + 123)) //checks if mario is next to block on the left or right
+						{
+							
+							if (x - 20 > pilar[j].x && x - 20 < pilar[j].x + 32)		//hitting block on the right side
+							{
+								x = pilar[j].x + 32;
+							}
+							if (x + 87 > pilar[j].x  &&  x + 87 < pilar[j].x + 32)	//hitting block on the left side
+							{
+								x = pilar[j].x - 123;
+							}
+						}
+					}
 				}
 
 
@@ -1051,7 +1090,8 @@ Line2:
 				for (int j = 12; j < 16; j++){
 					obstacleC[j]->draw(imagecar, imagecopcar, imagebus);
 				}
-				for (int j = 39; j < 100; j++){
+				for (int j = 39; j < 100; j++)
+				{
 					obstacleP[j]->draw(smallPillar, medPillar, medPillar);
 				}
 					for (int j = 1; j < 50; j++)
