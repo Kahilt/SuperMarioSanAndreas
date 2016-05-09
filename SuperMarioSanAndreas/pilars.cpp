@@ -6,10 +6,12 @@
 class pilars: public worldObstacles
 {
 private :
+	
+public:
 	float x;
 	float y;
-public:
-		float pillarHeight;
+
+	float pillarHeight;
 		float pillarWidth;
 
 	//	float x;
