@@ -81,7 +81,7 @@ int top, bot, lef, righ;
 	 const float WFPS = 9.0;
 	 enum Direction {UP, DOWN, LEFT, RIGHT, NONE1, NONE2, ATT};
 	 int level;//tells you what level you are currently drawing
-	 const int numOfEnemys = 20;					//contains the number of enemies
+	 const int numOfEnemys = 21;					//contains the number of enemies
 	 bool jumpCheck;
 	 int check2;
 	// int dir = DOWN;
@@ -184,147 +184,207 @@ int top, bot, lef, righ;
 	ALLEGRO_BITMAP *currMario1;
 	ALLEGRO_BITMAP *currMario2;
 
-	///////////////////////////////////////////////////CALLING CLASSES/////////////////////////////////////////////////////////////////////////////
+	//////////////////////////////////////////////////////Songs///////////////////////////////////////////////////
+	al_reserve_samples(6);
+
+	ALLEGRO_SAMPLE *startSound = al_load_sample("1.wav");
+	ALLEGRO_SAMPLE_INSTANCE *startInstance = al_create_sample_instance(startSound);
+	al_set_sample_instance_playmode(startInstance, ALLEGRO_PLAYMODE_LOOP);
+	al_attach_sample_instance_to_mixer(startInstance, al_get_default_mixer());
+
+	//ALLEGRO_SAMPLE_ID id1;
+	ALLEGRO_SAMPLE *gameSong = al_load_sample("Mario Theme Song (thewcoop Trap Remix).wav");
+	ALLEGRO_SAMPLE_INSTANCE *gameInstance = al_create_sample_instance(gameSong);
+	al_set_sample_instance_playmode(gameInstance, ALLEGRO_PLAYMODE_LOOP);
+	al_attach_sample_instance_to_mixer(gameInstance, al_get_default_mixer());
+
+	ALLEGRO_SAMPLE *jumpsound = al_load_sample("jump.wav");
+	ALLEGRO_SAMPLE *hammerthrow = al_load_sample("hammer.wav");
+	ALLEGRO_SAMPLE *fire = al_load_sample("fire.wav");
+	ALLEGRO_SAMPLE *dying = al_load_sample("Dying.wav");
+	//ALLEGRO_SAMPLE_ID id2;
+	
+
+	///////////////////////////////////////////////////CREATING OBJECTS/////////////////////////////////////////////////////////////////////////////
 
 	SuperMario marioObject;
-
+	Luigi luigi;
+	Luigi_lightning lightning;
 	Enemies gangster[numOfEnemys];						//creates 1 object of enemies class
-	gangster[0].setValues(1000, 590, 1000, 1500,1);	//sets values to enemy
-	gangster[1].setValues(1800, 590, 1800, 2200,1);
-	gangster[2].setValues(3000, 600, 3000, 3800,2);
-	gangster[3].setValues(4050, 600, 4080, 4800, 2);
-	gangster[4].setValues(6500, 590, 5400, 5900, 1);
-	gangster[5].setValues(6500, 590, 6000, 6700, 1);
-	gangster[6].setValues(6500, 600, 7600, 8000, 2);
+
+    Cars car[13];
+	worldObstacles *obstacleC[13];
+	for (int i = 0; i < 13; i++)
+	{
+		obstacleC[i] = &car[i];
+	}
+
+	pilars pilar[142];
+	worldObstacles *obstacleP[142];
+	for (int i = 0; i < 142; i++)
+	{
+		obstacleP[i] = &pilar[i];
+	}
+	
+	manHole manH[50];
+	worldObstacles *obstacleMH[50];
+	for (int i = 0; i < 50; i++)
+	{
+		obstacleMH[i] = &manH[i];
+	}
+
+	Spikes spikes[100];
+	worldObstacles *Obsspikes[100];
+	for (int i = 0; i < 100; i++)
+	{
+		Obsspikes[i] = &spikes[i];
+	}
    
-	Luigi luigi;						//Luigi positioned at end with lightning 
+							//Luigi positioned at end with lightning 
 	luigi.x = 7500;
 	luigi.y = 550;
-
-	Luigi_lightning lightning;						
+						
 	lightning.x = luigi.x+10;
 	lightning.y = luigi.y+40;
 
 	
    
-	///////////////////////setting values for the position of cars level 1//////////////////////////////////////////
-	Cars car[20];
+	///////////////////////SETTING POSITION OF CARS//////////////////////////////////////////
+
+	///////////////////////////////////LEVEL 1//////////////////////////////////////////////
+
+	obstacleC[0]->setvalue(800, 620, 1);
+	obstacleC[1]->setvalue(1600, 620, 1);
+	obstacleC[2]->setvalue(2300, 620, 1);
+	obstacleC[3]->setvalue(2800, 620, 2);
+	obstacleC[4]->setvalue(3900, 620, 2);
+	obstacleC[5]->setvalue(4900, 560, 3);
 	
-	worldObstacles *obstacleC[20];
-	for (int i = 0; i < 20; i++)
-	{
-		obstacleC[i] = &car[i];
-	}
-	
+	//////////////////////////////////LEVEL 2//////////////////////////////////////////////
 
-	obstacleC[0]->setvalue(800, 650, 1);
-	obstacleC[1]->setvalue(1600, 650, 1);
-	obstacleC[2]->setvalue(2300, 650, 1);
-	obstacleC[3]->setvalue(2800, 660, 2);
-	obstacleC[4]->setvalue(3900, 660, 2);
-	obstacleC[5]->setvalue(4900, 590, 3);
-	
-	///////////////////////setting values for the position of cars for level 2//////////////////////////////////////////
-	obstacleC[6]->setvalue(800, 650, 1);
-	obstacleC[7]->setvalue(1600, 650, 1);
-	obstacleC[8]->setvalue(2300, 650, 1);
-	//obstacleC[9]->setvalue(-2000, 800, 2);
-	//obstacleC[10]->setvalue(3900, 660, 2);
-	//obstacleC[11]->setvalue(4900, 590, 3);
-	/*obstacle[12]->setvalue(, 590, 3);
-	obstacle[13]->setvalue(4900, 590, 3); 
-	obstacle[14]->setvalue(4900, 590, 3);*/
+	obstacleC[6]->setvalue(800, 620, 1);
+	obstacleC[7]->setvalue(1600, 620, 1);
+	obstacleC[8]->setvalue(2300, 620, 1);
 
-	////////////////////cars level 3
+	////////////////////////////////LEVEL 3///////////////////////////////////////////////
 
-	obstacleC[12]->setvalue(800, 650, 1);
-	//obstacleC[13]->setvalue(1600, 650, 1);
-	obstacleC[14]->setvalue(2300, 650, 1);
-	obstacleC[15]->setvalue(-2000, 800, 2);
-	//obstacleC[16]->setvalue(3900, 660, 2);
-	obstacleC[17]->setvalue(4900, 590, 3);
+    obstacleC[9]->setvalue(800, 620, 1);
+	obstacleC[10]->setvalue(2300, 620, 1);
+	obstacleC[11]->setvalue(2000, 800, 2);
+	obstacleC[12]->setvalue(4900, 560, 3);
 
+	////////////////////////////SETTING POSITION OF ENEMIES//////////////////////////////
 
-	///////////////////////////////////////setting positions of pillars(brikes) for level 1////////////////////////////////////////////////
-	pilars pilar[300];
+	////////////////////////////////LEVEL 1/////////////////////////////////////////////
 
-	
+	gangster[0].setValues(1000, 590, 1000, 1500, 1);	//sets values to enemy
+	gangster[1].setValues(1800, 590, 1800, 2200, 1);
+	gangster[2].setValues(3000, 600, 3000, 3800, 2);
+	gangster[3].setValues(4050, 600, 4080, 4800, 2);
+	gangster[4].setValues(6500, 590, 5400, 5900, 1);
+	gangster[5].setValues(6500, 590, 6000, 6700, 1);
+	gangster[6].setValues(6500, 600, 7600, 8000, 2);
 
-	worldObstacles *obstacleP[300];
-	
-	for (int i = 0; i < 300; i++)
-	{
-		obstacleP[i] = &pilar[i];
-	}
-	
+	////////////////////////////////LEVEL 2/////////////////////////////////////////////
+
+	gangster[7].setValues(4050, 600, 4480, 4900, 2);
+	gangster[8].setValues(6500, 590, 5200, 5900, 1);
+	gangster[9].setValues(6500, 590, 6700, 7000, 1);
+	gangster[10].setValues(6500, 600, 7300, 8000, 2);
+	gangster[11].setValues(450, 500, 460, 690, 2);
+	gangster[12].setValues(1900, 430, 1900, 2140, 2);
+	gangster[13].setValues(3000, 430, 3000, 3256, 2);
+
+	////////////////////////////////LEVEL 3/////////////////////////////////////////////
+
+	gangster[14].setValues(1000, 590, 1000, 1500, 1);	//sets values to enemy
+	gangster[15].setValues(1800, 590, 1800, 2200, 1);
+	gangster[16].setValues(3000, 600, 2900, 3200, 2);
+	gangster[17].setValues(3000, 600, 4400, 4780, 2);
+	gangster[18].setValues(6500, 590, 5400, 5900, 1);
+	gangster[19].setValues(530, 503, 530, 690, 1);
+	gangster[20].setValues(3070, 430, 3070, 3256, 2);
+
+	///////////////////////////////SETTING POSITON OF BRICKS/////////////////////////////
+
+	////////////////////////////////LEVEL 1/////////////////////////////////////////////
+
 	int b1 = 0;
 	for (int i = 0; i < 9; i++){
-		
-			b1 += 32;
-		obstacleP[i]->setvalue(1100+b1, 550, 1);
-		
+
+		b1 += 32;
+		obstacleP[i]->setvalue(1100 + b1, 550, 1);
+
 	}
+
 	int b2 = 0;
 	for (int i = 10; i < 18; i++){
 
 		b2 += 32;
 		obstacleP[i]->setvalue(1900 + b2, 550, 1);
 	}
+
 	int b3 = 0;
 	for (int i = 19; i < 28; i++){
 
 		b3 += 32;
 		obstacleP[i]->setvalue(3000 + b3, 550, 1);
 	}
+
 	int b4 = 0;
 	for (int i = 28; i < 38; i++){
 
 		b4 += 32;
 		obstacleP[i]->setvalue(3288 + b4, 400, 1);
 	}
-	///////////////////////////////////////setting positions of pillars(bricks) for level 2////////////////////////////////////////////////
+
+	////////////////////////////////LEVEL 2/////////////////////////////////////////////
+
 	int l2b1 = 0;
-	
 	for (int i = 39; i < 48; i++){
 
 		l2b1 += 32;
 		obstacleP[i]->setvalue(450 + l2b1, 620, 1);
 	}
-	
+
 	int l2b2 = 0;
 	for (int i = 49; i < 58; i++){
 
 		l2b2 += 32;
 		obstacleP[i]->setvalue(1900 + l2b2, 550, 1);
 	}
+
 	int l2b3 = 0;
 	for (int i = 59; i < 68; i++){
 
 		l2b3 += 32;
 		obstacleP[i]->setvalue(3000 + l2b3, 550, 1);
 	}
+
 	int l2b4 = 0;
 	for (int i = 78; i < 88; i++){
 
 		obstacleP[i]->setvalue(3288 + l2b4, 400, 1);
 		l2b4 += 32;
 	}
+
 	obstacleP[89]->setvalue(2600, 550, 1);
 	obstacleP[90]->setvalue(2750, 550, 1);
 	obstacleP[91]->setvalue(2782, 550, 1);
+
 	int l2b5 = 0;
 	for (int i = 92; i < 96; i++){
 
-		obstacleP[i]->setvalue(3660+ l2b5, 300, 1);
+		obstacleP[i]->setvalue(3660 + l2b5, 300, 1);
 		l2b5 += 32;
 	}
+
 	int l2b6 = 0;
 	for (int i = 97; i < 100; i++){
 
 		obstacleP[i]->setvalue(3850 + l2b6, 450, 1);
 		l2b6 += 32;
 	}
-	//drawMulti(97, 105, 32, obstacleP, 20, 450, 1);
 
 	int l2b7 = 0;
 	for (int i = 100; i < 106; i++){
@@ -332,49 +392,42 @@ int top, bot, lef, righ;
 		obstacleP[i]->setvalue(4000 + l2b7, 380, 1);
 		l2b7 += 32;
 	}
+
 	int l2b8 = 0;
 	for (int i = 107; i < 111; i++){
 
 		obstacleP[i]->setvalue(4275 + l2b8, 480, 1);
 		l2b8 += 32;
 	}
+
 	int l2b9 = 0;
 	for (int i = 112; i < 118; i++){
 
 		obstacleP[i]->setvalue(5200 + l2b9, 472, 1);
 		l2b9 += 32;
 	}
+
 	int l2b10 = 0;
 	for (int i = 119; i < 127; i++){
 
 		obstacleP[i]->setvalue(6050 + l2b10, 480, 1);
 		l2b10 += 32;
 	}
+
 	obstacleP[128]->setvalue(5940, 550, 1);
 	obstacleP[129]->setvalue(5908, 550, 1);
+
 	int l2b11 = 0;
 	for (int i = 130; i < 141; i++){
 
 		obstacleP[i]->setvalue(6250 + l2b11, 350, 1);
 		l2b11 += 32;
 	}
+	
+	////////////////////////SETTING POSITION OF MANHOLES////////////////////////////////
 
-	////////////////////////////////////////////Level 3 Bricks
-
-	int l3b1 = 0;
-
-	/*for (int i = 92; i < 97; i++){
-
-		l3b1 += 32;
-		obstacleP[i]->setvalue(450 + l3b1, 620, 1);
-	}*/
-	////////////////////////////////////////////man hole poistion  level 2//////////////////////////////////////////////////////////////////////////////////////////
-	manHole manH[50];
-	worldObstacles *obstacleMH[50];
-	for (int i = 0; i < 50; i++)
-	{
-		obstacleMH[i] = &manH[i];
-	}
+	////////////////////////////////LEVEL 2/////////////////////////////////////////////
+	
 	obstacleMH[0]->setvalue(7000, 660, 1);
 	obstacleMH[1]->setvalue(360, 660, 1);
 	int mhl2 = 0;
@@ -393,72 +446,57 @@ int top, bot, lef, righ;
 		obstacleMH[i]->setvalue(6000 + mh2l2, 660, 1);
 		mh2l2 += 146;
 	}
-	/////////////////////////////////manHoles level 3////////////////////////////////////////////////////////////////////////////////////////////
+
+	////////////////////////////////LEVEL 3/////////////////////////////////////////////
 	obstacleMH[20]->setvalue(1600,660,1);
-	//obstacleMH[7]->setvalue(3608, 660, 1);
-	////////////////////////////////////////////gansters level 2//////////////////////////////////////////////////////////////////////////////////////////
-	gangster[7].setValues(450, 500, 460, 690, 2);
-	gangster[8].setValues(1900, 430, 1900, 2140, 2);
-	gangster[9].setValues(3000, 430, 3000, 3256, 2);
+	
+	
 
-	///////////////////////gangsters level 3///////////////////////////////////////////////////////////////////////
-	gangster[10].setValues(1000, 590, 1000, 1500, 1);	//sets values to enemy
-	gangster[11].setValues(1800, 590, 1800, 2200, 1);
-	gangster[12].setValues(3000, 600, 2900, 3200, 2);
-	gangster[13].setValues(3000, 600, 4400, 4780, 2);
-	gangster[14].setValues(6500, 590, 5400, 5900, 1);
-	//gangster[15].setValues(6500, 590, 6000, 6700, 1);
-	//gangster[16].setValues(6500, 600, 7600, 8000, 2);
-	gangster[17].setValues(530, 503, 530, 690, 1);
-	//gangster[18].setValues(1900, 430, 1900, 2140, 2);
-	gangster[19].setValues(3070, 430, 3070, 3256, 2);
-	//gangster[9].setValues(450, 500, 310, 500, 2);
-	////////////////////////////Spikes////////////////////////////////////////////////////////////////////////////////////////////////
-	Spikes spikes[100];
-	worldObstacles *Obsspikes[100];
-
-	for (int i = 0; i < 100; i++)
-	{
-		Obsspikes[i] = &spikes[i];
-	}
+	
+	////////////////////////////SETTING POSITION OF SPIKES//////////////////////////////
 
 	int l3s1 = 0;
-
 	for (int i = 0; i < 2; i++){
 
 		l3s1 += 32;
 		Obsspikes[i]->setvalue(450 + l3s1, 568, 1);
 	}
+
 	int l3s2 = 0;
 	for (int i = 3; i < 6; i++){
 
 		l3s2 += 32;
 		Obsspikes[i]->setvalue(1900 + l3s2, 498, 1);
 	}
+
 	int l3s3 = 0;
 	for (int i = 7; i < 9; i++){
 
 		l3s3 += 32;
 		Obsspikes[i]->setvalue(3000 + l3s3, 498, 1);
 	}
+
 	int l3s4 = 0;
 	for (int i = 10; i < 12; i++){
 
 		Obsspikes[i]->setvalue(3288 + l3s4, 349, 1);
 		l3s4 += 32;
 	}
+
 	int l3s5 = 0;
 	for (int i = 13; i < 15; i++){
 
 		Obsspikes[i]->setvalue(3480 + l3s4, 428, 2);
 		l3s4 += 32;
 	}
+
 	int l3s6 = 0;
 	for (int i = 16; i < 19; i++){
 
 		Obsspikes[i]->setvalue(3690 + l3s5, 327, 2);
 		l3s5 += 32;
 	}
+
 	int l3s7 = 0;
 	for (int i = 20; i < 23; i++){
 
@@ -466,7 +504,6 @@ int top, bot, lef, righ;
 		l3s7 += 32;
 	}
 	
-
 	Obsspikes[24]->setvalue(4000, 328, 1);
 	Obsspikes[25]->setvalue(4160, 328, 1);
 	Obsspikes[26]->setvalue(4275, 428, 1);
@@ -499,28 +536,19 @@ int top, bot, lef, righ;
 	}
 
 	Obsspikes[46]->setvalue(6340, 298, 1);
-	
-	////////////////////////////////////////////Summon Mario//////////////////////////////////////////////////////////////////////////////////////////////
 
 	////////////////////////////////////////////GAME START//////////////////////////////////////////////////////////////////////////////////////////////
-	al_start_timer(timer);	// main timer
+	jumpCheck = false;
+	al_get_keyboard_state(&keyState);
+	
 	al_start_timer(mariotimer);
 	al_start_timer(splash);
 	al_start_timer(weapontimer);	// mario timer
 	al_start_timer(enemyTimer);	// enemy timer
 	al_start_timer(luigiTimer);	// luigi timer
-	al_get_keyboard_state(&keyState);
-	jumpCheck = false;
-	//////////////////////////////////////////////////////Songs///////////////////////////////////////////////////
-ALLEGRO_SAMPLE *startSound = al_load_sample("1.wav");
-	//ALLEGRO_SAMPLE_ID id1;
-	ALLEGRO_SAMPLE *gameSong = al_load_sample("Mario Theme Song (thewcoop Trap Remix).wav");
-	ALLEGRO_SAMPLE *jumpsound = al_load_sample("jump.wav");
-	ALLEGRO_SAMPLE *hammerthrow = al_load_sample("hammer.wav");
-	ALLEGRO_SAMPLE *fire = al_load_sample("fire.wav");
-	ALLEGRO_SAMPLE *dying = al_load_sample("Dying.wav");
-	//ALLEGRO_SAMPLE_ID id2;
-	al_reserve_samples(6);
+	al_start_timer(timer);	// main timer
+	
+	
 	/////////////////////////////////////////////////////////Start SplashScreen////////////////////////////////////////////////
 
 	
@@ -548,7 +576,7 @@ ALLEGRO_SAMPLE *startSound = al_load_sample("1.wav");
 			{
 			if (events.timer.source == timer)
 			{
-				al_play_sample(startSound,1.0,0.0,1.0,ALLEGRO_PLAYMODE_LOOP,0);
+				al_play_sample_instance(startInstance);
 				active = true;
 
 				al_get_keyboard_state(&keyState);
@@ -570,6 +598,7 @@ ALLEGRO_SAMPLE *startSound = al_load_sample("1.wav");
 
 	//al_stop_sample(id1);
 	al_destroy_sample(startSound);
+	al_destroy_sample_instance(startInstance);
 	bool reset = false;
 	/////////////////////////////////////////////////////////End Of Start SplashScreen////////////////////////////////
 	level = 1; //The level
@@ -653,7 +682,7 @@ Line2:
 
 	while (!done)	// main game loop
 	{
-		al_play_sample(gameSong, 1.0, 0.0, 1.0, ALLEGRO_PLAYMODE_LOOP, 0);
+		al_play_sample_instance(gameInstance);
 		ALLEGRO_EVENT events;
 		al_wait_for_event(event_queue, &events);
 
@@ -702,12 +731,16 @@ Line2:
 						hit = true;
 						velx = 0;
 						dir = ATT;
-						al_play_sample(fire, 1.0, 0.0, 1.0, ALLEGRO_PLAYMODE_ONCE,0);
+						if (level == 3)
+							al_play_sample(fire, 1.0, 0.0, 1.0, ALLEGRO_PLAYMODE_ONCE, 0);
+						else
+							al_play_sample(hammerthrow, 1.0, 0.0, 1.0, ALLEGRO_PLAYMODE_ONCE, 0);
 
 					
 				}
 				else if (al_key_down(&keyState, ALLEGRO_KEY_UP) && al_key_down(&keyState, ALLEGRO_KEY_SPACE) && jump == true)
 				{
+					
 					hit = true;
 					vely = -jumpSpeed;
 					jump = false;
@@ -715,6 +748,7 @@ Line2:
 				}
 				else if (al_key_down(&keyState, ALLEGRO_KEY_UP) && jump == true)
 				{
+					al_play_sample(jumpsound, 1.0, 0.0, 1.0, ALLEGRO_PLAYMODE_ONCE, 0);
 					vely = -jumpSpeed;
 					jump = false;
 				}
@@ -879,7 +913,6 @@ Line2:
 			if (!jump)
 			{
 				vely += gravity;
-				al_play_sample(jumpsound, 1.0, 0.0, 1.0, ALLEGRO_PLAYMODE_ONCE, 0);
 			}
 			else
 				vely = 0;
@@ -1052,7 +1085,7 @@ Line2:
 			{
 				enemyMovespeed = 2;
 
-				for (int j = 0; j < 6; j++)
+				for (int j = 0; j <= 5; j++)
 				{
 					obstacleC[j]->draw(imagecar, imagecopcar, imagebus);
 				}
@@ -1101,7 +1134,7 @@ Line2:
 				}
 
 
-				for (int i = 0; i <6/* numOfEnemys*/; i++)
+				for (int i = 0; i <= 6; i++)
 				{
 					gangster[i].move(enemyMovespeed);
 
@@ -1169,11 +1202,11 @@ Line2:
 			{
 				enemyMovespeed = 3;
 
-				for (int j = 6; j < 11; j++){
+				for (int j = 6; j <= 8; j++){
 					obstacleC[j]->draw(imagecar, imagecopcar, imagebus);
 				}
 
-				for (int j = 39; j < 200; j++)
+				for (int j = 39; j < 142; j++)
 				{
 					obstacleP[j]->draw(smallPillar, medPillar, medPillar);
 
@@ -1233,7 +1266,7 @@ Line2:
 				}
 
 
-				for (int i = 7; i < 10; i++)
+				for (int i = 7; i <= 13; i++)
 				{
 					gangster[i].move(enemyMovespeed);
 					
@@ -1288,10 +1321,10 @@ Line2:
 			{
 				enemyMovespeed = 4;
 
-				for (int j = 12; j < 16; j++){
+				for (int j = 9; j < 13; j++){
 					obstacleC[j]->draw(imagecar, imagecopcar, imagebus);
 				}
-				for (int j = 39; j < 100; j++){
+				for (int j = 39; j < 142; j++){
 					obstacleP[j]->draw(smallPillar, medPillar, medPillar);
 				}
 					for (int j = 1; j < 50; j++)
@@ -1341,33 +1374,8 @@ Line2:
 					}
 
 				}
-
-				for (int j = 12; j < 18; j++){
-					obstacleC[j]->draw(imagecar, imagecopcar, imagebus);
-				}
-				for (int j = 39; j < 200; j++){
-					obstacleP[j]->draw(smallPillar, medPillar, medPillar);
-						}
-					for (int j = 1; j < 50; j++)
-					{
-						obstacleMH[j]->draw(manhole, manhole, manhole);
-
-						///////////check for manhole collision////////////////////
-						
-						//al_draw_bitmap(manhole, x + 85, 400, NULL);		used for testing purposes
-						if (marioObject.fall_in_manhole(x + 85, y + 100, manH[j].x, manH[j].y, al_get_bitmap_width(manhole)))
-						{
-							reset = true;
-							goto Line2;
-					}
-				
-					}
-					
-					
-					
-				
-					
-				for (int i = 10; i < numOfEnemys; i++)
+	
+				for (int i = 14; i <= numOfEnemys; i++)
 				{
 					gangster[i].move(enemyMovespeed);
 
@@ -1427,6 +1435,9 @@ Line2:
 
 				al_draw_bitmap(princess, 8200, 0, NULL);
 
+				if (x < 0)			//prevents mario from running away
+					x = 0;
+
 				if (x > 8160)			//won game
 				{
 					
@@ -1460,6 +1471,7 @@ Line2:
 	//al_rest(2.0);//delay
 	al_destroy_display(display);
 	al_destroy_sample(gameSong);
+	al_destroy_sample_instance(gameInstance);
 	al_destroy_sample(jumpsound);
 	al_destroy_sample(hammerthrow);
 	al_destroy_sample(fire);
