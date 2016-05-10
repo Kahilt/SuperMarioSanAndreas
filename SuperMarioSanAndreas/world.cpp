@@ -176,6 +176,8 @@ int top, bot, lef, righ;
 	ALLEGRO_BITMAP *luigiHealth = al_load_bitmap("Luigi_health_bar.png");
 
 	ALLEGRO_BITMAP *endflag = al_load_bitmap("endflag.png");
+	ALLEGRO_BITMAP *castle = al_load_bitmap("castle.png");
+
 
 	ALLEGRO_BITMAP *currMario1;
 	ALLEGRO_BITMAP *currMario2;
@@ -1142,6 +1144,7 @@ Line2:
 					x = 0;
 
 				al_draw_bitmap(endflag, 8140, 0, NULL);
+				al_draw_bitmap(castle, 8250, 0, NULL);
 
 				if (x > 8160)			//moves to level 2
 				{
