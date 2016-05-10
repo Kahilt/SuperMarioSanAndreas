@@ -177,6 +177,8 @@ int top, bot, lef, righ;
 
 	ALLEGRO_BITMAP *endflag = al_load_bitmap("endflag.png");
 	ALLEGRO_BITMAP *castle = al_load_bitmap("castle.png");
+	ALLEGRO_BITMAP *princess = al_load_bitmap("princess.png");
+
 
 
 	ALLEGRO_BITMAP *currMario1;
@@ -1270,7 +1272,7 @@ Line2:
 					x = 0;
 
 				al_draw_bitmap(endflag, 8140, 0, NULL);
-
+				al_draw_bitmap(castle, 8250, 0, NULL);
 				if (x > 8160)			//moves to level 2
 				{
 					level = 3;
@@ -1423,6 +1425,7 @@ Line2:
 				lightning.draw(light, (events.timer.source == enemyTimer));
 				luigi.drawHealth(luigiHealth);
 
+				al_draw_bitmap(princess, 8200, 0, NULL);
 
 				if (x > 8160)			//won game
 				{
@@ -1498,7 +1501,8 @@ Line2:
 	al_destroy_bitmap(spike);
 	al_destroy_bitmap(spikeflip);
 	al_destroy_bitmap(endflag);
-	
+	al_destroy_bitmap(castle);
+	al_destroy_bitmap(princess);
 	return 0;
 }
 
