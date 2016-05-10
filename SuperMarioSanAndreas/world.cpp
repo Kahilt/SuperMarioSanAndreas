@@ -527,7 +527,7 @@ int top, bot, lef, righ;
 	al_destroy_sample(startSound);
 	bool reset = false;
 	/////////////////////////////////////////////////////////End Of Start SplashScreen////////////////////////////////
-	level = 1; //The level
+	level = 3; //The level
 	int ctrl = 0; 
 
 Line2:
@@ -1109,6 +1109,12 @@ Line2:
 
 				}
 			}
+
+
+
+
+
+
 			//////////////////////////LEVEL 2//////////////////////////////////////////////////////////////////
 			if (level == 2)
 			{
@@ -1117,30 +1123,115 @@ Line2:
 				for (int j = 6; j < 11; j++){
 					obstacleC[j]->draw(imagecar, imagecopcar, imagebus);
 				}
-				for (int j = 39; j < 200; j++){
+
+				for (int j = 39; j < 200; j++)
+				{
 					obstacleP[j]->draw(smallPillar, medPillar, medPillar);
 
+					////////block collision//////////////////
+					bool coll = false;
+					if ((x - 20 > pilar[j].x && x - 20 < pilar[j].x + 32) || (x + 87 > pilar[j].x  &&  x + 87 < pilar[j].x + 75))  //means mario is either above or below block
+					{
+
+						if (y > pilar[j].y && y < pilar[j].y + 32)		//stop mario jump when head hit bottom of block
+						{
+							vely = gravity;
+							y = pilar[j].y + 32;
+							coll = true;
+						}
+
+						//al_draw_bitmap(smallPillar, x - 20, y + 123, NULL);
+						if (y + 123 > pilar[j].y && y + 123 < pilar[j].y + 32)	//allows mario to land on block
+						{
+							y = pilar[j].y - 123;
+							jump = true;
+							vely = 0;
+							coll = true;
+						}
+
+					}
+					if (!coll)
+					{
+						if ((pilar[j].y > y && pilar[j].y < y + 123) || (pilar[j].y + 32 > y && pilar[j].y + 32 < y + 123)) //checks if mario is next to block on the left or right
+						{
+
+							if (x - 20 > pilar[j].x && x - 20 < pilar[j].x + 32)		//hitting block on the right side
+							{
+								x = pilar[j].x + 32;
+							}
+							if (x + 87 > pilar[j].x  &&  x + 87 < pilar[j].x + 32)	//hitting block on the left side
+							{
+								x = pilar[j].x - 123;
+							}
+						}
+					}
+
 				}
-				for (int j = 1; j < 19; j++){
+
+
+				for (int j = 1; j < 19; j++)
+				{
 					obstacleMH[j]->draw(manhole, manhole, manhole);
+
+					/////cehck manhole collision
+					if (marioObject.fall_in_manhole(x + 20, y, manH[j].x, manH[j].y, al_get_bitmap_width(manhole)))
+					{
+						reset = true;
+						ctrl = 0;
+
+						goto Line2;
+					}
 				}
 
 
 				for (int i = 7; i < 10; i++)
 				{
 					gangster[i].move(enemyMovespeed);
+					
+					////////////////kill enemies//////////////////////
+					ALLEGRO_BITMAP *currMario;
+					al_lock_bitmap(AttackR, al_get_bitmap_format(AttackR), ALLEGRO_LOCK_READONLY);
+					al_lock_bitmap(AttackL, al_get_bitmap_format(AttackL), ALLEGRO_LOCK_READONLY);
+
+					if (check2 == 1)
+					{
+						currMario = al_create_sub_bitmap(AttackR, sourceXj + 100, 0, 133, 140);	//get current animation of mario
+						gangster[i].getHitWithHammer(punch_gangster, chain_gangster, currMario, x + 89, y, al_get_bitmap_width(currMario), 140, hit);	//checks if enemy gets hit with hammer, if true, enemy dies
+					}
+					else
+					{
+						currMario = al_create_sub_bitmap(AttackL, sourceXi, 0, 133, 140);	//get current animation of mario
+						gangster[i].getHitWithHammer(punch_gangster, chain_gangster, currMario, x - 148, y, al_get_bitmap_width(currMario), 140, hit);	//checks if enemy gets hit with hammer, if true, enemy dies
+					}
+					al_destroy_bitmap(currMario);
+
+					///////mario gets killed//////////
+					if (marioObject.marioCollide(x - 20, y, gangster[i].x, gangster[i].y, al_get_bitmap_width(Walk) / 10, 123, Walk, punch_gangster, gangster[i].aniWidth, gangster[i].aniHeight))
+					{
+						reset = true;
+						ctrl = 0;
+						goto Line2;
+					}
+
 					gangster[i].draw(punch_gangster, chain_gangster, (events.timer.source == enemyTimer));	// draw method from Enemies class
 				}
 
 				
 				//al_draw_bitmap(manhole, 7450, 670, NULL);
 
-				if (x > 8160)			//moves to level 3
+				if (x < 0)			//prevents mario from running away
+					x = 0;
+
+				al_draw_bitmap(endflag, 8140, 0, NULL);
+
+				if (x > 8160)			//moves to level 2
 				{
 					level = 3;
+					reset = true;
 					ctrl = 3;
-					reset = true;	
 					goto Line2;
+
+
 				}
 			}
 			
@@ -1154,6 +1245,29 @@ Line2:
 				for (int j = 39; j < 100; j++)
 				{
 					obstacleP[j]->draw(smallPillar, medPillar, medPillar);
+
+					////////block collision//////////////////
+					bool coll = false;
+					if ((x - 20 > pilar[j].x && x - 20 < pilar[j].x + 32) || (x + 87 > pilar[j].x  &&  x + 87 < pilar[j].x + 75))  //means mario is either above or below block
+					{
+
+						if (y > pilar[j].y && y < pilar[j].y + 32)		//stop mario jump when head hit bottom of block
+						{
+							vely = gravity;
+							y = pilar[j].y + 32;
+							coll = true;
+						}
+
+						//al_draw_bitmap(smallPillar, x - 20, y + 123, NULL);
+						if (y + 123 > pilar[j].y && y + 123 < pilar[j].y + 32)	//allows mario to land on block
+						{
+							y = pilar[j].y - 123;
+							jump = true;
+							vely = 0;
+							coll = true;
+						}
+					}
+
 				}
 					for (int j = 1; j < 50; j++)
 					{
