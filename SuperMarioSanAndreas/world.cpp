@@ -175,6 +175,8 @@ int top, bot, lef, righ;
 	ALLEGRO_BITMAP *luigiBM = al_load_bitmap("Luigi.png");
 	ALLEGRO_BITMAP *luigiHealth = al_load_bitmap("Luigi_health_bar.png");
 
+	ALLEGRO_BITMAP *endflag = al_load_bitmap("end_of_level_flag.png");
+
 	ALLEGRO_BITMAP *currMario1;
 	ALLEGRO_BITMAP *currMario2;
 
@@ -591,77 +593,7 @@ Line2:
 		}
 	}
 	/////////////////////////////////////////////////////////End Of Reset////////////////////////////////
-	/*
-Line3:
-
-	/////////////////////////////////////////////////////////Splashes////////////////////////////////////////
-	if (newlevel == true)
-	{
-		while (!done)	// main game loop
-		{
-			ALLEGRO_EVENT events;
-			al_wait_for_event(event_queue, &events);
-			if (events.type == ALLEGRO_EVENT_KEY_DOWN)
-			{
-
-				switch (events.keyboard.keycode)
-				{
-				case ALLEGRO_KEY_ESCAPE:
-					done = true;
-					break;
-				}
-			}
-
-			else if (events.type == ALLEGRO_EVENT_DISPLAY_CLOSE)
-			{
-				done = true;
-			}
-
-			if (events.type == ALLEGRO_EVENT_TIMER)
-			{
-				if (events.timer.source == timer)
-				{
-					active = true;
-
-					al_get_keyboard_state(&keyState);
-
-					if (al_key_down(&keyState, ALLEGRO_KEY_SPACE))
-					{
-
-						done = true;
-					}
-					draw = true;
-				}
-				if (draw)
-				{
-					if (level = 1){
-						al_draw_bitmap(wasted, cameraposition[0], cameraposition[1], NULL);
-						al_flip_display();
-						newlevel = false;
-						draw = false;
-					}
-					else if (level = 2){
-						al_draw_bitmap(level2, cameraposition[0], cameraposition[1], NULL);
-						al_flip_display();
-						newlevel = false;
-						draw = false;
-					}
-					else if (level = 3){
-						al_draw_bitmap(level3, cameraposition[0], cameraposition[1], NULL);
-						al_flip_display();
-						newlevel = false;
-						draw = false;
-					}
-					else if (level = 4){
-						al_draw_bitmap(victory, cameraposition[0], cameraposition[1], NULL);
-						al_flip_display();
-						newlevel = false;
-						draw = false;
-					}
-				}
-			}
-		}
-	}*/
+	
 
 	///////////////////////////////////////////END SPLASH//////////////////////////////////////////
 	done = false;
@@ -1056,11 +988,12 @@ Line3:
 			draw = false;
 			al_flip_display();//shows the display window on pc window
 			//			al_draw_bitmap(imagewindowsky,/* 1*/x + (length*i), 2, NULL);
-			for (int i = 0; i <= 5; i++)//for loop created to redraw the background according to level lenght
+			for (int i = 0; i <= 6; i++)//for loop created to redraw the background according to level lenght
 			{
 				al_draw_bitmap(imagewindowsky, (length*i), 0, NULL);	// draws sky to window
 				al_draw_bitmap(imagewindow, (length*i), 3, NULL);	// draws buildings to window.
 			}
+
 
 		
 
@@ -1096,8 +1029,11 @@ Line3:
 						if (y + 123 > pilar[j].y && y + 123 < pilar[j].y + 32)	//allows mario to land on block
 						{
 							y = pilar[j].y - 123;
+							jump = true;
+							vely = 0;
 							coll = true;
 						}
+						
 					}
 					if (!coll)
 					{
@@ -1157,6 +1093,11 @@ Line3:
 					ctrl = 0;
 					goto Line2;
 				}
+
+				if (x < 0)			//prevents mario from running away
+					x = 0;
+
+				al_draw_bitmap(endflag, 8140, 0, NULL);
 
 				if (x > 8160)			//moves to level 2
 				{
@@ -1397,6 +1338,7 @@ Line3:
 	al_destroy_bitmap(luigiHealth);
 	al_destroy_bitmap(spike);
 	al_destroy_bitmap(spikeflip);
+	al_destroy_bitmap(endflag);
 	
 	return 0;
 }
