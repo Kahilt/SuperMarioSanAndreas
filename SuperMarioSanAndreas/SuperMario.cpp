@@ -79,7 +79,13 @@ public:
 			return false;
 	}
 
-		
+	bool struck(int x, int y, int lx, int lw, bool active, int ly)
+	{
+		if (active && x > lx && x < lx + lw && y > ly)
+			return true;
+		else
+		return false;
+	}
 	
 
 	
