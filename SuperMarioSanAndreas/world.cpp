@@ -2,8 +2,8 @@
 #include <iostream> //telling compiler to include iostream files
 #include <allegro5/allegro_image.h>//telling compiler to include allegro 5 image file
 #include <allegro5/allegro_primitives.h>//telling compiler to include allegro 5 primitives
-//#include <allegro5/allegro_ttf.h>
-//#include <allegro5/allegro_font.h>	
+#include <allegro5/allegro_ttf.h>
+#include <allegro5/allegro_font.h>	
 #include <allegro5/allegro_audio.h>
 #include <allegro5/allegro_acodec.h>
 #include <cmath>
@@ -20,6 +20,11 @@ using namespace std;
 #include "SuperMario.cpp"
 #include "SplashScreens.cpp"
 #include "Spikes.cpp"
+#include <string>
+#include <sstream>
+
+using namespace std;
+
 void cameraUpdate(float *camerposition, float x, float y, int w, int h){
 	camerposition[0] = -(length / 2) + (x + w / 2);				//positioning the camera at midpoint of the screen on the x axis
 	if (camerposition[0] < 0)									//check if the position is less then zero and if true then make it equal to zero
@@ -77,6 +82,7 @@ int top, bot, lef, righ;
 	
 	 const float EFPS = 15.0;		//controls speed of enemy animation
 	 const float LFPS = 5.0;		//controls speed of Luigi animation
+	 const float HFPS = 10.0;		//controls hit count for luigi
 	 const float MFPS = 8.0;
 	 const float WFPS = 9.0;
 	 enum Direction {UP, DOWN, LEFT, RIGHT, NONE1, NONE2, ATT};
@@ -85,6 +91,11 @@ int top, bot, lef, righ;
 	 bool jumpCheck;
 	 int check2;
 	// int dir = DOWN;
+
+	 ////////////player variables////////////
+	 int score = 0;
+	 int prevX = 0;
+	 int lives = 5;
 
 	ALLEGRO_DISPLAY *display;
 	al_set_new_display_flags(ALLEGRO_WINDOWED|ALLEGRO_RESIZABLE);
@@ -108,6 +119,7 @@ int top, bot, lef, righ;
 	
 	ALLEGRO_TIMER *timer = al_create_timer(1.0 / FPS);
 	ALLEGRO_TIMER *mariotimer = al_create_timer(1.0 / MFPS); 
+	ALLEGRO_TIMER *hitTime = al_create_timer(1.0 / HFPS);
 
 	ALLEGRO_TIMER *weapontimer = al_create_timer(1.0 /WFPS);
 	ALLEGRO_TIMER *splash = al_create_timer(1.0 / 5.0);
@@ -122,6 +134,7 @@ int top, bot, lef, righ;
 	al_register_event_source(event_queue, al_get_timer_event_source(weapontimer));
 	al_register_event_source(event_queue, al_get_timer_event_source(enemyTimer));
 	al_register_event_source(event_queue, al_get_timer_event_source(luigiTimer));
+	al_register_event_source(event_queue, al_get_timer_event_source(hitTime));
 	ALLEGRO_TRANSFORM CAMERA;
 
 	///////////////////////////////////////////////////////////////////////Splash Screen Loading/////////////////////////////////////////////////////////////
@@ -178,11 +191,14 @@ int top, bot, lef, righ;
 	ALLEGRO_BITMAP *endflag = al_load_bitmap("endflag.png");
 	ALLEGRO_BITMAP *castle = al_load_bitmap("castle.png");
 	ALLEGRO_BITMAP *princess = al_load_bitmap("princess.png");
-
-
-
+	
 	ALLEGRO_BITMAP *currMario1;
 	ALLEGRO_BITMAP *currMario2;
+
+	al_init_font_addon();
+	al_init_ttf_addon();
+
+	ALLEGRO_FONT *font = al_load_font("emulogic.ttf", 25, NULL);
 
 	///////////////////////////////////////////////////CALLING CLASSES/////////////////////////////////////////////////////////////////////////////
 
@@ -509,6 +525,7 @@ int top, bot, lef, righ;
 	al_start_timer(weapontimer);	// mario timer
 	al_start_timer(enemyTimer);	// enemy timer
 	al_start_timer(luigiTimer);	// luigi timer
+	al_start_timer(hitTime);
 	al_get_keyboard_state(&keyState);
 	jumpCheck = false;
 	//////////////////////////////////////////////////////Songs///////////////////////////////////////////////////
@@ -620,16 +637,25 @@ Line2:
 					if (ctrl == 0)
  						al_draw_bitmap(wasted, cameraposition[0], cameraposition[1], NULL);
 					else if (ctrl == 1)
+					{
+						prevX = 0;
 						al_draw_bitmap(level1, cameraposition[0], cameraposition[1], NULL);
-
-					else if (ctrl==2)
+					}
+					else if (ctrl == 2)
+					{
+						prevX = 0;
 						al_draw_bitmap(level2, cameraposition[0], cameraposition[1], NULL);
-					
+					}
 					else if (ctrl == 3)
+					{
+						prevX = 0;
 						al_draw_bitmap(level3, cameraposition[0], cameraposition[1], NULL);
+					}
 					else if (ctrl == 4)
+					{
+						prevX = 0;
 						al_draw_bitmap(victory, cameraposition[0], cameraposition[1], NULL);
-
+					}
 					al_flip_display();
 					reset = false;
 					draw = false;
@@ -1043,9 +1069,13 @@ Line2:
 			}
 
 		
-
-
-
+			if (x > prevX)
+			{
+				score += (x - prevX);
+				prevX = x;
+			}
+			
+			al_draw_textf(font, al_map_rgb(0, 0, 0), x + length / 4, 0, ALLEGRO_ALIGN_CENTRE, "SCORE : %d", score);
 
 			if (level == 1)
 				//////////////////////////LEVEL 1//////////////////////////////////////////////////////////////////
@@ -1187,7 +1217,7 @@ Line2:
 							vely = gravity;
 							y = pilar[j].y + 32;
 							coll = true;
-				}
+						}
 
 						//al_draw_bitmap(smallPillar, x - 20, y + 123, NULL);
 						if (y + 123 > pilar[j].y && y + 123 < pilar[j].y + 32)	//allows mario to land on block
@@ -1222,7 +1252,7 @@ Line2:
 				{
 					obstacleMH[j]->draw(manhole, manhole, manhole);
 
-					/////cehck manhole collision
+					/////check manhole collision
 					if (marioObject.fall_in_manhole(x + 20, y, manH[j].x, manH[j].y, al_get_bitmap_width(manhole)))
 					{
 						reset = true;
@@ -1278,21 +1308,69 @@ Line2:
 					level = 3;
 					reset = true;
 					ctrl = 3;
+
 					goto Line2;
 
 
 				}
 			}
+
+
+			////////////////////////level 3//////////////////////
+
 			
 			if (level == 3)
 			{
 				enemyMovespeed = 4;
 
-				for (int j = 12; j < 16; j++){
+				for (int j = 12; j < 18; j++){
 					obstacleC[j]->draw(imagecar, imagecopcar, imagebus);
 				}
-				for (int j = 39; j < 100; j++){
+				
+				for (int j = 39; j < 200; j++)
+				{
 					obstacleP[j]->draw(smallPillar, medPillar, medPillar);
+
+					////////block collision//////////////////
+					bool coll = false;
+					if ((pilar[j].x > x + 36 && pilar[j].x < x + 135) || (pilar[j].x + 32 > x + 36 && pilar[j].x + 32 < x + 135))  //means mario is either above or below block
+					{
+
+						if (y + 100 > pilar[j].y && y + 100 < pilar[j].y + 32)		//stop mario jump when head hit bottom of block
+						{
+							vely = gravity;
+							y = pilar[j].y + 32 - 100;
+							coll = true;
+						}
+
+						//al_draw_bitmap(smallPillar, x + 36, y + 100, NULL);
+						if (y + 224 > pilar[j].y && y + 224 < pilar[j].y + 32)	//allows mario to land on block
+						{
+							y = pilar[j].y - 224;
+							jump = true;
+							vely = 0;
+							coll = true;
+						}
+
+					}
+					if (!coll)
+					{
+						if ((pilar[j].y > y + 100 && pilar[j].y < y + 224) || (pilar[j].y + 32 > y + 100 && pilar[j].y + 32 < y + 224)) //checks if mario is next to block on the left or right
+						{
+
+							if (pilar[j].x + 32 > x + 36 && pilar[j].x + 32 < x + 135)		//hitting block on the right side
+							{
+								x = pilar[j].x + 32;
+							}
+							if (pilar[j].x > x + 36 && pilar[j].x < x + 135)	//hitting block on the left side
+							{
+								x = pilar[j].x - 99;
+							}
+						}
+					}
+
+
+
 				}
 					for (int j = 1; j < 50; j++)
 					{
@@ -1318,9 +1396,9 @@ Line2:
 						
 						if (check2 == 1)
 						{
-							currMario2 = al_create_sub_bitmap(SuperAttackRight, sourceXj, 100, 195, 127);
-							//al_draw_bitmap(currMario2, x - 23, y + 100,NULL);
-							if (marioObject.spikeCollision(currMario2, spike, x - 23, y + 100, 195, 127, spikes[j].x, spikes[j].y, al_get_bitmap_width(spike), al_get_bitmap_height(spike)))
+							currMario2 = al_create_sub_bitmap(SuperAttackRight, sourceXj + 50, 100, 83, 127);
+							//al_draw_bitmap(currMario2, x + 32 , y + 100,NULL);
+							if (marioObject.spikeCollision(currMario2, spike, x + 32, y + 100, 105, 127, spikes[j].x, spikes[j].y, al_get_bitmap_width(spike), al_get_bitmap_height(spike)))
 							{
 								reset = true;
 								ctrl = 0;
@@ -1329,9 +1407,9 @@ Line2:
 						}
 						else
 						{
-							currMario1 = al_create_sub_bitmap(SuperAttackLeft, sourceXi + 553, 100, 133, 127);
-							//al_draw_bitmap(currMario1, x - 23, y + 100, NULL);
-							if (marioObject.spikeCollision(currMario1, spike, x - 23, y + 100, 195, 127, spikes[j].x, spikes[j].y, al_get_bitmap_width(spike), al_get_bitmap_height(spike)))
+							currMario1 = al_create_sub_bitmap(SuperAttackLeft, sourceXi + 603, 100, 83, 127);
+							//al_draw_bitmap(currMario1, x + 32, y + 100, NULL);
+							if (marioObject.spikeCollision(currMario1, spike, x + 32, y + 100, 105, 127, spikes[j].x, spikes[j].y, al_get_bitmap_width(spike), al_get_bitmap_height(spike)))
 							{
 
 								reset = true;
@@ -1342,31 +1420,7 @@ Line2:
 
 				}
 
-				for (int j = 12; j < 18; j++){
-					obstacleC[j]->draw(imagecar, imagecopcar, imagebus);
-				}
-				for (int j = 39; j < 200; j++){
-					obstacleP[j]->draw(smallPillar, medPillar, medPillar);
-						}
-					for (int j = 1; j < 50; j++)
-					{
-						obstacleMH[j]->draw(manhole, manhole, manhole);
-
-						///////////check for manhole collision////////////////////
-						
-						//al_draw_bitmap(manhole, x + 85, 400, NULL);		used for testing purposes
-						if (marioObject.fall_in_manhole(x + 85, y + 100, manH[j].x, manH[j].y, al_get_bitmap_width(manhole)))
-						{
-							reset = true;
-							goto Line2;
-					}
 				
-					}
-					
-					
-					
-				
-					
 				for (int i = 10; i < numOfEnemys; i++)
 				{
 					gangster[i].move(enemyMovespeed);
@@ -1418,26 +1472,53 @@ Line2:
 					gangster[i].draw(punch_gangster, chain_gangster, (events.timer.source == enemyTimer));	// draw method from Enemies class
 					al_destroy_bitmap(currMario);
 				}
-
-
+				
 				luigi.draw(luigiBM, (events.timer.source == luigiTimer), lightning.active);
 				lightning.active = luigi.lightning_active();
 				lightning.draw(light, (events.timer.source == enemyTimer));
 				luigi.drawHealth(luigiHealth);
 
+				///check if Mario struck/////////
+				if (marioObject.struck(x+100, y, lightning.x - lightning.sourceX[lightning.i],648, lightning.active,luigi.y - 100))
+				{
+					reset = true;
+					ctrl = 0;
+					goto Line2;
+				}
+					
+				////////////////check if Luigi dies//////////////////////////////
+				ALLEGRO_BITMAP *currMario;
+				al_lock_bitmap(SuperAttackRight, al_get_bitmap_format(SuperAttackRight), ALLEGRO_LOCK_READONLY);
+				al_lock_bitmap(SuperAttackLeft, al_get_bitmap_format(SuperAttackLeft), ALLEGRO_LOCK_READONLY);
+
+				if (check2 == 1)
+				{
+					currMario = al_create_sub_bitmap(SuperAttackRight, sourceXj + 195, 0, 553, 227);	//get current animation of mario
+					al_lock_bitmap(currMario, al_get_bitmap_format(currMario), ALLEGRO_LOCK_READONLY);
+					luigi.getShot(luigiBM, currMario, x + 172, y, al_get_bitmap_width(currMario), 227, hit);	//checks if enemy gets hit with hammer, if true, enemy dies
+				}
+				else
+				{
+					currMario = al_create_sub_bitmap(SuperAttackLeft, sourceXi, 0, 553, 227);	//get current animation of mario
+					al_lock_bitmap(currMario, al_get_bitmap_format(currMario), ALLEGRO_LOCK_READONLY);
+					luigi.getShot(luigiBM, currMario, x - 553, y, al_get_bitmap_width(currMario), 227, hit);	//checks if enemy gets hit with hammer, if true, enemy dies
+				}
+
+
+
 				al_draw_bitmap(princess, 8200, 0, NULL);
 
 				if (x > 8160)			//won game
 				{
-					
-						level = 4;
-						reset = true;
-						ctrl = 4;
-						goto Line2;
-
-
-			
-				
+						if (luigi.alive) //doesnt allow player to advance without killing luigi
+							x = 0;
+						else
+						{
+							level = 4;
+							reset = true;
+							ctrl = 4;
+							goto Line2;
+						}
 				}
 			}
 
@@ -1449,14 +1530,11 @@ Line2:
 	//al_stop_sample(&id2);
 
 	
-	//al_init_font_addon();
-	//al_init_ttf_addon();
-
-	//ALLEGRO_FONT *font = al_load_font("emulogic.ttf", 20, NULL);
+	
 	
 	//al_flip_display();
 	
-	//al_destroy_font(font);
+	al_destroy_font(font);
 	//al_rest(2.0);//delay
 	al_destroy_display(display);
 	al_destroy_sample(gameSong);
