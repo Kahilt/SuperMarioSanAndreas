@@ -568,7 +568,7 @@ Line2:
 	/////////////////////////////////////////////////////////End Of Reset////////////////////////////////
 	done = false;
 
-	level = 3; //The level
+	level = 1; //The level
 	x = 0;
 
 
@@ -1124,6 +1124,6 @@ Line2:
 	al_destroy_bitmap(luigiHealth);
 	al_destroy_bitmap(spike);
 	al_destroy_bitmap(spikeflip);
-	
+	  
 	return 0;
 }
