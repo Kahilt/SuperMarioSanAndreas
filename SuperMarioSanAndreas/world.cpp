@@ -175,7 +175,7 @@ int top, bot, lef, righ;
 	ALLEGRO_BITMAP *luigiBM = al_load_bitmap("Luigi.png");
 	ALLEGRO_BITMAP *luigiHealth = al_load_bitmap("Luigi_health_bar.png");
 
-	ALLEGRO_BITMAP *endflag = al_load_bitmap("end_of_level_flag.png");
+	ALLEGRO_BITMAP *endflag = al_load_bitmap("endflag.png");
 
 	ALLEGRO_BITMAP *currMario1;
 	ALLEGRO_BITMAP *currMario2;
@@ -527,7 +527,7 @@ int top, bot, lef, righ;
 	al_destroy_sample(startSound);
 	bool reset = false;
 	/////////////////////////////////////////////////////////End Of Start SplashScreen////////////////////////////////
-	level = 3; //The level
+	level = 1; //The level
 	int ctrl = 0; 
 
 Line2:
