@@ -7,10 +7,12 @@ class manHole : public worldObstacles
 {
 private:
 
+	
+
+public:
 	float x;
 	float y;
 
-public:
 	float manholeL;
 	float manholeW;
 

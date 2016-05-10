@@ -7,10 +7,11 @@ class Spikes : public worldObstacles
 {
 private:
 
+	
+public:
 	float x;
 	float y;
 
-public:
 	float spikeL;
 	float spikeW;
 
@@ -33,4 +34,5 @@ public:
 		y = posy;
 		spikeType = type;
 	}
+
 };
