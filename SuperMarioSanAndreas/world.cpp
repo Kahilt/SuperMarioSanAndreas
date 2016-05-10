@@ -191,7 +191,7 @@ int top, bot, lef, righ;
 	ALLEGRO_BITMAP *endflag = al_load_bitmap("endflag.png");
 	ALLEGRO_BITMAP *castle = al_load_bitmap("castle.png");
 	ALLEGRO_BITMAP *princess = al_load_bitmap("princess.png");
-	
+
 	ALLEGRO_BITMAP *currMario1;
 	ALLEGRO_BITMAP *currMario2;
 
@@ -669,7 +669,7 @@ Line2:
 	///////////////////////////////////////////END SPLASH//////////////////////////////////////////
 	done = false;
 
-	
+	level = 1; //The level
 	x = 0;
 
 	if (level == 3)
@@ -1074,7 +1074,7 @@ Line2:
 				score += (x - prevX);
 				prevX = x;
 			}
-			
+
 			al_draw_textf(font, al_map_rgb(0, 0, 0), x + length / 4, 0, ALLEGRO_ALIGN_CENTRE, "SCORE : %d", score);
 
 			if (level == 1)
@@ -1217,7 +1217,7 @@ Line2:
 							vely = gravity;
 							y = pilar[j].y + 32;
 							coll = true;
-						}
+				}
 
 						//al_draw_bitmap(smallPillar, x - 20, y + 123, NULL);
 						if (y + 123 > pilar[j].y && y + 123 < pilar[j].y + 32)	//allows mario to land on block
@@ -1314,7 +1314,7 @@ Line2:
 
 				}
 			}
-
+			
 
 			////////////////////////level 3//////////////////////
 
@@ -1361,7 +1361,7 @@ Line2:
 							if (pilar[j].x + 32 > x + 36 && pilar[j].x + 32 < x + 135)		//hitting block on the right side
 							{
 								x = pilar[j].x + 32;
-							}
+				}
 							if (pilar[j].x > x + 36 && pilar[j].x < x + 135)	//hitting block on the left side
 							{
 								x = pilar[j].x - 99;
@@ -1417,10 +1417,10 @@ Line2:
 								goto Line2;
 							}
 					}
-
-				}
-
 				
+					}
+					
+					
 				for (int i = 10; i < numOfEnemys; i++)
 				{
 					gangster[i].move(enemyMovespeed);
@@ -1472,7 +1472,7 @@ Line2:
 					gangster[i].draw(punch_gangster, chain_gangster, (events.timer.source == enemyTimer));	// draw method from Enemies class
 					al_destroy_bitmap(currMario);
 				}
-				
+
 				luigi.draw(luigiBM, (events.timer.source == luigiTimer), lightning.active);
 				lightning.active = luigi.lightning_active();
 				lightning.draw(light, (events.timer.source == enemyTimer));
@@ -1514,10 +1514,10 @@ Line2:
 							x = 0;
 						else
 						{
-							level = 4;
-							reset = true;
-							ctrl = 4;
-							goto Line2;
+						level = 4;
+						reset = true;
+						ctrl = 4;
+						goto Line2;
 						}
 				}
 			}
@@ -1530,7 +1530,7 @@ Line2:
 	//al_stop_sample(&id2);
 
 	
-	
+
 	
 	//al_flip_display();
 	
