@@ -44,7 +44,7 @@ int top, bot, lef, righ;
 	 int delay = 0;
 	 bool hit = false;
 	 bool hitcheck = false;
-
+	 bool newlevel = false;
 	 float sourceXa=0;//used for cropping the SpriteSheet for animation
 	 float sourceXb = 0;
 	 float sourceXc = 0;
@@ -124,13 +124,15 @@ int top, bot, lef, righ;
 	al_register_event_source(event_queue, al_get_timer_event_source(luigiTimer));
 	ALLEGRO_TRANSFORM CAMERA;
 
-	///////////////////////////////////////////////////////////////////////IMAGE LOADING/////////////////////////////////////////////////////////////
+	///////////////////////////////////////////////////////////////////////Splash Screen Loading/////////////////////////////////////////////////////////////
 	ALLEGRO_BITMAP *start = al_load_bitmap("start.png");
-	ALLEGRO_BITMAP *wasted = al_load_bitmap("wasted screen.png");
-	ALLEGRO_BITMAP *level1 = al_load_bitmap("level1.jpg");
-	ALLEGRO_BITMAP *level2 = al_load_bitmap("level2.jpg");
-	ALLEGRO_BITMAP *level3 = al_load_bitmap("level3.jpg");
-	ALLEGRO_BITMAP *victory = al_load_bitmap("victory.jpg");
+	ALLEGRO_BITMAP *wasted = al_load_bitmap("wasted.png");
+	ALLEGRO_BITMAP *level1 = al_load_bitmap("Level1.png");
+	ALLEGRO_BITMAP *level2 = al_load_bitmap("Level2.png");
+	ALLEGRO_BITMAP *level3 = al_load_bitmap("Level3.png");
+	ALLEGRO_BITMAP *victory = al_load_bitmap("victory.png");
+
+	///////////////////////////////////////////////////////////////////////Image Loading/////////////////////////////////////////////////////////////////////
 	ALLEGRO_BITMAP *Duck = al_load_bitmap("Duck.png");
 	ALLEGRO_BITMAP *Jump = al_load_bitmap("Jump.png");
 	ALLEGRO_BITMAP *Stand = al_load_bitmap("Stand.png");
@@ -524,7 +526,7 @@ int top, bot, lef, righ;
 	bool reset = false;
 	/////////////////////////////////////////////////////////End Of Start SplashScreen////////////////////////////////
 	level = 1; //The level
-	
+	int ctrl = 0; 
 
 Line2:
 
@@ -561,14 +563,26 @@ Line2:
 
 					if (al_key_down(&keyState, ALLEGRO_KEY_SPACE))
 					{
+
 						done = true;
 					}
 					draw = true;
 				}
 				if (draw)
 				{
-					
-					al_draw_bitmap(wasted, cameraposition[0], cameraposition[1], NULL);
+					if (ctrl == 0)
+ 						al_draw_bitmap(wasted, cameraposition[0], cameraposition[1], NULL);
+					else if (ctrl == 1)
+						al_draw_bitmap(level1, cameraposition[0], cameraposition[1], NULL);
+
+					else if (ctrl==2)
+						al_draw_bitmap(level2, cameraposition[0], cameraposition[1], NULL);
+
+					else if (ctrl == 3)
+						al_draw_bitmap(level3, cameraposition[0], cameraposition[1], NULL);
+					else if (ctrl == 4)
+						al_draw_bitmap(victory, cameraposition[0], cameraposition[1], NULL);
+
 					al_flip_display();
 					reset = false;
 					draw = false;
@@ -577,6 +591,79 @@ Line2:
 		}
 	}
 	/////////////////////////////////////////////////////////End Of Reset////////////////////////////////
+	/*
+Line3:
+
+	/////////////////////////////////////////////////////////Splashes////////////////////////////////////////
+	if (newlevel == true)
+	{
+		while (!done)	// main game loop
+		{
+			ALLEGRO_EVENT events;
+			al_wait_for_event(event_queue, &events);
+			if (events.type == ALLEGRO_EVENT_KEY_DOWN)
+			{
+
+				switch (events.keyboard.keycode)
+				{
+				case ALLEGRO_KEY_ESCAPE:
+					done = true;
+					break;
+				}
+			}
+
+			else if (events.type == ALLEGRO_EVENT_DISPLAY_CLOSE)
+			{
+				done = true;
+			}
+
+			if (events.type == ALLEGRO_EVENT_TIMER)
+			{
+				if (events.timer.source == timer)
+				{
+					active = true;
+
+					al_get_keyboard_state(&keyState);
+
+					if (al_key_down(&keyState, ALLEGRO_KEY_SPACE))
+					{
+
+						done = true;
+					}
+					draw = true;
+				}
+				if (draw)
+				{
+					if (level = 1){
+						al_draw_bitmap(wasted, cameraposition[0], cameraposition[1], NULL);
+						al_flip_display();
+						newlevel = false;
+						draw = false;
+					}
+					else if (level = 2){
+						al_draw_bitmap(level2, cameraposition[0], cameraposition[1], NULL);
+						al_flip_display();
+						newlevel = false;
+						draw = false;
+					}
+					else if (level = 3){
+						al_draw_bitmap(level3, cameraposition[0], cameraposition[1], NULL);
+						al_flip_display();
+						newlevel = false;
+						draw = false;
+					}
+					else if (level = 4){
+						al_draw_bitmap(victory, cameraposition[0], cameraposition[1], NULL);
+						al_flip_display();
+						newlevel = false;
+						draw = false;
+					}
+				}
+			}
+		}
+	}*/
+
+	///////////////////////////////////////////END SPLASH//////////////////////////////////////////
 	done = false;
 
 	
@@ -1055,6 +1142,7 @@ Line2:
 					if (marioObject.marioCollide(x - 20, y, gangster[i].x, gangster[i].y, al_get_bitmap_width(Walk) / 10, 123, Walk, punch_gangster, gangster[i].aniWidth, gangster[i].aniHeight))
 					{
 						reset = true;
+						ctrl = 0;
 						goto Line2;
 					}
 
@@ -1066,6 +1154,7 @@ Line2:
 				if (marioObject.fall_in_manhole(x + 20, y, manH[0].x, manH[0].y, al_get_bitmap_width(manhole)))
 				{
 					reset = true;
+					ctrl = 0;
 					goto Line2;
 				}
 
@@ -1073,7 +1162,10 @@ Line2:
 				{
 					level = 2;
 					reset = true;
+					ctrl = 2;
 					goto Line2;
+
+
 				}
 			}
 			//////////////////////////LEVEL 2//////////////////////////////////////////////////////////////////
@@ -1105,7 +1197,8 @@ Line2:
 				if (x > 8160)			//moves to level 3
 				{
 					level = 3;
-					reset = true;
+					ctrl = 3;
+					reset = true;	
 					goto Line2;
 				}
 			}
@@ -1131,6 +1224,8 @@ Line2:
 						if (marioObject.fall_in_manhole(x + 85, y + 100, manH[j].x, manH[j].y, al_get_bitmap_width(manhole)))
 						{
 							reset = true;
+							ctrl = 0;
+
 							goto Line2;
 						}		
 					
@@ -1150,6 +1245,7 @@ Line2:
 							if (marioObject.spikeCollision(currMario2, spike, x - 23, y + 100, 195, 127, spikes[j].x, spikes[j].y, al_get_bitmap_width(spike), al_get_bitmap_height(spike)))
 							{
 								reset = true;
+								ctrl = 0;
 								goto Line2;
 							}
 						}
@@ -1161,6 +1257,7 @@ Line2:
 							{
 
 								reset = true;
+								ctrl = 0;
 								goto Line2;
 							}
 						}
@@ -1197,6 +1294,7 @@ Line2:
 						if (marioObject.marioCollide(x - 23 , y + 100, gangster[i].x, gangster[i].y, al_get_bitmap_width(currMario2), 100, currMario2, punch_gangster,gangster[i].aniWidth,gangster[i].aniHeight) )//|| marioObject.marioCollide(x, y, gangster[i].x, gangster[i].y, al_get_bitmap_width(currMario), 100, currMario1, chain_gangster))
 						{
 							reset = true;
+							ctrl = 0;
 							goto Line2;
 						}
 						al_destroy_bitmap(currMario2);
@@ -1209,6 +1307,7 @@ Line2:
 						{
 
 							reset = true;
+							ctrl = 0;
 							goto Line2;
 						}
 						al_destroy_bitmap(currMario1);
@@ -1223,6 +1322,20 @@ Line2:
 				lightning.active = luigi.lightning_active();
 				lightning.draw(light, (events.timer.source == enemyTimer));
 				luigi.drawHealth(luigiHealth);
+
+
+				if (x > 8160)			//won game
+				{
+					
+						level = 4;
+						reset = true;
+						ctrl = 4;
+						goto Line2;
+
+
+			
+				
+				}
 			}
 
 		}
