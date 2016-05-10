@@ -832,7 +832,10 @@ Line2:
 				
 			}
 			if (!jump)
+			{
 				vely += gravity;
+				al_play_sample(jumpsound, 1.0, 0.0, 1.0, ALLEGRO_PLAYMODE_ONCE, 0);
+			}
 			else
 				vely = 0;
 
