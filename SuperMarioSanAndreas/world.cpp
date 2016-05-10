@@ -171,7 +171,7 @@ int top, bot, lef, righ;
 	ALLEGRO_BITMAP *spike = al_load_bitmap("Spike.png");
 	ALLEGRO_BITMAP *spikeflip = al_load_bitmap("Spike_flip.png");
 
-	ALLEGRO_BITMAP *light = al_load_bitmap("Lightning sprite.png");
+	ALLEGRO_BITMAP *light = al_load_bitmap("Lightning sprite1.png");
 	ALLEGRO_BITMAP *luigiBM = al_load_bitmap("Luigi.png");
 	ALLEGRO_BITMAP *luigiHealth = al_load_bitmap("Luigi_health_bar.png");
 
