@@ -200,6 +200,27 @@ int top, bot, lef, righ;
 
 	ALLEGRO_FONT *font = al_load_font("emulogic.ttf", 25, NULL);
 
+	//////////////////////////////////////////////////////AUDIO///////////////////////////////////////////////////
+
+	al_reserve_samples(6);
+
+	ALLEGRO_SAMPLE *startSound = al_load_sample("1.wav");
+	ALLEGRO_SAMPLE_INSTANCE *startInstance = al_create_sample_instance(startSound);
+	al_set_sample_instance_playmode(startInstance, ALLEGRO_PLAYMODE_LOOP);
+	al_attach_sample_instance_to_mixer(startInstance, al_get_default_mixer());
+
+	ALLEGRO_SAMPLE *gameSong = al_load_sample("Mario Theme Song (thewcoop Trap Remix).wav");
+	ALLEGRO_SAMPLE_INSTANCE *gameInstance = al_create_sample_instance(gameSong);
+	al_set_sample_instance_playmode(gameInstance, ALLEGRO_PLAYMODE_LOOP);
+	al_attach_sample_instance_to_mixer(gameInstance, al_get_default_mixer());
+
+	ALLEGRO_SAMPLE *jumpsound = al_load_sample("jump.wav");
+	ALLEGRO_SAMPLE *hammerthrow = al_load_sample("hammer.wav");
+	ALLEGRO_SAMPLE *fire = al_load_sample("fire.wav");
+	ALLEGRO_SAMPLE *dying = al_load_sample("Dying.wav");
+	
+	
+
 	///////////////////////////////////////////////////CALLING CLASSES/////////////////////////////////////////////////////////////////////////////
 
 	SuperMario marioObject;
@@ -528,16 +549,7 @@ int top, bot, lef, righ;
 	al_start_timer(hitTime);
 	al_get_keyboard_state(&keyState);
 	jumpCheck = false;
-	//////////////////////////////////////////////////////Songs///////////////////////////////////////////////////
-	ALLEGRO_SAMPLE *startSound = al_load_sample("1.wav");
-	//ALLEGRO_SAMPLE_ID id1;
-	ALLEGRO_SAMPLE *gameSong = al_load_sample("Mario Theme Song (thewcoop Trap Remix).wav");
-	ALLEGRO_SAMPLE *jumpsound = al_load_sample("jump.wav");
-	ALLEGRO_SAMPLE *hammerthrow = al_load_sample("hammer.wav");
-	ALLEGRO_SAMPLE *fire = al_load_sample("fire.wav");
-	ALLEGRO_SAMPLE *dying = al_load_sample("Dying.wav");
-	//ALLEGRO_SAMPLE_ID id2;
-	al_reserve_samples(6);
+	
 	/////////////////////////////////////////////////////////Start SplashScreen////////////////////////////////////////////////
 
 	
@@ -565,7 +577,7 @@ int top, bot, lef, righ;
 			{
 			if (events.timer.source == timer)
 			{
-				al_play_sample(startSound,1.0,0.0,1.0,ALLEGRO_PLAYMODE_LOOP,0);
+				al_play_sample_instance(startInstance);
 				active = true;
 
 				al_get_keyboard_state(&keyState);
@@ -585,8 +597,9 @@ int top, bot, lef, righ;
 		}
 	}
 
-	//al_stop_sample(id1);
+	
 	al_destroy_sample(startSound);
+	al_destroy_sample_instance(startInstance);
 	bool reset = false;
 	/////////////////////////////////////////////////////////End Of Start SplashScreen////////////////////////////////
 	level = 1; //The level
@@ -679,7 +692,7 @@ Line2:
 
 	while (!done)	// main game loop
 	{
-		al_play_sample(gameSong, 1.0, 0.0, 1.0, ALLEGRO_PLAYMODE_LOOP, 0);
+		al_play_sample_instance(gameInstance);
 		ALLEGRO_EVENT events;
 		al_wait_for_event(event_queue, &events);
 
@@ -728,7 +741,13 @@ Line2:
 						hit = true;
 						velx = 0;
 						dir = ATT;
-						al_play_sample(fire, 1.0, 0.0, 1.0, ALLEGRO_PLAYMODE_ONCE,0);
+						if (level == 3)
+						{
+							al_play_sample(fire, 1.0, 0.0, 1.0, ALLEGRO_PLAYMODE_ONCE, 0);
+						}
+						else{
+							al_play_sample(hammerthrow, 1.0, 0.0, 1.0, ALLEGRO_PLAYMODE_ONCE, 0);
+						}
 
 					
 				}
@@ -737,12 +756,23 @@ Line2:
 					hit = true;
 					vely = -jumpSpeed;
 					jump = false;
+					if (level == 3)
+					{
+						al_play_sample(fire, 1.0, 0.0, 1.0, ALLEGRO_PLAYMODE_ONCE, 0);
+						al_play_sample(jumpsound, 1.0, 0.0, 1.0, ALLEGRO_PLAYMODE_ONCE, 0);
+					}
+					else{
+						al_play_sample(hammerthrow, 1.0, 0.0, 1.0, ALLEGRO_PLAYMODE_ONCE, 0);
+						al_play_sample(jumpsound, 1.0, 0.0, 1.0, ALLEGRO_PLAYMODE_ONCE, 0);
+					}
 
 				}
 				else if (al_key_down(&keyState, ALLEGRO_KEY_UP) && jump == true)
 				{
 					vely = -jumpSpeed;
 					jump = false;
+					al_play_sample(jumpsound, 1.0, 0.0, 1.0, ALLEGRO_PLAYMODE_ONCE, 0);
+					
 				}
 				else if (al_key_down(&keyState, ALLEGRO_KEY_RIGHT))
 				{
@@ -905,7 +935,7 @@ Line2:
 			if (!jump)
 			{
 				vely += gravity;
-				al_play_sample(jumpsound, 1.0, 0.0, 1.0, ALLEGRO_PLAYMODE_ONCE, 0);
+				
 			}
 			else
 				vely = 0;
@@ -1538,6 +1568,7 @@ Line2:
 	//al_rest(2.0);//delay
 	al_destroy_display(display);
 	al_destroy_sample(gameSong);
+	al_destroy_sample_instance(gameInstance);
 	al_destroy_sample(jumpsound);
 	al_destroy_sample(hammerthrow);
 	al_destroy_sample(fire);
