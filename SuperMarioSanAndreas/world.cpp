@@ -30,16 +30,7 @@ void cameraUpdate(float *camerposition, float x, float y, int w, int h){
 	if (camerposition[0] < 0)									//check if the position is less then zero and if true then make it equal to zero
 		camerposition[0] = 0;
 }
-//template<class first, class second>
-//void drawMulti(first startloop, first endloop, first plusplus,second object[],first posx,first posy,first type)
-//		{
-//			int val =0;
-//			for (int i = startloop; i < endloop; i++){
-//				object[startloop]->setvalue(posx + val, posy,type);
-//				val +=plusplus;
-//
-//			}
-//		}
+
 int top, bot, lef, righ;
 
 
@@ -87,7 +78,7 @@ int top, bot, lef, righ;
 	 const float WFPS = 9.0;
 	 enum Direction {UP, DOWN, LEFT, RIGHT, NONE1, NONE2, ATT};
 	 int level;//tells you what level you are currently drawing
-	 const int numOfEnemys = 30;					//contains the number of enemies
+	 const int numOfEnemys = 24;					//contains the number of enemies
 	 bool jumpCheck;
 	 int check2;
 	// int dir = DOWN;
@@ -200,7 +191,7 @@ int top, bot, lef, righ;
 
 	ALLEGRO_FONT *font = al_load_font("emulogic.ttf", 25, NULL);
 
-	//////////////////////////////////////////////////////AUDIO///////////////////////////////////////////////////
+	//////////////////////////////////AUDIO/////////////////////////////////////////////////
 
 	al_reserve_samples(6);
 
@@ -219,21 +210,40 @@ int top, bot, lef, righ;
 	ALLEGRO_SAMPLE *fire = al_load_sample("fire.wav");
 	ALLEGRO_SAMPLE *dying = al_load_sample("Dying.wav");
 	
-	
-
-	///////////////////////////////////////////////////CALLING CLASSES/////////////////////////////////////////////////////////////////////////////
+	///////////////////////////CALLING CLASSES////////////////////////////////////////////
 
 	SuperMario marioObject;
 
-	Enemies gangster[numOfEnemys];						//creates 1 object of enemies class
-	gangster[0].setValues(1000, 590, 1000, 1500,1);	//sets values to enemy
-	gangster[1].setValues(1800, 590, 1800, 2200,1);
-	gangster[2].setValues(3000, 600, 3000, 3800,2);
-	gangster[3].setValues(4050, 600, 4080, 4800, 2);
-	gangster[4].setValues(6500, 590, 5400, 5900, 1);
-	gangster[5].setValues(6500, 590, 6000, 6700, 1);
-	gangster[6].setValues(6500, 600, 7600, 8000, 2);
-   
+	Enemies gangster[numOfEnemys];	//creates 1 object of enemies class
+
+	Cars car[12];
+	worldObstacles *obstacleC[12];
+	for (int i = 0; i < 12; i++)
+	{
+		obstacleC[i] = &car[i];
+	}
+
+	pilars pilar[142];
+	worldObstacles *obstacleP[142];
+	for (int i = 0; i < 142; i++)
+	{
+		obstacleP[i] = &pilar[i];
+	}
+
+	manHole manH[50];
+	worldObstacles *obstacleMH[50];
+	for (int i = 0; i < 50; i++)
+	{
+		obstacleMH[i] = &manH[i];
+	}
+
+	Spikes spikes[100];
+	worldObstacles *Obsspikes[100];
+	for (int i = 0; i < 100; i++)
+	{
+		Obsspikes[i] = &spikes[i];
+	}
+	
 	Luigi luigi;						//Luigi positioned at end with lightning 
 	luigi.x = 7500;
 	luigi.y = 550;
@@ -244,199 +254,45 @@ int top, bot, lef, righ;
 
 	
    
-	///////////////////////setting values for the position of cars level 1//////////////////////////////////////////
-	Cars car[20];
+	///////////////////////SETTING CAR POSITIONS//////////////////////////////////////////
+
+	/////////////////////////////LEVEL 1//////////////////////////////////////////////////
+
+	obstacleC[0]->setvalue(800, 620, 1);
+	obstacleC[1]->setvalue(1600, 620, 1);
+	obstacleC[2]->setvalue(2300, 620, 1);
+	obstacleC[3]->setvalue(2800, 630, 2);
+	obstacleC[4]->setvalue(3900, 630, 2);
+	obstacleC[5]->setvalue(4900, 560, 3);
+
+	/////////////////////////////LEVEL 2//////////////////////////////////////////////////
+
+	obstacleC[6]->setvalue(800, 620, 1);
+	obstacleC[7]->setvalue(1600, 620, 1);
+	obstacleC[8]->setvalue(2300, 620, 1);
+
+	/////////////////////////////LEVEL 3//////////////////////////////////////////////////
 	
-	worldObstacles *obstacleC[20];
-	for (int i = 0; i < 20; i++)
-	{
-		obstacleC[i] = &car[i];
-	}
+	obstacleC[9]->setvalue(800, 620, 1);
+	obstacleC[10]->setvalue(2300, 620, 1);
+	obstacleC[11]->setvalue(4900, 560, 3);
 	
+	///////////////////////SETTING ENEMY POSITIONS//////////////////////////////////////////
 
-	obstacleC[0]->setvalue(800, 650, 1);
-	obstacleC[1]->setvalue(1600, 650, 1);
-	obstacleC[2]->setvalue(2300, 650, 1);
-	obstacleC[3]->setvalue(2800, 660, 2);
-	obstacleC[4]->setvalue(3900, 660, 2);
-	obstacleC[5]->setvalue(4900, 590, 3);
-	
-	///////////////////////setting values for the position of cars for level 2//////////////////////////////////////////
-	obstacleC[6]->setvalue(800, 650, 1);
-	obstacleC[7]->setvalue(1600, 650, 1);
-	obstacleC[8]->setvalue(2300, 650, 1);
-	//obstacleC[9]->setvalue(-2000, 800, 2);
-	//obstacleC[10]->setvalue(3900, 660, 2);
-	//obstacleC[11]->setvalue(4900, 590, 3);
-	/*obstacle[12]->setvalue(, 590, 3);
-	obstacle[13]->setvalue(4900, 590, 3); 
-	obstacle[14]->setvalue(4900, 590, 3);*/
+	/////////////////////////////////LEVEL 1///////////////////////////////////////////////
 
-	////////////////////cars level 3
+	gangster[0].setValues(1000, 590, 1000, 1500, 1);	//sets values to enemy
+	gangster[1].setValues(1800, 590, 1800, 2200, 1);
+	gangster[2].setValues(3000, 600, 3000, 3800, 2);
+	gangster[3].setValues(4050, 600, 4080, 4800, 2);
+	gangster[4].setValues(6500, 590, 5400, 5900, 1);
+	gangster[5].setValues(6500, 590, 6000, 6700, 1);
+	gangster[6].setValues(6500, 600, 7600, 8000, 2);
 
-	obstacleC[12]->setvalue(800, 650, 1);
-	//obstacleC[13]->setvalue(1600, 650, 1);
-	obstacleC[14]->setvalue(2300, 650, 1);
-	obstacleC[15]->setvalue(-2000, 800, 2);
-	//obstacleC[16]->setvalue(3900, 660, 2);
-	obstacleC[17]->setvalue(4900, 590, 3);
+	/////////////////////////////////LEVEL 2///////////////////////////////////////////////
 
-
-	///////////////////////////////////////setting positions of pillars(brikes) for level 1////////////////////////////////////////////////
-	pilars pilar[300];
-
-	
-
-	worldObstacles *obstacleP[300];
-	
-	for (int i = 0; i < 300; i++)
-	{
-		obstacleP[i] = &pilar[i];
-	}
-	
-	int b1 = 0;
-	for (int i = 0; i < 9; i++){
-		
-			b1 += 32;
-		obstacleP[i]->setvalue(1100+b1, 550, 1);
-		
-	}
-	int b2 = 0;
-	for (int i = 10; i < 18; i++){
-
-		b2 += 32;
-		obstacleP[i]->setvalue(1900 + b2, 550, 1);
-	}
-	int b3 = 0;
-	for (int i = 19; i < 28; i++){
-
-		b3 += 32;
-		obstacleP[i]->setvalue(3000 + b3, 550, 1);
-	}
-	int b4 = 0;
-	for (int i = 28; i < 38; i++){
-
-		b4 += 32;
-		obstacleP[i]->setvalue(3288 + b4, 400, 1);
-	}
-	///////////////////////////////////////setting positions of pillars(bricks) for level 2////////////////////////////////////////////////
-	int l2b1 = 0;
-	
-	for (int i = 39; i < 48; i++){
-
-		l2b1 += 32;
-		obstacleP[i]->setvalue(450 + l2b1, 620, 1);
-	}
-	
-	int l2b2 = 0;
-	for (int i = 49; i < 58; i++){
-
-		l2b2 += 32;
-		obstacleP[i]->setvalue(1900 + l2b2, 550, 1);
-	}
-	int l2b3 = 0;
-	for (int i = 59; i < 68; i++){
-
-		l2b3 += 32;
-		obstacleP[i]->setvalue(3000 + l2b3, 550, 1);
-	}
-	int l2b4 = 0;
-	for (int i = 78; i < 88; i++){
-
-		obstacleP[i]->setvalue(3288 + l2b4, 400, 1);
-		l2b4 += 32;
-	}
-	obstacleP[89]->setvalue(2600, 550, 1);
-	obstacleP[90]->setvalue(2750, 550, 1);
-	obstacleP[91]->setvalue(2782, 550, 1);
-	int l2b5 = 0;
-	for (int i = 92; i < 96; i++){
-
-		obstacleP[i]->setvalue(3660+ l2b5, 300, 1);
-		l2b5 += 32;
-	}
-	int l2b6 = 0;
-	for (int i = 97; i < 100; i++){
-
-		obstacleP[i]->setvalue(3850 + l2b6, 450, 1);
-		l2b6 += 32;
-	}
-	//drawMulti(97, 105, 32, obstacleP, 20, 450, 1);
-
-	int l2b7 = 0;
-	for (int i = 100; i < 106; i++){
-
-		obstacleP[i]->setvalue(4000 + l2b7, 380, 1);
-		l2b7 += 32;
-	}
-	int l2b8 = 0;
-	for (int i = 107; i < 111; i++){
-
-		obstacleP[i]->setvalue(4275 + l2b8, 480, 1);
-		l2b8 += 32;
-	}
-	int l2b9 = 0;
-	for (int i = 112; i < 118; i++){
-
-		obstacleP[i]->setvalue(5200 + l2b9, 472, 1);
-		l2b9 += 32;
-	}
-	int l2b10 = 0;
-	for (int i = 119; i < 127; i++){
-
-		obstacleP[i]->setvalue(6050 + l2b10, 480, 1);
-		l2b10 += 32;
-	}
-	obstacleP[128]->setvalue(5940, 550, 1);
-	obstacleP[129]->setvalue(5908, 550, 1);
-	int l2b11 = 0;
-	for (int i = 130; i < 141; i++){
-
-		obstacleP[i]->setvalue(6250 + l2b11, 350, 1);
-		l2b11 += 32;
-	}
-
-	////////////////////////////////////////////Level 3 Bricks
-
-	int l3b1 = 0;
-
-	/*for (int i = 92; i < 97; i++){
-
-		l3b1 += 32;
-		obstacleP[i]->setvalue(450 + l3b1, 620, 1);
-	}*/
-	////////////////////////////////////////////man hole poistion  level 2//////////////////////////////////////////////////////////////////////////////////////////
-	manHole manH[50];
-	worldObstacles *obstacleMH[50];
-	for (int i = 0; i < 50; i++)
-	{
-		obstacleMH[i] = &manH[i];
-	}
-	obstacleMH[0]->setvalue(7000, 660, 1);
-	obstacleMH[1]->setvalue(360, 660, 1);
-	int mhl2 = 0;
-	for (int i = 2; i < 5; i++){
-		obstacleMH[i]->setvalue(2500+mhl2, 660, 1);
-		mhl2 += 146;
-	}
-	obstacleMH[6]->setvalue(3300, 660, 1);
-	int mh1l2 = 0;
-	for (int i = 7; i < 13; i++){
-		obstacleMH[i]->setvalue(3610 + mh1l2, 660, 1);
-		mh1l2 += 146;
-	}
-		int mh2l2 = 0;
-	for (int i = 14; i < 19; i++){
-		obstacleMH[i]->setvalue(6000 + mh2l2, 660, 1);
-		mh2l2 += 146;
-	}
-	/////////////////////////////////manHoles level 3////////////////////////////////////////////////////////////////////////////////////////////
-	obstacleMH[20]->setvalue(1600,660,1);
-	
-	////////////////////////////////////////////gansters level 2//////////////////////////////////////////////////////////////////////////////////////////
 	gangster[7].setValues(1000, 590, 1000, 1500, 1);	//sets values to enemy
 	gangster[8].setValues(1800, 590, 1800, 2200, 1);
-	
 	gangster[10].setValues(4050, 600, 4450, 5200, 2);
 	gangster[11].setValues(6500, 590, 5400, 5900, 1);
 	gangster[12].setValues(6500, 590, 6800, 7500, 1);
@@ -445,63 +301,210 @@ int top, bot, lef, righ;
 	gangster[15].setValues(1900, 430, 1900, 2140, 2);
 	gangster[16].setValues(3000, 430, 3000, 3256, 2);
 
-	///////////////////////gangsters level 3///////////////////////////////////////////////////////////////////////
+	/////////////////////////////////LEVEL 3///////////////////////////////////////////////
+
 	gangster[17].setValues(1000, 590, 1000, 1500, 1);	//sets values to enemy
 	gangster[18].setValues(1800, 590, 1800, 2200, 1);
 	gangster[19].setValues(3000, 600, 2900, 3200, 2);
 	gangster[20].setValues(3000, 600, 4400, 4780, 2);
 	gangster[21].setValues(6500, 590, 5400, 5900, 1);
-	
 	gangster[22].setValues(530, 503, 530, 690, 1);
-	
 	gangster[23].setValues(3070, 430, 3070, 3256, 2);
 	
-	////////////////////////////Spikes////////////////////////////////////////////////////////////////////////////////////////////////
-	Spikes spikes[100];
-	worldObstacles *Obsspikes[100];
+	///////////////////////////////////////SETTING BRICK POSITIONS//////////////////////////
 
-	for (int i = 0; i < 100; i++)
-	{
-		Obsspikes[i] = &spikes[i];
+	/////////////////////////////////LEVEL 1///////////////////////////////////////////////
+
+	int b1 = 0;
+	for (int i = 0; i < 9; i++){
+
+		b1 += 32;
+		obstacleP[i]->setvalue(1100 + b1, 550, 1);
+
 	}
 
-	int l3s1 = 0;
+	int b2 = 0;
+	for (int i = 10; i < 18; i++){
 
+		b2 += 32;
+		obstacleP[i]->setvalue(1900 + b2, 550, 1);
+	}
+
+	int b3 = 0;
+	for (int i = 19; i < 28; i++){
+
+		b3 += 32;
+		obstacleP[i]->setvalue(3000 + b3, 550, 1);
+	}
+
+	int b4 = 0;
+	for (int i = 28; i < 38; i++){
+
+		b4 += 32;
+		obstacleP[i]->setvalue(3288 + b4, 400, 1);
+	}
+
+	/////////////////////////////////LEVEL 2 & 3///////////////////////////////////////////////
+
+	int l2b1 = 0;
+	for (int i = 39; i < 48; i++){
+
+		l2b1 += 32;
+		obstacleP[i]->setvalue(450 + l2b1, 620, 1);
+	}
+
+	int l2b2 = 0;
+	for (int i = 49; i < 58; i++){
+
+		l2b2 += 32;
+		obstacleP[i]->setvalue(1900 + l2b2, 550, 1);
+	}
+
+	int l2b3 = 0;
+	for (int i = 59; i < 68; i++){
+
+		l2b3 += 32;
+		obstacleP[i]->setvalue(3000 + l2b3, 550, 1);
+	}
+
+	int l2b4 = 0;
+	for (int i = 78; i < 88; i++){
+
+		obstacleP[i]->setvalue(3288 + l2b4, 400, 1);
+		l2b4 += 32;
+	}
+
+	obstacleP[89]->setvalue(2600, 550, 1);
+	obstacleP[90]->setvalue(2750, 550, 1);
+	obstacleP[91]->setvalue(2782, 550, 1);
+
+	int l2b5 = 0;
+	for (int i = 92; i < 96; i++){
+
+		obstacleP[i]->setvalue(3660 + l2b5, 300, 1);
+		l2b5 += 32;
+	}
+
+	int l2b6 = 0;
+	for (int i = 97; i < 100; i++){
+
+		obstacleP[i]->setvalue(3850 + l2b6, 450, 1);
+		l2b6 += 32;
+	}
+
+	int l2b7 = 0;
+	for (int i = 100; i < 106; i++){
+
+		obstacleP[i]->setvalue(4000 + l2b7, 380, 1);
+		l2b7 += 32;
+	}
+
+	int l2b8 = 0;
+	for (int i = 107; i < 111; i++){
+
+		obstacleP[i]->setvalue(4275 + l2b8, 480, 1);
+		l2b8 += 32;
+	}
+
+	int l2b9 = 0;
+	for (int i = 112; i < 118; i++){
+
+		obstacleP[i]->setvalue(5200 + l2b9, 472, 1);
+		l2b9 += 32;
+	}
+
+	int l2b10 = 0;
+	for (int i = 119; i < 127; i++){
+
+		obstacleP[i]->setvalue(6050 + l2b10, 480, 1);
+		l2b10 += 32;
+	}
+
+	obstacleP[128]->setvalue(5940, 550, 1);
+	obstacleP[129]->setvalue(5908, 550, 1);
+
+	int l2b11 = 0;
+	for (int i = 130; i < 141; i++){
+
+		obstacleP[i]->setvalue(6250 + l2b11, 350, 1);
+		l2b11 += 32;
+	}
+	
+	
+	///////////////////////////SETTING MANHOLE POSITIONS///////////////////////////////////
+
+	/////////////////////////////////LEVEL 2///////////////////////////////////////////////
+
+	obstacleMH[0]->setvalue(7000, 660, 1);
+	obstacleMH[1]->setvalue(360, 660, 1);
+
+	int mhl2 = 0;
+	for (int i = 2; i < 5; i++){
+		obstacleMH[i]->setvalue(2500+mhl2, 660, 1);
+		mhl2 += 146;
+	}
+
+	obstacleMH[6]->setvalue(3300, 660, 1);
+
+	int mh1l2 = 0;
+	for (int i = 7; i < 13; i++){
+		obstacleMH[i]->setvalue(3610 + mh1l2, 660, 1);
+		mh1l2 += 146;
+	}
+
+	int mh2l2 = 0;
+	for (int i = 14; i < 19; i++){
+		obstacleMH[i]->setvalue(6000 + mh2l2, 660, 1);
+		mh2l2 += 146;
+	}
+
+	/////////////////////////////////LEVEL 3///////////////////////////////////////////////
+	obstacleMH[20]->setvalue(1600,660,1);
+
+	////////////////////////////SETTING SPIKE POSITIONS///////////////////////////////////
+	
+	int l3s1 = 0;
 	for (int i = 0; i < 2; i++){
 
 		l3s1 += 32;
 		Obsspikes[i]->setvalue(450 + l3s1, 568, 1);
 	}
+
 	int l3s2 = 0;
 	for (int i = 3; i < 6; i++){
 
 		l3s2 += 32;
 		Obsspikes[i]->setvalue(1900 + l3s2, 498, 1);
 	}
+
 	int l3s3 = 0;
 	for (int i = 7; i < 9; i++){
 
 		l3s3 += 32;
 		Obsspikes[i]->setvalue(3000 + l3s3, 498, 1);
 	}
+
 	int l3s4 = 0;
 	for (int i = 10; i < 12; i++){
 
 		Obsspikes[i]->setvalue(3288 + l3s4, 349, 1);
 		l3s4 += 32;
 	}
+
 	int l3s5 = 0;
 	for (int i = 13; i < 15; i++){
 
 		Obsspikes[i]->setvalue(3480 + l3s4, 428, 2);
 		l3s4 += 32;
 	}
+
 	int l3s6 = 0;
 	for (int i = 16; i < 19; i++){
 
 		Obsspikes[i]->setvalue(3690 + l3s5, 327, 2);
 		l3s5 += 32;
 	}
+
 	int l3s7 = 0;
 	for (int i = 20; i < 23; i++){
 
@@ -509,7 +512,6 @@ int top, bot, lef, righ;
 		l3s7 += 32;
 	}
 	
-
 	Obsspikes[24]->setvalue(4000, 328, 1);
 	Obsspikes[25]->setvalue(4160, 328, 1);
 	Obsspikes[26]->setvalue(4275, 428, 1);
@@ -543,10 +545,9 @@ int top, bot, lef, righ;
 
 	Obsspikes[46]->setvalue(6340, 298, 1);
 	
-	////////////////////////////////////////////Summon Mario//////////////////////////////////////////////////////////////////////////////////////////////
+	/////////////////////////////GAME START//////////////////////////////////////////////
 
-	////////////////////////////////////////////GAME START//////////////////////////////////////////////////////////////////////////////////////////////
-	al_start_timer(timer);	// main timer
+	al_start_timer(timer);	// main timeR
 	al_start_timer(mariotimer);
 	al_start_timer(splash);
 	al_start_timer(weapontimer);	// mario timer
@@ -556,7 +557,7 @@ int top, bot, lef, righ;
 	al_get_keyboard_state(&keyState);
 	jumpCheck = false;
 	
-	/////////////////////////////////////////////////////////Start SplashScreen////////////////////////////////////////////////
+	//////////////////////////////Start SplashScreen///////////////////////////////////
 
 	
  while (!done)	// splash loop
@@ -608,7 +609,7 @@ int top, bot, lef, righ;
 	al_destroy_sample_instance(startInstance);
 	bool reset = false;
 	/////////////////////////////////////////////////////////End Of Start SplashScreen////////////////////////////////
-	level = 2; //The level
+	level = 1; //The level
 	int ctrl = 0; 
 
 Line2:
@@ -1123,7 +1124,7 @@ Line2:
 					obstacleC[j]->draw(imagecar, imagecopcar, imagebus);
 				}
 
-				for (int j = 0; j < 50; j++)
+				for (int j = 0; j < 39; j++)
 				{
 					obstacleP[j]->draw(smallPillar, medPillar, medPillar);
 
@@ -1167,7 +1168,7 @@ Line2:
 				}
 
 
-				for (int i = 0; i <6/* numOfEnemys*/; i++)
+				for (int i = 0; i <6; i++)
 				{
 					gangster[i].move(enemyMovespeed);
 
@@ -1189,24 +1190,24 @@ Line2:
 					al_destroy_bitmap(currMario);
 
 					///////////checks if mario dies by enemy///////////////
-					/*if (marioObject.marioCollide(x - 20, y, gangster[i].x, gangster[i].y, al_get_bitmap_width(Walk) / 10, 123, Walk, punch_gangster, gangster[i].aniWidth, gangster[i].aniHeight))
+					if (marioObject.marioCollide(x - 20, y, gangster[i].x, gangster[i].y, al_get_bitmap_width(Walk) / 10, 123, Walk, punch_gangster, gangster[i].aniWidth, gangster[i].aniHeight))
 					{
 						reset = true;
 						ctrl = 0;
 						goto Line2;
 					}
-*/
+
 
 					gangster[i].draw(punch_gangster, chain_gangster, (events.timer.source == enemyTimer));	// draw method from Enemies class
 				}
 
 				obstacleMH[0]->draw(manhole, manhole, manhole);
-				/*if (marioObject.fall_in_manhole(x + 20, y, manH[0].x, manH[0].y, al_get_bitmap_width(manhole)))
+				if (marioObject.fall_in_manhole(x + 20, y, manH[0].x, manH[0].y, al_get_bitmap_width(manhole)))
 				{
 					reset = true;
 					ctrl = 0;
 					goto Line2;
-				}*/
+				}
 
 				if (x < 0)			//prevents mario from running away
 					x = 0;
@@ -1235,11 +1236,11 @@ Line2:
 			{
 				enemyMovespeed = 3;
 
-				for (int j = 6; j < 11; j++){
+				for (int j = 6; j < 9; j++){
 					obstacleC[j]->draw(imagecar, imagecopcar, imagebus);
 				}
 
-				for (int j = 39; j < 200; j++)
+				for (int j = 39; j < 142; j++)
 				{
 					obstacleP[j]->draw(smallPillar, medPillar, medPillar);
 
@@ -1288,14 +1289,14 @@ Line2:
 				{
 					obstacleMH[j]->draw(manhole, manhole, manhole);
 
-				//	/////check manhole collision
-				//	if (marioObject.fall_in_manhole(x + 20, y, manH[j].x, manH[j].y, al_get_bitmap_width(manhole)))
-				//	{
-				//		reset = true;
-				//		ctrl = 0;
+					/////check manhole collision
+					if (marioObject.fall_in_manhole(x + 20, y, manH[j].x, manH[j].y, al_get_bitmap_width(manhole)))
+					{
+						reset = true;
+						ctrl = 0;
 
-				//		goto Line2;
-				//}
+						goto Line2;
+				}
 				}
 
 
@@ -1321,12 +1322,12 @@ Line2:
 					al_destroy_bitmap(currMario);
 
 					///////mario gets killed//////////
-					/*if (marioObject.marioCollide(x - 20, y, gangster[i].x, gangster[i].y, al_get_bitmap_width(Walk) / 10, 123, Walk, punch_gangster, gangster[i].aniWidth, gangster[i].aniHeight))
+					if (marioObject.marioCollide(x - 20, y, gangster[i].x, gangster[i].y, al_get_bitmap_width(Walk) / 10, 123, Walk, punch_gangster, gangster[i].aniWidth, gangster[i].aniHeight))
 					{
 						reset = true;
 						ctrl = 0;
 						goto Line2;
-					}*/
+					}
 
 					gangster[i].draw(punch_gangster, chain_gangster, (events.timer.source == enemyTimer));	// draw method from Enemies class
 				}
@@ -1359,11 +1360,11 @@ Line2:
 			{
 				enemyMovespeed = 4;
 
-				for (int j = 12; j < 18; j++){
+				for (int j = 9; j < 12; j++){
 					obstacleC[j]->draw(imagecar, imagecopcar, imagebus);
 				}
 				
-				for (int j = 39; j < 200; j++)
+				for (int j = 39; j < 142; j++)
 				{
 					obstacleP[j]->draw(smallPillar, medPillar, medPillar);
 
@@ -1415,11 +1416,11 @@ Line2:
 						///////////check for manhole collision////////////////////
 						
 						//al_draw_bitmap(manhole, x + 85, 400, NULL);		used for testing purposes
-						/*if (marioObject.fall_in_manhole(x + 85, y + 100, manH[j].x, manH[j].y, al_get_bitmap_width(manhole)))
+						if (marioObject.fall_in_manhole(x + 85, y + 100, manH[j].x, manH[j].y, al_get_bitmap_width(manhole)))
 						{
 							reset = true;
 							goto Line2;
-						}		*/
+						}		
 					
 					}
 					
@@ -1430,29 +1431,29 @@ Line2:
 												
 						///////////check for spike collision////////////////////
 						
-					//	if (check2 == 1)
-					//	{
-					//		currMario2 = al_create_sub_bitmap(SuperAttackRight, sourceXj + 50, 100, 83, 127);
-					//		//al_draw_bitmap(currMario2, x + 32 , y + 100,NULL);
-					//		if (marioObject.spikeCollision(currMario2, spike, x + 32, y + 100, 105, 127, spikes[j].x, spikes[j].y, al_get_bitmap_width(spike), al_get_bitmap_height(spike)))
-					//		{
-					//			reset = true;
-					//			ctrl = 0;
-					//			goto Line2;
-					//		}
-					//	}
-					//	else
-					//	{
-					//		currMario1 = al_create_sub_bitmap(SuperAttackLeft, sourceXi + 603, 100, 83, 127);
-					//		//al_draw_bitmap(currMario1, x + 32, y + 100, NULL);
-					//		if (marioObject.spikeCollision(currMario1, spike, x + 32, y + 100, 105, 127, spikes[j].x, spikes[j].y, al_get_bitmap_width(spike), al_get_bitmap_height(spike)))
-					//		{
+						if (check2 == 1)
+						{
+							currMario2 = al_create_sub_bitmap(SuperAttackRight, sourceXj + 50, 100, 83, 127);
+							//al_draw_bitmap(currMario2, x + 32 , y + 100,NULL);
+							if (marioObject.spikeCollision(currMario2, spike, x + 32, y + 100, 105, 127, spikes[j].x, spikes[j].y, al_get_bitmap_width(spike), al_get_bitmap_height(spike)))
+							{
+								reset = true;
+								ctrl = 0;
+								goto Line2;
+							}
+						}
+						else
+						{
+							currMario1 = al_create_sub_bitmap(SuperAttackLeft, sourceXi + 603, 100, 83, 127);
+							//al_draw_bitmap(currMario1, x + 32, y + 100, NULL);
+							if (marioObject.spikeCollision(currMario1, spike, x + 32, y + 100, 105, 127, spikes[j].x, spikes[j].y, al_get_bitmap_width(spike), al_get_bitmap_height(spike)))
+							{
 
-					//			reset = true;
-					//			ctrl = 0;
-					//			goto Line2;
-					//		}
-					//}
+								reset = true;
+								ctrl = 0;
+								goto Line2;
+							}
+					}
 				
 					}
 					
@@ -1479,31 +1480,31 @@ Line2:
 					}
 					
 					///////////////checks if mario dies////////////////////////
-					//if (check2 == 1)
-					//{
-					//	currMario2 = al_create_sub_bitmap(SuperAttackRight, sourceXj, 100, 195, 127);
-					//	//al_draw_bitmap(currMario2, x - 23, y + 100,NULL);
-					//	if (marioObject.marioCollide(x - 23 , y + 100, gangster[i].x, gangster[i].y, al_get_bitmap_width(currMario2), 100, currMario2, punch_gangster,gangster[i].aniWidth,gangster[i].aniHeight) )//|| marioObject.marioCollide(x, y, gangster[i].x, gangster[i].y, al_get_bitmap_width(currMario), 100, currMario1, chain_gangster))
-					//	{
-					//		reset = true;
-					//		ctrl = 0;
-					//		goto Line2;
-					//	}
-					//	al_destroy_bitmap(currMario2);
-					//}
-					//else
-					//{
-					//	currMario1 = al_create_sub_bitmap(SuperAttackLeft, sourceXi + 553, 100, 133, 127);
-					//	//al_draw_bitmap(currMario1, x - 23, y + 100, NULL);
-					//	if (marioObject.marioCollide(x, y + 127, gangster[i].x, gangster[i].y, al_get_bitmap_width(currMario1), 100, currMario1, punch_gangster, gangster[i].aniWidth, gangster[i].aniHeight))// || marioObject.marioCollide(x, y, gangster[i].x, gangster[i].y, al_get_bitmap_width(currMario), 100, currMario1, chain_gangster))
-					//	{
+					if (check2 == 1)
+					{
+						currMario2 = al_create_sub_bitmap(SuperAttackRight, sourceXj, 100, 195, 127);
+						//al_draw_bitmap(currMario2, x - 23, y + 100,NULL);
+						if (marioObject.marioCollide(x - 23 , y + 100, gangster[i].x, gangster[i].y, al_get_bitmap_width(currMario2), 100, currMario2, punch_gangster,gangster[i].aniWidth,gangster[i].aniHeight) )//|| marioObject.marioCollide(x, y, gangster[i].x, gangster[i].y, al_get_bitmap_width(currMario), 100, currMario1, chain_gangster))
+						{
+							reset = true;
+							ctrl = 0;
+							goto Line2;
+						}
+						al_destroy_bitmap(currMario2);
+					}
+					else
+					{
+						currMario1 = al_create_sub_bitmap(SuperAttackLeft, sourceXi + 553, 100, 133, 127);
+						//al_draw_bitmap(currMario1, x - 23, y + 100, NULL);
+						if (marioObject.marioCollide(x, y + 127, gangster[i].x, gangster[i].y, al_get_bitmap_width(currMario1), 100, currMario1, punch_gangster, gangster[i].aniWidth, gangster[i].aniHeight))// || marioObject.marioCollide(x, y, gangster[i].x, gangster[i].y, al_get_bitmap_width(currMario), 100, currMario1, chain_gangster))
+						{
 
-					//		reset = true;
-					//		ctrl = 0;
-					//		goto Line2;
-					//	}
-					//	al_destroy_bitmap(currMario1);
-					//}
+							reset = true;
+							ctrl = 0;
+							goto Line2;
+						}
+						al_destroy_bitmap(currMario1);
+					}
 
 					gangster[i].draw(punch_gangster, chain_gangster, (events.timer.source == enemyTimer));	// draw method from Enemies class
 					al_destroy_bitmap(currMario);
@@ -1563,15 +1564,9 @@ Line2:
 
 		
 	}
-	//al_stop_sample(&id2);
-
-	
-
-	
 	//al_flip_display();
 	
 	al_destroy_font(font);
-	//al_rest(2.0);//delay
 	al_destroy_display(display);
 	al_destroy_sample(gameSong);
 	al_destroy_sample_instance(gameInstance);
