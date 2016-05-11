@@ -1511,6 +1511,7 @@ Line2:
 				}
 
 				luigi.draw(luigiBM, (events.timer.source == luigiTimer), lightning.active);
+				lightning.alive = luigi.alive;
 				lightning.active = luigi.lightning_active();
 				lightning.draw(light, (events.timer.source == enemyTimer));
 				luigi.drawHealth(luigiHealth);
@@ -1559,12 +1560,16 @@ Line2:
 				}
 			}
 
+			if (level == 4)
+				goto line4;
 		}
 
 
 		
 	}
 	//al_flip_display();
+	
+line4:
 	
 	al_destroy_font(font);
 	al_destroy_display(display);

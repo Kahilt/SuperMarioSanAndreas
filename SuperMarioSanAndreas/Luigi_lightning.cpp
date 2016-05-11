@@ -13,6 +13,7 @@ public:
 	float tempX;			//controls the source point of ther animations
 	int i;					//used to iterate array
 	bool active;
+	bool alive;
 
 	Luigi_lightning()
 	{
@@ -31,6 +32,7 @@ public:
 		i = 6;
 
 		active = false;
+		alive = false;
 	}
 
 	~Luigi_lightning()
@@ -40,21 +42,24 @@ public:
 
 	void draw(ALLEGRO_BITMAP *light, bool time)
 	{
-		if (active)
+		if (alive)
 		{
-			al_draw_bitmap_region(light, tempX, 0, sourceX[i], 112, (x - sourceX[i]), y, NULL);
-
-			if (time)
+			if (active)
 			{
-				i--;
+				al_draw_bitmap_region(light, tempX, 0, sourceX[i], 112, (x - sourceX[i]), y, NULL);
 
-				tempX -= sourceX[i];
-
-				if (i == -1)		//used to set i back to ending of array
+				if (time)
 				{
-					i = 6;
-					tempX = 3153;
-					active = false;
+					i--;
+
+					tempX -= sourceX[i];
+
+					if (i == -1)		//used to set i back to ending of array
+					{
+						i = 6;
+						tempX = 3153;
+						active = false;
+					}
 				}
 			}
 		}
