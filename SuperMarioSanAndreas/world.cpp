@@ -87,7 +87,7 @@ int top, bot, lef, righ;
 	 const float WFPS = 9.0;
 	 enum Direction {UP, DOWN, LEFT, RIGHT, NONE1, NONE2, ATT};
 	 int level;//tells you what level you are currently drawing
-	 const int numOfEnemys = 20;					//contains the number of enemies
+	 const int numOfEnemys = 30;					//contains the number of enemies
 	 bool jumpCheck;
 	 int check2;
 	// int dir = DOWN;
@@ -432,24 +432,30 @@ int top, bot, lef, righ;
 	}
 	/////////////////////////////////manHoles level 3////////////////////////////////////////////////////////////////////////////////////////////
 	obstacleMH[20]->setvalue(1600,660,1);
-	//obstacleMH[7]->setvalue(3608, 660, 1);
+	
 	////////////////////////////////////////////gansters level 2//////////////////////////////////////////////////////////////////////////////////////////
-	gangster[7].setValues(450, 500, 460, 690, 2);
-	gangster[8].setValues(1900, 430, 1900, 2140, 2);
-	gangster[9].setValues(3000, 430, 3000, 3256, 2);
+	gangster[7].setValues(1000, 590, 1000, 1500, 1);	//sets values to enemy
+	gangster[8].setValues(1800, 590, 1800, 2200, 1);
+	
+	gangster[10].setValues(4050, 600, 4450, 5200, 2);
+	gangster[11].setValues(6500, 590, 5400, 5900, 1);
+	gangster[12].setValues(6500, 590, 6800, 7500, 1);
+	gangster[13].setValues(6500, 600, 7600, 8000, 2);
+	gangster[14].setValues(450, 500, 460, 690, 2);
+	gangster[15].setValues(1900, 430, 1900, 2140, 2);
+	gangster[16].setValues(3000, 430, 3000, 3256, 2);
 
 	///////////////////////gangsters level 3///////////////////////////////////////////////////////////////////////
-	gangster[10].setValues(1000, 590, 1000, 1500, 1);	//sets values to enemy
-	gangster[11].setValues(1800, 590, 1800, 2200, 1);
-	gangster[12].setValues(3000, 600, 2900, 3200, 2);
-	gangster[13].setValues(3000, 600, 4400, 4780, 2);
-	gangster[14].setValues(6500, 590, 5400, 5900, 1);
-	//gangster[15].setValues(6500, 590, 6000, 6700, 1);
-	//gangster[16].setValues(6500, 600, 7600, 8000, 2);
-	gangster[17].setValues(530, 503, 530, 690, 1);
-	//gangster[18].setValues(1900, 430, 1900, 2140, 2);
-	gangster[19].setValues(3070, 430, 3070, 3256, 2);
-	//gangster[9].setValues(450, 500, 310, 500, 2);
+	gangster[17].setValues(1000, 590, 1000, 1500, 1);	//sets values to enemy
+	gangster[18].setValues(1800, 590, 1800, 2200, 1);
+	gangster[19].setValues(3000, 600, 2900, 3200, 2);
+	gangster[20].setValues(3000, 600, 4400, 4780, 2);
+	gangster[21].setValues(6500, 590, 5400, 5900, 1);
+	
+	gangster[22].setValues(530, 503, 530, 690, 1);
+	
+	gangster[23].setValues(3070, 430, 3070, 3256, 2);
+	
 	////////////////////////////Spikes////////////////////////////////////////////////////////////////////////////////////////////////
 	Spikes spikes[100];
 	worldObstacles *Obsspikes[100];
@@ -602,7 +608,7 @@ int top, bot, lef, righ;
 	al_destroy_sample_instance(startInstance);
 	bool reset = false;
 	/////////////////////////////////////////////////////////End Of Start SplashScreen////////////////////////////////
-	level = 1; //The level
+	level = 2; //The level
 	int ctrl = 0; 
 
 Line2:
@@ -1183,24 +1189,24 @@ Line2:
 					al_destroy_bitmap(currMario);
 
 					///////////checks if mario dies by enemy///////////////
-					if (marioObject.marioCollide(x - 20, y, gangster[i].x, gangster[i].y, al_get_bitmap_width(Walk) / 10, 123, Walk, punch_gangster, gangster[i].aniWidth, gangster[i].aniHeight))
+					/*if (marioObject.marioCollide(x - 20, y, gangster[i].x, gangster[i].y, al_get_bitmap_width(Walk) / 10, 123, Walk, punch_gangster, gangster[i].aniWidth, gangster[i].aniHeight))
 					{
 						reset = true;
 						ctrl = 0;
 						goto Line2;
 					}
-
+*/
 
 					gangster[i].draw(punch_gangster, chain_gangster, (events.timer.source == enemyTimer));	// draw method from Enemies class
 				}
 
 				obstacleMH[0]->draw(manhole, manhole, manhole);
-				if (marioObject.fall_in_manhole(x + 20, y, manH[0].x, manH[0].y, al_get_bitmap_width(manhole)))
+				/*if (marioObject.fall_in_manhole(x + 20, y, manH[0].x, manH[0].y, al_get_bitmap_width(manhole)))
 				{
 					reset = true;
 					ctrl = 0;
 					goto Line2;
-				}
+				}*/
 
 				if (x < 0)			//prevents mario from running away
 					x = 0;
@@ -1282,18 +1288,18 @@ Line2:
 				{
 					obstacleMH[j]->draw(manhole, manhole, manhole);
 
-					/////check manhole collision
-					if (marioObject.fall_in_manhole(x + 20, y, manH[j].x, manH[j].y, al_get_bitmap_width(manhole)))
-					{
-						reset = true;
-						ctrl = 0;
+				//	/////check manhole collision
+				//	if (marioObject.fall_in_manhole(x + 20, y, manH[j].x, manH[j].y, al_get_bitmap_width(manhole)))
+				//	{
+				//		reset = true;
+				//		ctrl = 0;
 
-						goto Line2;
+				//		goto Line2;
+				//}
 				}
-				}
 
 
-				for (int i = 7; i < 10; i++)
+				for (int i = 7; i < 17; i++)
 				{
 					gangster[i].move(enemyMovespeed);
 					
@@ -1315,12 +1321,12 @@ Line2:
 					al_destroy_bitmap(currMario);
 
 					///////mario gets killed//////////
-					if (marioObject.marioCollide(x - 20, y, gangster[i].x, gangster[i].y, al_get_bitmap_width(Walk) / 10, 123, Walk, punch_gangster, gangster[i].aniWidth, gangster[i].aniHeight))
+					/*if (marioObject.marioCollide(x - 20, y, gangster[i].x, gangster[i].y, al_get_bitmap_width(Walk) / 10, 123, Walk, punch_gangster, gangster[i].aniWidth, gangster[i].aniHeight))
 					{
 						reset = true;
 						ctrl = 0;
 						goto Line2;
-					}
+					}*/
 
 					gangster[i].draw(punch_gangster, chain_gangster, (events.timer.source == enemyTimer));	// draw method from Enemies class
 				}
@@ -1409,11 +1415,11 @@ Line2:
 						///////////check for manhole collision////////////////////
 						
 						//al_draw_bitmap(manhole, x + 85, 400, NULL);		used for testing purposes
-						if (marioObject.fall_in_manhole(x + 85, y + 100, manH[j].x, manH[j].y, al_get_bitmap_width(manhole)))
+						/*if (marioObject.fall_in_manhole(x + 85, y + 100, manH[j].x, manH[j].y, al_get_bitmap_width(manhole)))
 						{
 							reset = true;
 							goto Line2;
-						}		
+						}		*/
 					
 					}
 					
@@ -1424,34 +1430,34 @@ Line2:
 												
 						///////////check for spike collision////////////////////
 						
-						if (check2 == 1)
-						{
-							currMario2 = al_create_sub_bitmap(SuperAttackRight, sourceXj + 50, 100, 83, 127);
-							//al_draw_bitmap(currMario2, x + 32 , y + 100,NULL);
-							if (marioObject.spikeCollision(currMario2, spike, x + 32, y + 100, 105, 127, spikes[j].x, spikes[j].y, al_get_bitmap_width(spike), al_get_bitmap_height(spike)))
-							{
-								reset = true;
-								ctrl = 0;
-								goto Line2;
-							}
-						}
-						else
-						{
-							currMario1 = al_create_sub_bitmap(SuperAttackLeft, sourceXi + 603, 100, 83, 127);
-							//al_draw_bitmap(currMario1, x + 32, y + 100, NULL);
-							if (marioObject.spikeCollision(currMario1, spike, x + 32, y + 100, 105, 127, spikes[j].x, spikes[j].y, al_get_bitmap_width(spike), al_get_bitmap_height(spike)))
-							{
+					//	if (check2 == 1)
+					//	{
+					//		currMario2 = al_create_sub_bitmap(SuperAttackRight, sourceXj + 50, 100, 83, 127);
+					//		//al_draw_bitmap(currMario2, x + 32 , y + 100,NULL);
+					//		if (marioObject.spikeCollision(currMario2, spike, x + 32, y + 100, 105, 127, spikes[j].x, spikes[j].y, al_get_bitmap_width(spike), al_get_bitmap_height(spike)))
+					//		{
+					//			reset = true;
+					//			ctrl = 0;
+					//			goto Line2;
+					//		}
+					//	}
+					//	else
+					//	{
+					//		currMario1 = al_create_sub_bitmap(SuperAttackLeft, sourceXi + 603, 100, 83, 127);
+					//		//al_draw_bitmap(currMario1, x + 32, y + 100, NULL);
+					//		if (marioObject.spikeCollision(currMario1, spike, x + 32, y + 100, 105, 127, spikes[j].x, spikes[j].y, al_get_bitmap_width(spike), al_get_bitmap_height(spike)))
+					//		{
 
-								reset = true;
-								ctrl = 0;
-								goto Line2;
-							}
-					}
+					//			reset = true;
+					//			ctrl = 0;
+					//			goto Line2;
+					//		}
+					//}
 				
 					}
 					
 					
-				for (int i = 10; i < numOfEnemys; i++)
+				for (int i = 17; i < numOfEnemys; i++)
 				{
 					gangster[i].move(enemyMovespeed);
 
@@ -1473,31 +1479,31 @@ Line2:
 					}
 					
 					///////////////checks if mario dies////////////////////////
-					if (check2 == 1)
-					{
-						currMario2 = al_create_sub_bitmap(SuperAttackRight, sourceXj, 100, 195, 127);
-						//al_draw_bitmap(currMario2, x - 23, y + 100,NULL);
-						if (marioObject.marioCollide(x - 23 , y + 100, gangster[i].x, gangster[i].y, al_get_bitmap_width(currMario2), 100, currMario2, punch_gangster,gangster[i].aniWidth,gangster[i].aniHeight) )//|| marioObject.marioCollide(x, y, gangster[i].x, gangster[i].y, al_get_bitmap_width(currMario), 100, currMario1, chain_gangster))
-						{
-							reset = true;
-							ctrl = 0;
-							goto Line2;
-						}
-						al_destroy_bitmap(currMario2);
-					}
-					else
-					{
-						currMario1 = al_create_sub_bitmap(SuperAttackLeft, sourceXi + 553, 100, 133, 127);
-						//al_draw_bitmap(currMario1, x - 23, y + 100, NULL);
-						if (marioObject.marioCollide(x, y + 127, gangster[i].x, gangster[i].y, al_get_bitmap_width(currMario1), 100, currMario1, punch_gangster, gangster[i].aniWidth, gangster[i].aniHeight))// || marioObject.marioCollide(x, y, gangster[i].x, gangster[i].y, al_get_bitmap_width(currMario), 100, currMario1, chain_gangster))
-						{
+					//if (check2 == 1)
+					//{
+					//	currMario2 = al_create_sub_bitmap(SuperAttackRight, sourceXj, 100, 195, 127);
+					//	//al_draw_bitmap(currMario2, x - 23, y + 100,NULL);
+					//	if (marioObject.marioCollide(x - 23 , y + 100, gangster[i].x, gangster[i].y, al_get_bitmap_width(currMario2), 100, currMario2, punch_gangster,gangster[i].aniWidth,gangster[i].aniHeight) )//|| marioObject.marioCollide(x, y, gangster[i].x, gangster[i].y, al_get_bitmap_width(currMario), 100, currMario1, chain_gangster))
+					//	{
+					//		reset = true;
+					//		ctrl = 0;
+					//		goto Line2;
+					//	}
+					//	al_destroy_bitmap(currMario2);
+					//}
+					//else
+					//{
+					//	currMario1 = al_create_sub_bitmap(SuperAttackLeft, sourceXi + 553, 100, 133, 127);
+					//	//al_draw_bitmap(currMario1, x - 23, y + 100, NULL);
+					//	if (marioObject.marioCollide(x, y + 127, gangster[i].x, gangster[i].y, al_get_bitmap_width(currMario1), 100, currMario1, punch_gangster, gangster[i].aniWidth, gangster[i].aniHeight))// || marioObject.marioCollide(x, y, gangster[i].x, gangster[i].y, al_get_bitmap_width(currMario), 100, currMario1, chain_gangster))
+					//	{
 
-							reset = true;
-							ctrl = 0;
-							goto Line2;
-						}
-						al_destroy_bitmap(currMario1);
-					}
+					//		reset = true;
+					//		ctrl = 0;
+					//		goto Line2;
+					//	}
+					//	al_destroy_bitmap(currMario1);
+					//}
 
 					gangster[i].draw(punch_gangster, chain_gangster, (events.timer.source == enemyTimer));	// draw method from Enemies class
 					al_destroy_bitmap(currMario);
